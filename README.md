@@ -6,7 +6,7 @@ We found a customer who runs a dentistry clinic, gathered their requirements and
 
 # Team Members
 
- Name | Description
+ Name | Role
 ------------- | ------------- 
 Talha Memisoglu | Scrum Master/Back-End Developer
 Helin Saygili | Product Owner/Front-End Developer
