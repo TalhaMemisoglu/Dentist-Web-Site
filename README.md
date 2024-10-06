@@ -15,3 +15,4 @@ Enes Korkmaz | Back-End Developer
 Hasan Yazgan | Back-End Developer
 
 You can find relevant documentation and track our progress on Wiki Pages.
+./https://github.com/TalhaMemisoglu/Dentist-Web-Site/wiki
