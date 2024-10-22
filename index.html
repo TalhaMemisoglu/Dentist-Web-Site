@@ -1,37 +1,40 @@
 <!DOCTYPE html>
-
-<html>
-    <head>
-        <meta charset="utf-8">
-        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-        <title></title>
-        <!-- <meta name="description" content=""> -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="styles/main.css">
-    </head>
-    <body>
-        <!-- <script src="" async defer></script> -->
-         <header>
-            <div id="grid-nav-bar" class="container">
-                <div id="left-empty">left-empty</div>
-                <div id="logo-div">logo</div>
-
-                <div id="content-div"> test from helin
-                    <!-- <div id="about-div" class="nav-links"><a href="#">Hakkimizda</a></div>
-                    <div id="services-div" class="nav-links"><a href="#">Hizmetler</a></div>
-                    <div id="dentist-div" class="nav-links"><a href="#">Doktorlar</a></div>
-                    <div id="contact-div" class="nav-links"><a href="#">Iletisim</a></div> -->
-                </div>
-
-                <div id="button-div">buttons
-                    <!-- <div id="booking-div"><a href="#">Randevu Al</a></div>
-                    <div id="signIn-div"><a href="#">Giris Yap</a></div> -->
-                </div>
-
-                <div id="right-empty">right-empty</div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Denta Diş Kliniği</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Denta Diş Kliniği</h1>
             </div>
+            <button class="hamburger" onclick="toggleMenu()">&#9776;</button> <!-- Hamburger Menü -->
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home">Ana Sayfa</a></li>
+                    <li><a href="#about">Hakkımızda</a></li>
+                    <li><a href="#doctors">Hekimlerimiz</a></li>
+                    <li><a href="#services">Hizmetlerimiz</a></li>
+                    <li><a href="#appointment">Randevu Oluştur</a></li>
+                    <li><a href="#login" class="login-btn">Giriş Yap</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-            
-         </header>
-    </body>
+    <section id="home">
+        <div class="hero">
+            <h2>Sağlıklı bir gülüş için buradayız</h2>
+            <p>Profesyonel diş hizmetleri için randevunuzu oluşturun</p>
+            <a href="#appointment" class="btn">Randevu Oluştur</a>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
 </html>
