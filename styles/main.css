@@ -7,31 +7,17 @@ body {
 
 #logo-div {
     order: 2;
-    background-color: rgba(0, 0, 255, 0.48);
 }
 
 .container {
     display: grid;
     grid-template-columns: 0.5fr 0.5fr 5fr 1.5fr 0.5fr;
-    background-color: rgb(104, 214, 198);
-}
-
-#left-empty {
-    order: 1;
-    background-color: rgba(137, 43, 226, 0.694);
-}
-#right-empty {
-    order: 5;
-    background-color: rgba(137, 43, 226, 0.646);
 }
 
 #content-div {
     order: 3;
-    border: 2px solid black;
-    background-color: bisque;
 }
 
 #button-div {
     order: 4;
-    border: 2px solid black;
 }
