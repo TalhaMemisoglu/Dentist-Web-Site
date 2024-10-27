@@ -1,0 +1,324 @@
+@import '../../sass/colors.scss';
+
+.banner-section {
+    height: 800px;
+    margin-top: 100px;
+    position: relative;
+    z-index: 1;
+
+    .banner-pattern {
+        position: absolute;
+        top: 10%;
+        right: 0;
+        left: 0;
+        width: 100%;
+        z-index: -1;
+    }
+}
+
+.banner-text {
+    h1 {
+        font-size: 64px;
+        font-weight: 700;
+        margin-bottom: 40px;
+    }
+    .banner-bottom {
+        margin-top: 60px;
+        display: flex;
+
+        .theme-btn {
+            margin-right: 50px;
+
+            a {
+                padding: 20px 25px;
+            }
+        }
+
+        .banner-call {
+            display: flex;
+            align-items: center;
+
+            .icon {
+                width: 35px;
+                height: 35px;
+                margin-right: 30px;
+                background: $color-white;
+                line-height: 35px;
+                text-align: center;
+                border-radius: 12px;
+                position: relative;
+                z-index: 1;
+
+                &:before {
+                    content: "";
+                    position: absolute;
+                    top: -35%;
+                    left: -35%;
+                    width: 60px;
+                    height: 60px;
+                    background: #ffffff;
+                    z-index: -1;
+                    opacity: 0.2;
+                    border-radius: 17px;
+                }
+            }
+            
+            .call-text {
+
+                p {
+                    font-size: 14px;
+                    text-transform: uppercase;
+                    color: $color-blue;
+                    font-weight: 700;
+                    margin-bottom: 5px;
+                }
+
+                h6 {
+                    font-size: 18px;
+                    text-transform: uppercase;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}
+
+.banner-img-area {
+    position: relative;
+    text-align: center;
+
+    .banner-img {
+        margin-bottom: -150px;
+    }
+
+    .info-box {
+        position: absolute;
+        bottom: 5%;
+        left: 0%;
+        background: $color-white;
+        border-radius: 15px;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+
+        .info-img {
+            margin-right: 10px;
+        }
+
+        .info-text {
+            text-align: left;
+            
+            p {
+                margin-bottom: 0;
+                color: $color-black;
+                font-size: 16px;
+                font-weight: 600;
+
+                small {
+                    color: $color-gray;
+                }
+            }
+        }
+    }
+
+    .shapes {
+        img {
+            position: absolute;
+
+            &:nth-child(1) {
+                left: 0;
+                top: 0;
+            }
+            &:nth-child(2) {
+                right: 0;
+                top: 0;
+            }
+            &:nth-child(3) {
+                right: 0;
+                top: 40%;
+            }
+            &:nth-child(4) {
+                left: 10%;
+                top: 30%;
+                z-index: -1;
+            }
+        }
+
+    }
+
+}
+
+
+// Mobile Responsive
+@media (max-width: 575px) {
+
+    // Banner CSS
+    .banner-section {
+        height: 100%;
+        margin-top: 70px
+    }
+    .banner-img-area {
+        .banner-img {
+            margin-bottom: 0;
+        }
+
+        .shapes {
+            img {
+                &:nth-child(1) {
+                    max-width: 70px ;
+                }
+            }
+        }
+        
+    }
+    .banner-text {
+        text-align: center;
+        padding-top: 30px;
+        
+        h1 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .banner-bottom {
+            margin-top: 40px;
+            margin-bottom: 30px;
+            display: block;
+    
+            .theme-btn {
+                margin-right: 0px;
+                margin-bottom: 20px;
+                
+                a {
+                    padding: 15px 20px;
+                }
+            }
+    
+            .banner-call {
+                justify-content: center;
+
+                .call-text {
+                    text-align: left;
+                    p {
+                        font-size: 12px;
+                    }
+    
+                    h6 {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media (min-width: 576px) and (max-width: 767px) {
+    // Banner CSS
+    .banner-section {
+        height: 100%;
+        margin-top: 70px
+    }
+    .banner-img-area {
+        .banner-img {
+            margin-bottom: 0;
+        }
+
+        .shapes {
+            img {
+                &:nth-child(1) {
+                    max-width: 70px ;
+                }
+            }
+        }
+        
+    }
+    .banner-text {
+        text-align: center;
+        padding-top: 30px;
+        
+        h1 {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .banner-bottom {
+            margin-top: 40px;
+            margin-bottom: 30px;
+            display: block;
+    
+            .theme-btn {
+                margin-right: 0px;
+                margin-bottom: 20px;
+                
+                a {
+                    padding: 15px 20px;
+                }
+            }
+    
+            .banner-call {
+                justify-content: center;
+
+                .call-text {
+                    text-align: left;
+                    p {
+                        font-size: 12px;
+                    }
+    
+                    h6 {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Medium Devices Responsive
+@media (min-width: 768px) and (max-width: 991px) {
+    // Banner CSS
+    .banner-section {
+        height: 100%;
+        margin-top: 70px
+    }
+    .banner-img-area {
+        .banner-img {
+            margin-bottom: 0;
+        }
+
+        .shapes {
+            img {
+                &:nth-child(1) {
+                    max-width: 70px ;
+                }
+            }
+        }
+        
+    }
+    .banner-text {
+        text-align: center;
+        padding-top: 30px;
+        
+        h1 {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .banner-bottom {
+            justify-content: center;
+        }
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .banner-text  {
+        h1 {
+            font-size: 45px;
+            margin-bottom: 25px;
+        } 
+
+        .banner-bottom {
+            margin-top: 40px;
+        }
+    }  
+}

@@ -1,0 +1,58 @@
+@import '../../sass/colors.scss';
+
+.service-section {
+    .service-title-text {
+        padding-top: 50px;
+        max-width: 600px;
+        margin: 0 0 0 auto;
+        font-weight: 500;
+    }
+
+    .services-link {
+        margin: 50px 0 30px;
+
+        a {
+            color: $color-blue;
+            text-decoration: none;
+            font-weight: 700;
+            background: #583fbc1e;
+            padding: 15px 25px;
+            display: inline-block;
+            border-radius: 15px;
+
+            svg {
+                margin-left: 10px;
+                font-size: 20px;
+                top: -2px;
+                position: relative;
+            }
+        }
+    }
+}
+
+//Mobile Responsive
+@media (max-width: 575px){
+    .service-section {
+        .service-title-text {
+            padding-top: 0;
+            margin-bottom: 10px;
+        }
+    }
+}
+@media (min-width: 576px) and (max-width: 767px) {
+    .service-section {
+        .service-title-text {
+            padding-top: 0;
+            margin-bottom: 30px;
+        }
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .service-section {
+        .service-title-text {
+            padding-top: 0;
+            margin-bottom: 30px;
+        }
+    }
+}

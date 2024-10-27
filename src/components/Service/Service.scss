@@ -1,0 +1,62 @@
+.service-box {
+    border: 1px solid #1819451a;
+    padding: 15px;
+    border-radius: 32px;
+    text-align: center;
+    margin-bottom: 30px;
+
+    .icon-area {
+        background: #DBDEFA;
+        padding: 80px;
+        border-radius: 30px;
+        margin-bottom: 30px;
+
+        .icon-box {
+            margin: auto;
+        }
+    }
+
+    .service-text {
+        h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+
+            a {
+                text-decoration: none;
+                color: #181945;
+            }
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+}
+
+// Small Device Responsive
+@media (min-width: 576px) and (max-width: 767px) {
+    .service-box {
+        .icon-area {
+            padding: 50px;
+        }
+    }
+}
+
+// Medium Device Responsive
+@media (min-width: 768px) and (max-width: 991px) {
+    .service-box {
+        .icon-area {
+            padding: 50px;
+        }
+    }
+}
+
+// Medium Device Responsive
+@media (min-width: 992px) and (max-width: 1199px) {
+    .service-box {
+        .icon-area {
+            padding: 50px;
+        }
+    }
+}
