@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">Welcome to Our Dental Clinic</h1>
+            <p class="lead mb-4">Professional dental care for you and your family</p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                <a href="{% url 'book:patient_type' %}" class="btn btn-primary btn-lg px-4 gap-3">Book Appointment</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'book:my_appointments' %}" class="btn btn-outline-secondary btn-lg px-4">My Appointments</a>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

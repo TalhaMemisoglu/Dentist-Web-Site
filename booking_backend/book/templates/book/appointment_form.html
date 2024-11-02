@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card appointment-card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title mb-0">Book Your Appointment</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'book:booking' %}">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group mb-3">
+                                <label class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="error-message mt-1">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary w-100">Book Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

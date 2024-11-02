@@ -1,0 +1,47 @@
+% extends "base.html" %}
+
+{% block title %}My Appointments - Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Appointments</h2>
+    {% if appointments %}
+        <div class="row">
+            {% for appointment in appointments %}
+                <div class="col-md-6 mb-4">
+                    <div class="card appointment-card">
+                        <div class="card-header {% if appointment.appointment_date >= today %}bg-primary{% else %}bg-secondary{% endif %} text-white">
+                            <h3 class="card-title mb-0">{{ appointment.operation }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Location:</strong> {{ appointment.location }}</p>
+                            <p><strong>Date:</strong> {{ appointment.appointment_date }}</p>
+                            <p><strong>Time:</strong> {{ appointment.appointment_time }}</p>
+                            <p><strong>Status:</strong> 
+                                {% if appointment.appointment_date >= today %}
+                                    <span class="badge bg-success">Upcoming</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Past</span>
+                                {% endif %}
+                            </p>
+                            {% if appointment.appointment_date >= today %}
+                                <form method="post" action="{% url 'cancel_appointment' appointment.id %}" class="mt-3">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this appointment?')">
+                                        Cancel Appointment
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            <p class="mb-0">You don't have any appointments scheduled.</p>
+        </div>
+        <a href="{% url 'book:patient_type' %}" class="btn btn-primary">Book an Appointment</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Appointment Confirmed - Dental Clinic{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card appointment-card">
+                <div class="card-header bg-success text-white">
+                    <h2 class="card-title mb-0">Appointment Confirmed!</h2>
+                </div>
+                <div class="card-body">
+                    <div class="success-message">
+                        <p class="mb-0">Thank you for booking your appointment with us!</p>
+                    </div>
+                    <div class="appointment-details">
+                        <h3>Appointment Details:</h3>
+                        <p><strong>Location:</strong> {{ appointment.location }}</p>
+                        <p><strong>Operation:</strong> {{ appointment.operation }}</p>
+                        <p><strong>Date:</strong> {{ appointment.appointment_date }}</p>
+                        <p><strong>Time:</strong> {{ appointment.appointment_time }}</p>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="{% url 'my_appointments' %}" class="btn btn-primary me-2">View My Appointments</a>
+                        <a href="{% url 'home' %}" class="btn btn-secondary">Return to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
