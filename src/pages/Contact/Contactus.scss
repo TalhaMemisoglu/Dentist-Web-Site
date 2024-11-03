@@ -1,0 +1,21 @@
+@import '../../sass/colors.scss';
+
+.contact-section {
+    margin-top: 130px;
+    height: 500px;
+
+    .section-title {
+        max-width: 550px;
+        margin: 0 auto 40px;
+        text-align: center;
+    }
+}
+
+.contact-form-area {
+    max-width: 750px;
+    margin: -200px auto 100px;
+    padding: 50px;
+    background: $color-white;
+    border-radius: 20px;
+    box-shadow: 0px 0 20px 14px #6c757d0d;
+}

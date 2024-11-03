@@ -1,0 +1,133 @@
+.about-section {
+    height: 750px;
+    
+    .about-banner-text {
+        h2 {
+            font-size: 60px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        p {
+            margin-bottom: 50px;
+        }
+    }
+
+
+    .about-banner-img {
+        text-align: center;
+        position: relative;
+
+        img {
+            margin: 0 10px;
+
+            &:nth-child(2) {
+                margin-top: 120px;
+            }
+        }
+
+        .pattern {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            bottom: 0;
+            z-index: -1;
+        }
+    }
+}
+
+// Mobile Responsive
+@media (max-width: 575px) {
+    .about-section {
+        text-align: center;
+        height: 100%;
+        padding-top: 70px;
+
+        .about-banner-text {
+            margin-bottom: 20px;
+
+            h2 {
+                font-size: 40px;
+                margin-bottom: 15px;
+            }
+
+            p {
+                margin-bottom: 25px;
+            }
+        }
+
+        .about-banner-img {
+            img {
+                &:nth-child(2) {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .about-section {
+        text-align: center;
+        height: 100%;
+        padding-top: 70px;
+
+        .about-banner-text {
+            margin-bottom: 20px;
+
+            h2 {
+                font-size: 40px;
+                margin-bottom: 15px;
+            }
+
+            p {
+                margin-bottom: 25px;
+            }
+        }
+
+        .about-banner-img {
+            img {
+                max-width: 170px;
+                &:nth-child(2) {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}
+
+// Medium Responsive
+@media (min-width: 768px) and (max-width: 991px) {
+    .about-section {
+        text-align: center;
+        height: 100%;
+        padding: 100px 0;
+
+        .about-banner-text {
+            h2 {
+                font-size: 40px;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+
+// Large Responsive
+@media (min-width: 992px) and (max-width: 1199px) {
+    .about-section {
+        height: 100%;
+        padding: 100px 0;
+
+        .about-banner-img {
+            img {
+                max-width: 180px;
+            }
+        }
+    }
+}

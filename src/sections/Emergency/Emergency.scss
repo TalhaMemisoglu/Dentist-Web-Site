@@ -1,0 +1,115 @@
+@import '../../sass/colors.scss';
+
+.emergency-section {
+    padding-top: 100px;
+    padding-bottom: 150px;
+    
+    .emergency-img {
+        text-align: right;
+        margin-right: 60px;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 30px;
+
+        &::before {
+            position: absolute;
+            content: "";
+            width: 45%;
+            height: 125%;
+            top: -12%;
+            left: 35%;
+            background: #DBEFFA;
+            z-index: -1;
+            border-radius: 20px;
+        }
+    }
+
+    .emergency-text {
+        max-width: 700px;
+        margin-bottom: 30px;
+
+        .section-title {
+            margin-bottom: 30px;
+
+            h2 {
+                max-width: inherit;
+            }
+        }
+
+        .theme-btn {
+            margin-top: 80px;
+        }
+    }
+}
+
+// Mobile Responsive
+@media (max-width: 575px) {
+    .emergency-section {
+        padding-top: 50px;
+        padding-bottom: 50px;
+
+        .emergency-img {
+            margin-right: 0;
+            text-align: center;
+
+            &::before {
+                display: none;
+            }
+        }
+
+        .emergency-text {
+            .theme-btn {
+                margin-top: 25px;
+            }
+        }
+    }
+}
+@media (min-width: 576px) and (max-width: 767px) {
+    .emergency-section {
+        padding-top: 50px;
+        padding-bottom: 50px;
+
+        .emergency-img {
+            text-align: center;
+            &::before {
+                display: none;
+            }
+        } 
+
+        .emergency-text {
+            .theme-btn {
+                margin-top: 25px;
+            }
+        }
+    }
+}
+
+// Medium Device Responsive
+@media (min-width: 758px) and (max-width: 991px) {
+    .emergency-section {
+        padding-top: 0;
+        padding-bottom: 50px;
+
+        .emergency-img {
+            text-align: center;
+            margin-right: 0;
+
+            &::before {
+                display: none;
+            }
+        } 
+
+        .emergency-text {
+
+            .section-title {
+                h2 {
+                    font-size: 25px;
+                }
+            }
+
+            .theme-btn {
+                margin-top: 25px;
+            }
+        }
+    }
+}

@@ -1,0 +1,133 @@
+@import '../../sass/colors.scss';
+
+.priority-section {
+    padding-bottom: 150px;
+    
+    .priority-img {
+        text-align: right;
+        margin-right: 60px;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 30px;
+
+        &::before {
+            position: absolute;
+            content: "";
+            width: 45%;
+            height: 65%;
+            top: -12%;
+            left: 30%;
+            background: #DBEFFA;
+            z-index: -1;
+            border-radius: 20px;
+        }
+    }
+
+    .priority-text {
+        max-width: 700px;
+        margin-bottom: 30px;
+
+        .section-title {
+            margin-bottom: 30px;
+
+            h2 {
+                max-width: inherit;
+            }
+        }
+
+        .theme-btn {
+            margin-top: 80px;
+        }
+    }
+}
+
+
+// Mobile Responsive
+@media (max-width: 575px) {
+    .priority-section {
+        padding-bottom: 20px;
+
+        .priority-img {
+            margin-right: 0;
+
+            &::before {
+                display: none;
+            }
+        }
+
+        .priority-text {
+            .theme-btn {
+                margin-top: 20px;
+            }
+        }
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .priority-section {
+        padding-bottom: 70px;
+
+        .priority-img {
+            margin-right: 0;
+            text-align: center;
+
+            &::before {
+                display: none;
+            }
+        }
+
+        .priority-text {
+            .theme-btn {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+
+// Medium Device Responsive
+@media (min-width: 768px) and (max-width: 991px) {
+    .priority-section {
+        padding-bottom: 70px;
+
+        .priority-img {
+            margin-right: 0;
+            text-align: center;
+
+            &::before {
+                display: none;
+            }
+        }
+
+        .priority-text {
+            .theme-btn {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+// Medium Device Responsive 
+@media (min-width: 991px) and (max-width: 1199px) {
+    .priority-section {
+        padding-bottom: 70px;
+        padding-top: 0px;
+
+        .priority-img {
+            &::before {
+                display: none;
+            }
+        }
+    }
+}
+
+// Large Device Responsive
+@media (min-width: 1200px) and (max-width: 1800px) {
+    .priority-section {
+        .priority-img {
+            &::before {
+                display: none;
+            }
+        }
+    }
+} 

@@ -1,0 +1,21 @@
+.faq-section {
+    .section-title {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .accordion-item {
+        .accordion-header {
+           .accordion-button {
+                font-weight: 600;
+           }
+        }
+    }
+}
+
+// Mobile Responsive
+@media (max-width: 575px) {
+    .faq-section {
+        padding-bottom: 50px;
+    }
+}
