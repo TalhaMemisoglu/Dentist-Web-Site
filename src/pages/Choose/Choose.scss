@@ -1,0 +1,121 @@
+@import '../../sass/colors.scss';
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f8f2;
+  color: #333;
+  display: flex;
+  flex-direction: column;  
+  justify-content: flex-start;  
+  min-height: 100vh;  
+  padding: 0;  
+}
+
+
+.outer-container {
+  max-width: 300px;
+  padding: 20px;
+  background-color: #e0e0d1;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+.main-content-container {
+  max-width: 600px;
+  padding: 20px;
+  background-color: #f2f2e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;  
+}
+
+h1 {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+  text-align: left; 
+  margin-bottom: 1rem;
+  margin-top: 100px;
+}
+
+// Hizmet kutuları
+.service-box {
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 20px;
+  padding: 0.8rem;
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+  width: 90%; // Daha küçük boyut
+  align-self: center; // Ortalanmış
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  h2 {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+
+  .line-between {
+    width: 100%;
+    height: 2px;
+    background-color: #333;
+    margin: 10px 0;
+  }
+
+  .duration {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+  }
+
+  .arrow {
+    align-self: flex-end;
+    font-size: 1.2em;
+    color: #333;
+    margin-top: -1.2em;
+    margin-right: 0.3em;
+  }
+}
+
+
+.load-more-btn {
+  margin: 20px auto;
+  padding: 15px 25px;
+  font-size: 1em;
+  color: $color-blue; // Buton metni rengi
+  background: #583fbc1e; // Arka plan rengi
+  display: inline-block;
+  border-radius: 15px; // Köşe yuvarlama
+  border: none; // Kenarlıkları kaldır
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $color-blue; // Hover rengini aktif etmek
+    color: #fff; // Hover'da yazı rengini beyaz yap
+  }
+
+  svg {
+    margin-left: 10px;
+    font-size: 20px;
+    top: -2px;
+    position: relative;
+  }
+}
+
+footer {
+  margin-top: auto;
+  width: 100%;
+}
