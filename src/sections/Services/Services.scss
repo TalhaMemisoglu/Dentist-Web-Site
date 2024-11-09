@@ -11,14 +11,15 @@
     .services-link {
         margin: 50px 0 30px;
 
-        a {
-            color: $color-blue;
+        button {
+            color: $color-blue; // Buton metni rengi
             text-decoration: none;
             font-weight: 700;
-            background: #583fbc1e;
-            padding: 15px 25px;
+            background: #583fbc1e; // Arka plan rengi
+            padding: 15px 25px; // İç boşluk
             display: inline-block;
-            border-radius: 15px;
+            border-radius: 15px; // Köşe yuvarlama
+            border: none; // Kenarlıkları kaldır
 
             svg {
                 margin-left: 10px;
@@ -26,11 +27,17 @@
                 top: -2px;
                 position: relative;
             }
+
+            &:hover {
+                background-color: $color-blue; // Hover rengini aktif etmek
+                color: #fff; // Hover'da yazı rengini beyaz yap
+                cursor: pointer;
+            }
         }
     }
 }
 
-//Mobile Responsive
+// Mobile Responsive
 @media (max-width: 575px){
     .service-section {
         .service-title-text {
@@ -39,6 +46,7 @@
         }
     }
 }
+
 @media (min-width: 576px) and (max-width: 767px) {
     .service-section {
         .service-title-text {

@@ -2,7 +2,7 @@ import React from 'react';
 import './Appointment.scss';
 import SectionTitle from '../../components/SectionTitle/SectionTitle';
 import {AiFillHome} from "react-icons/ai";
-import ContactForm from '../../components/ContactForm/ContactForm';
+
 
 const Appointment = () => {
 
@@ -30,7 +30,7 @@ const Appointment = () => {
                             title="Dentalist'te bakım bir zevktir."
                             description="Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual"/>
 
-                            <ContactForm />
+                            
                         </div>
                     </div>
                 </div>

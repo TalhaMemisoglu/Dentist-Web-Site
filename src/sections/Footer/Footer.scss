@@ -1,18 +1,16 @@
 @import '../../sass/colors.scss';
 
-
 footer {
     background: $color-blue;
 
     .footer-logo {
-        
-        margin-bottom: 30px;
-       
+        margin-top: 100px;  // Daha küçük margin
+        margin-bottom: 20px;  // Daha küçük margin
     }
 
     .social-logo {
         p {
-            font-size: 12px;
+            font-size: 10px;  // Font boyutunu küçük tutarak daha az alan kaplar
             text-transform: uppercase;
             font-weight: 600;
             color: $color-black;
@@ -28,7 +26,7 @@ footer {
                 
                 a {
                     color: $color-black;
-                    margin-right: 10px;
+                    margin-right: 8px; // Daha küçük margin
                 }
             }
         }
@@ -37,21 +35,25 @@ footer {
     .footer-link {
         p {
             text-transform: uppercase;
+            font-weight: 600;
             color: $color-black;
+            margin-top: 10px;  // Daha küçük margin
+            margin-bottom: 5px;
         }
 
         ul {
             padding: 0;
             margin: 0;
+            font-weight: 500;
 
             li {
                 list-style: none;
-                margin-bottom: 10px;
+                margin-bottom: 8px; // Daha küçük margin
 
                 a {
                     text-decoration: none;
                     color: $color-black;
-                    font-size: 15px;
+                    font-size: 14px;  // Daha küçük font
                 }
             }
         }
@@ -61,22 +63,22 @@ footer {
         p {
             text-transform: uppercase;
             color: $color-black;
+            margin-top: 30px;  // Daha küçük margin
+            margin-bottom: 20px;
         }
     }
 
     .contact-list {
         display: flex;
         align-items: center;
-        margin-bottom: 40px;
-        margin-top: 30px;
-        
+        margin-top: 10px;
 
         .contact-icon {
             background: $color-white;
-            width:50px;
-            height: 50px;
-            line-height: 50px;
-            border-radius: 20px;
+            width: 45px;  // Daha küçük ikon
+            height: 45px;
+            line-height: 45px;
+            border-radius: 15px;
             position: relative;
             z-index: 0;
             text-align: center;
@@ -84,34 +86,36 @@ footer {
             &::before {
                 position: absolute;
                 content: '';
-                width: 70px;
-                height: 70px;
+                width: 60px;  // Daha küçük önceden daha büyük bir boyut vardı
+                height: 60px;
                 background: $color-white;
-                top: -10px;
-                left: -10px;
+                top: -8px;
+                left: -8px;
                 z-index: -1;
                 opacity: .3;
-                border-radius: 20px;
+                border-radius: 15px;
             }
 
             img {
-                max-width: 50px;
+                max-width: 40px;  // Daha küçük ikon
             }
         }
 
-        .contact-text {
-            margin-left: 30px;
-
+        .contact-text-block {
+            margin-left: 20px;  // Daha küçük margin
+            margin-bottom: 20px;  // Daha küçük margin
+        
             p {
-                font-size: 12px;
+                font-size: 11px;  // Daha küçük font boyutu
                 margin-bottom: 5px;
                 text-transform: capitalize;
                 font-weight: 500;
+                line-height: 1.2;
             }
 
             h5 {
                 color: $color-black;
-                font-size: 16px;
+                font-size: 14px;  // Daha küçük font boyutu
             }
         }
     }
@@ -120,7 +124,7 @@ footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 50px;
+        margin-top: 40px; // Daha küçük margin
 
         .copy-text {
             p {
@@ -133,7 +137,7 @@ footer {
             ul {
                 li {
                     display: inline-block;
-                    margin-left: 20px; 
+                    margin-left: 15px;  // Daha küçük margin
 
                     a {
                         color: $color-black;
@@ -149,20 +153,20 @@ footer {
 @media (max-width:575px){
     footer {
         .contact-list {
-            margin-bottom: 10px;
+            margin-bottom: 5px;  // Daha küçük margin
 
             .contact-icon {
-                width: 45px;
-                height: 45px;
-                line-height: 45px;
+                width: 40px;  // Küçük ikon boyutu
+                height: 40px;
+                line-height: 40px;
                 border-radius: 10px;
 
                 &::before {
-                    width: 60px;
-                    height: 60px;
-                    top: -8px;
-                    left: -8px;
-                    border-radius: 15px;
+                    width: 50px;  // Daha küçük boyut
+                    height: 50px;
+                    top: -6px;
+                    left: -6px;
+                    border-radius: 12px;
                 }
             }
         }

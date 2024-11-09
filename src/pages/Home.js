@@ -1,6 +1,5 @@
 import React from 'react';
 import Navbar from '../components/Navbar/Navbar';
-import Appointment from '../sections/Appointment/Appointment';
 import Banner from '../sections/Banner/Banner';
 import Emergency from '../sections/Emergency/Emergency';
 import Expert from '../sections/Expert/Expert';
@@ -18,8 +17,7 @@ const Home = () => {
             <Services/>
             <Emergency/>
             <Features />
-            <Expert/>
-            <Appointment/>
+            <Expert/>        
             <Footer/>
         </>
     );

@@ -18,7 +18,7 @@ const AboutBanner = () => {
                                     <p>Ağız sağlığınızla ilgili harika hissetmenizi istiyoruz. Sadece yılda iki kez değil, her ısırıkta, bir fıkra anlattığınızda, güldüğünüzde veya bir öpücük paylaştığınızda.</p>
 
                                     <div className="theme-btn">
-                                        <Link to='/'>Bizimle iletişime geçin</Link>
+                                        <Link to='/contact'>Bizimle iletişime geçin</Link>
                                     </div>
                                 </div>
                             </div>
