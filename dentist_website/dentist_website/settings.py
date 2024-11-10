@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'mainp.apps.MainpConfig',
+    'users.apps.UserConfig',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -123,3 +125,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'profile'
+LOGIN_URL = 'login'
+
+AUTH_USER_MODEL = 'users.CustomUser'         #For custom user model which we will need for dentist patient and etc.
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"    #will be removed. It is for crispy forms which i used for register form
+CRISPY_TEMPLATE_PACK = 'bootstrap4'             #which is from the playlist. Both this and template will be changed
