@@ -42,7 +42,7 @@ const Choose = () => {
         </div>
 
         <div className="service-box" onClick={() => navigate('/teeth-cleaning-child')}>
-          <h2>ORTADONTİ</h2>
+          <h2>ORTADONTİ deneme</h2>
           <div className="line-between"></div>
           <p className="duration">Süre: 60 dk</p>
           <span className="arrow">→</span>
