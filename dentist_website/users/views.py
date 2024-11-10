@@ -30,4 +30,15 @@ def profile(request):    #Updating profile could be added but idk. Maybe for med
         'user': request.user,
         'profile': request.user.profile  # Assuming Profile is linked to User
     }
-    return HttpResponse(f'Username: {request.user.username}')
+    user = request.user  # Get the currently logged-in user
+    
+    email = user.email  # Direct access to the email field in CustomUser
+    phone = user.phone if hasattr(user, 'phone') else "No phone number provided"
+
+    # Return the information as a response
+    response = f"""
+    Username: {user.username}
+    Email: {email}
+    Phone: {phone}
+    """
+    return HttpResponse(response)

@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',     #will be deleted, temporary
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -121,4 +123,16 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+AUTH_USER_MODEL = 'users.CustomUser'         #For custom user model which we will need for dentist patient and etc.
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"    #will be removed. It is for crispy forms which i used for register form
+CRISPY_TEMPLATE_PACK = 'bootstrap4'             #which is from the playlist. Both this and template will be changed
+
+LOGIN_REDIRECT_URL = 'profile'
+LOGIN_URL = 'login'

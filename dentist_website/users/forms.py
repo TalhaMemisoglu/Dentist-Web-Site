@@ -15,7 +15,7 @@ class UserRegisterForm(UserCreationForm):
         
     def clean(self):
         cleaned_data = super().clean()
-        email = cleaned_data.get("email")
+        email = cleaned_data.get("email")   #default validation of Django
         phone = cleaned_data.get("phone")
 
         # Check if at least one of email, or phone is provided
