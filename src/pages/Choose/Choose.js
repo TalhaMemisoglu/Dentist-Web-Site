@@ -42,7 +42,7 @@ const Choose = () => {
         </div>
 
         <div className="service-box" onClick={() => navigate('/teeth-cleaning-child')}>
-          <h2>ORTADONTİ deneme</h2>
+          <h2>ORTADONTİ </h2>
           <div className="line-between"></div>
           <p className="duration">Süre: 60 dk</p>
           <span className="arrow">→</span>
@@ -59,14 +59,14 @@ const Choose = () => {
             <div className="service-box" onClick={() => navigate('/dental-implant')}>
               <h2>DİŞ TEMİZLİĞİ</h2>
               <div className="line-between"></div>
-              <p className="duration">Süre: 120 min</p>
+              <p className="duration">Süre: 120 dk</p>
               <span className="arrow">→</span>
             </div>
 
             <div className="service-box" onClick={() => navigate('/root-canal')}>
               <h2>KANAL TEDAVİ</h2>
               <div className="line-between"></div>
-              <p className="duration">Süre: 90 min</p>
+              <p className="duration">Süre: 90 dk</p>
               <span className="arrow">→</span>
             </div>
           </>
