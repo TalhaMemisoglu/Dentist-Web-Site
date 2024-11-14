@@ -1,0 +1,50 @@
+/* appointment.scss */
+.appointment-container {
+    font-family: Arial, sans-serif;
+  }
+  
+  .main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+  }
+  
+  .question-box {
+    background-color: #f5f8fc;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .question-box h2 {
+    margin-bottom: 20px;
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .btn-new-patient, .btn-existing-patient {
+    background-color: #fff;
+    border: 2px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-new-patient:hover, .btn-existing-patient:hover {
+    background-color: #eaeaea;
+  }
+  
+  .btn-new-patient span, .btn-existing-patient span {
+    display: block;
+    color: #777;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  

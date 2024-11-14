@@ -1,0 +1,50 @@
+@import '../../sass/colors.scss';
+
+.appointment-btn {
+    background: $color-blue;
+    color: $color-white;
+    padding: 14px 20px;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: .3s;
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 20px;
+    display: inline-block;
+
+    &:hover {
+        background: $color-white;
+        color: $color-blue;
+        border: 1px solid $color-blue;
+    }
+}
+
+.text-right {
+    text-align: right;
+}
+
+.button-group {
+    background-color: #0590D4;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    
+    label {
+        text-transform: uppercase;
+        color: #1819458a;
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .form-control {
+        height: 50px;
+        border-radius: 14px;
+    }
+
+    textarea {
+        height: 150px !important;
+    }
+}

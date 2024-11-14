@@ -1,0 +1,176 @@
+@import '../../sass/colors.scss';
+
+.appointment-container {
+  font-family: Arial, sans-serif;
+  min-height: 100vh; /* Sayfanın en az ekran yüksekliği kadar olmasını sağlar */
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column; /* Elemanları dikeyde sıralar */
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
+.page-title {
+  font-size: 36px;
+  color: #333;
+  font-weight: 200px;
+  margin-top: 100px; /* Başlık ile üst arasındaki mesafeyi ayarlayın */
+  margin-bottom: 20px; /* Başlık ile alt arasındaki mesafeyi ayarlayın */
+  text-align: left; /* Sola hizala */
+  width: 100%; /* Tüm genişliği kapsaması için */
+
+  /* Responsive Ayarlar */
+  @media (max-width: 1024px) {
+    font-size: 30px;
+    margin-top: 80px;
+    margin-bottom: 25px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin-top: 70px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+    margin-top: 60px;
+    margin-bottom: 15px;
+  }
+}
+
+.question-box {
+  position: relative;
+  margin-top: 60px;
+  margin-bottom: 80px;
+  background-color: $color-white;
+  border-radius: 30px;
+  border: 2px solid $color-black;
+  padding: 60px 80px; /* Yatayda dar, dikeyde geniş padding */
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 60%; /* Genişliği azaltın */
+  min-height: 300px; /* Yüksekliği artırmak için minimum yükseklik belirleyin */
+
+  /* Responsive Ayarlar */
+  @media (max-width: 1024px) { /* Tabletler için */
+    width: 80%;
+    padding: 40px 20px;
+    margin-top: 50px;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 768px) { /* Küçük tablet ve büyük telefonlar için */
+    width: 90%;
+    padding: 30px 15px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+  }
+
+  @media (max-width: 480px) { /* Küçük telefonlar için */
+    width: 95%;
+    padding: 20px 10px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+  }
+}
+
+.question-box h2 {
+  margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center; /* Butonların ortalanmasını sağlar */
+}
+
+.btn-new-patient, .btn-existing-patient {
+  background-color: #fff;
+  border: 2px solid $color-black;
+  padding: 30px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 60px;
+  margin-right: 60px;
+  font-size: 25px;
+  width: 50%;
+  max-width: 400px;
+}
+
+.btn-new-patient:hover, .btn-existing-patient:hover {
+  background-color: $color-blue;
+}
+
+.button-text {
+  display: block;
+  color: #777;
+  font-size: 20px;
+  margin-top: 5px;
+  text-align: center; /* Yazıyı butonun altında ortalar */
+}
+
+/* Responsive Ayarlar */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 40px;
+  }
+
+  .button-container {
+    gap: 10px;
+  }
+
+  .btn-new-patient, .btn-existing-patient {
+    padding: 12px;
+    font-size: 20px; /* Yazı boyutunu biraz küçültüyoruz */
+  }
+
+  .button-text {
+    font-size: 18px; /* Yazı boyutunu biraz küçültüyoruz */
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 30px;
+  }
+
+  .button-container {
+    gap: 10px;
+  }
+
+  .btn-new-patient, .btn-existing-patient {
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .button-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 20px;
+  }
+
+  .button-container {
+    gap: 8px;
+  }
+
+  .btn-new-patient, .btn-existing-patient {
+    padding: 8px;
+    font-size: 16px;
+  }
+
+  .button-text {
+    font-size: 14px; /* Yazıyı daha da küçültüyoruz */
+  }
+}
