@@ -12,8 +12,9 @@ const Features = () => {
 
                 <div className="row align-items-center">
                     {
-                        featuresData.map(singleFeature => 
+                        featuresData.map((singleFeature, index) => 
                             <IconList 
+                                key={index} // Add the key prop here
                                 icon={singleFeature.icon} 
                                 title={singleFeature.title}
                                 description={singleFeature.description}

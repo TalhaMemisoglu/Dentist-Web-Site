@@ -10,6 +10,7 @@ import Login from './pages/Login/Login';
 import Patients from './pages/Patients/Patients';
 import Choose from './pages/Choose/Choose';
 import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute"
 
 function Logout() {
   localStorage.clear()
@@ -31,6 +32,7 @@ function App() {
           <Route path="/contact" element={<Contactus />} />
           <Route path="/register" element={<Register/>} />
           <Route path="/login" element={<Login/>} />
+          <Route path="/logout" element={<Logout/>} />
           <Route path="/patients" element={<Patients/>} />
           <Route path="/choose" element={<Choose/>} />
           <Route path="*" element={<NotFound />}></Route>

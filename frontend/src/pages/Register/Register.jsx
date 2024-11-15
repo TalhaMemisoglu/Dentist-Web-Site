@@ -1,10 +1,32 @@
 import React from 'react';
+import { useState } from "react";
+import api from "../../api";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 import './Register.scss'; // Import the SCSS file for styles
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link, useNavigate } from 'react-router-dom'; // Import Link for navigation
 import Navbar from '../../components/Navbar/Navbar';
 
 const Register = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        setLoading(true);
+        e.preventDefault();
+
+        try {
+            await api.post("/api/user/register/", { username, password });
+            navigate("/login"); // Redirect to login after successful registration
+        } catch (error) {
+            alert(error.message || "Registration failed");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <>
         <Navbar></Navbar>
@@ -17,7 +39,7 @@ const Register = () => {
                             <p>Let's put a smile on your face :)</p>
                         </div>
 
-                        <form>
+                        <form onSubmit={handleSubmit} className="form-container">
                             <div className="form-group">
                                 <div className="input-group mb-3 row">
                                     <div className="col">
