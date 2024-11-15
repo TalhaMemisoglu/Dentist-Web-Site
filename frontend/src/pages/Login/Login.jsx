@@ -1,9 +1,33 @@
+import { useState } from "react";
+import api from "../../api";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 import './Login.scss'; // Import the SCSS file
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 
 const Login = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        setLoading(true);
+        e.preventDefault();
+
+        try {
+            const res = await api.post("/api/token/", { username, password });
+            localStorage.setItem(ACCESS_TOKEN, res.data.access);
+            localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+            navigate("/");
+        } catch (error) {
+            alert("Login failed: " + error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <>
             <Navbar />
@@ -16,15 +40,16 @@ const Login = () => {
                                 <p>Let's put a smile on your face :)</p>
                             </div>
 
-                            <form onSubmit={handleLogin}>
+                            <form onSubmit={handleSubmit} className="form-container">
                                 <div className="form-group">
                                     <div className="input-group mb-3 col">
                                         <input
                                             type="text"
                                             className="form-control form-control-lg fs-6"
-                                            placeholder="Email address"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            placeholder="Username"
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
+                                            required
                                         />
                                     </div>
 
@@ -35,6 +60,7 @@ const Login = () => {
                                             placeholder="Password"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
+                                            required
                                         />
                                     </div>
                                 </div>
@@ -50,8 +76,12 @@ const Login = () => {
                                     </div>
                                 </div>
                                 <div className="input-group mb-3">
-                                    <button type="submit" className="btn btn-lg btn-primary w-100 fs-6 button-group">
-                                        Giriş Yap
+                                    <button
+                                        type="submit"
+                                        className="btn btn-lg btn-primary w-100 fs-6 button-group"
+                                        disabled={loading}
+                                    >
+                                        {loading ? "Loading..." : "Giriş Yap"}
                                     </button>
                                 </div>
 
