@@ -37,7 +37,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.IsAuthenticated",#default permission ensures that all views require authentication unless explicitly configured otherwise
     ],
 }
 
@@ -146,3 +146,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
+
+AUTH_USER_MODEL = 'api.CustomUser' #For custom user model which we will need for dentist patient and etc.
+
+LOGIN_REDIRECT_URL = 'profile'  #If user successfully login, it will redirect to profile page
+LOGIN_URL = 'login' #If user tryna access to a view which requires authentication, it will redirect to login page
