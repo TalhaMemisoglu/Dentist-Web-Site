@@ -1,1 +1,7 @@
 *.pyc
+__pycache__/
+#Should You Track .pyc Files in Git?
+#No, .pyc files are machine-dependent and can vary depending on the system and Python version. 
+#This means that:
+#They are not portable: They are tied to the specific version of Python and the platform (Windows, macOS, etc.) you're using.
+#They are unnecessary to track: Every time you run Python on a different system, Python will regenerate .pyc files as needed. They don’t need to be versioned in Git.
