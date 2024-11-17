@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'corsheaders',
+    'book', # Remove after complete migration to rest of API
 ]
 
 MIDDLEWARE = [

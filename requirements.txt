@@ -8,3 +8,4 @@ pytz
 sqlparse
 psycopg[binary]
 python-dotenv
+pillow
