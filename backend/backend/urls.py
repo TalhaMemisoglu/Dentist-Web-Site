@@ -11,4 +11,5 @@ urlpatterns = [
     #The api-auth/ endpoint provides session-based login for DRF’s browsable API. It doesn’t align 
     #with JWT, which is stateless and doesn’t use sessions.
     #Removing it avoids confusion and enforces consistency in authentication across your project.
+    path('api/booking/', include('book.urls')) # Fuse with rest of API after further testing
 ]
