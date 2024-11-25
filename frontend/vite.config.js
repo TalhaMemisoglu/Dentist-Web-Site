@@ -13,4 +13,5 @@ export default defineConfig({   //Will send the request to the backend server
       },
     },
   },
-})
+})  //added proxy because it bypasses the CORS policy and sends the request to the backend server
+    //and it makes our code more writable and readable, and thus makes the debugging easier
