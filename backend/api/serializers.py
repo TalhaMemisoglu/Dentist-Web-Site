@@ -18,14 +18,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
         
         return data
 
+    # No need to override `create()` if you're relying on signals to create the profile
     def create(self, validated_data):
-        # Create the user first
+        # Create the user
         user = CustomUser.objects.create_user(**validated_data)
-        
-        # Now create the profile
-        Profile.objects.create(user=user, email=validated_data.get('email'), phone=validated_data.get('phone'))
-
         return user
+    
 # Login Serializer    
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()

@@ -11,43 +11,36 @@ from django.http import JsonResponse
 from .models import CustomUser, Profile
 from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer
 
-# User Registration View
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import permissions, status
+from rest_framework.response import Response
+from rest_framework import generics
+from .models import CustomUser
+
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.AllowAny]
-    
+
     def create(self, request, *args, **kwargs):
         # Handle user registration
         response = super().create(request, *args, **kwargs)
-        
-        # Get the user from the request data
+
+        # Get the created user
         user_data = response.data
-        username = user_data.get('username')
-        
-        # Login the user after registration
-        user = CustomUser.objects.get(username=username)
-        login(request, user)
-        
-        # Create the profile for the new user
-        profile_data = {
-            'user': user.id,
-            'name': user.username,  # Assuming username is used as the name
-            'email': user.email,
-            'phone': user.phone,
-        }
-        profile_serializer = ProfileSerializer(data=profile_data)
-        if profile_serializer.is_valid():
-            profile_serializer.save()
-        else:
-            return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Send back a success response with a message
-        success_message = f'Account created for {username}!'
+        user = CustomUser.objects.get(username=user_data['username'])
+
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+
+        # Send back a success response with tokens
+        success_message = f'Account created for {user.username}!'
         return Response({
             'message': success_message,
             'user': user_data,
-            'profile': profile_serializer.data
+            'access_token': access_token,
+            'refresh_token': str(refresh),
         }, status=status.HTTP_201_CREATED)
         
         
