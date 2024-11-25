@@ -76,7 +76,21 @@ const Navbar = () => {
                             
                             {/* Navbar Button */}
                             <div className="theme-btn">
-                                <Link to="/patients">Randevu al</Link>
+                                {isAuthenticated ? (
+                                    <Link 
+                                        to="/choose" 
+                                        className="nav-link theme-btn-link"
+                                    >
+                                        Randevu al
+                                    </Link>
+                                ) : (
+                                    <Link 
+                                        to="/patients" 
+                                        className="nav-link theme-btn-link"
+                                    >
+                                        Randevu al
+                                    </Link>
+                                )}
                             </div>
                             <div className="theme-btn2">
                             {isAuthenticated ? (

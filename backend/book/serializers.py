@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework import serializers
 from .models import Dentist, Operation, DentistOperation, DentistSchedule, Appointment
 

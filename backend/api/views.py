@@ -95,3 +95,9 @@ class LogoutView(APIView):
             return Response({"error": "No active session found."}, status=400)
         
         return Response({"message": "Successfully logged out."}, status=200)
+
+class DentistListView(APIView):
+    def get(self, request):
+        dentists = CustomUser.objects.filter(user_type='dentist')
+        serializer = CustomUserSerializer(dentists, many=True)
+        return Response(serializer.data)
