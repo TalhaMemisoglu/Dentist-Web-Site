@@ -5,7 +5,6 @@ from .views import DentistViewSet, AppointmentViewSet
 # API Router setup
 router = DefaultRouter()
 router.register(r'dentists', DentistViewSet)
-router.register(r'operations', OperationViewSet)
 router.register(r'appointments', AppointmentViewSet, basename='appointment')
 
 # User URLs
