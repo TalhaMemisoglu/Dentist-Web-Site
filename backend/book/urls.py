@@ -9,5 +9,7 @@ router.register(r'appointments', AppointmentViewSet, basename='appointment')
 
 # User URLs
 urlpatterns = [
-   #TODO 
+   #TODO
+   #   path('', include(router.urls)),
+   # test 
 ]
