@@ -13,11 +13,11 @@
     .navbar {
         padding: 0;
         
-        .navbar-brand {
-            img {
-                max-width: 150px;
-            }
+        .navbar-brand img {
+            width: 60px; 
+            height: 60px;
         }
+        
         .navbar-nav {
             .nav-item {
                 .nav-link {
