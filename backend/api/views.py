@@ -10,6 +10,7 @@ from django.contrib.messages import get_messages
 from django.http import JsonResponse
 from .models import CustomUser, Profile
 from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer
+from rest_framework.permissions import AllowAny
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import permissions, status
@@ -97,6 +98,7 @@ class LogoutView(APIView):
         return Response({"message": "Successfully logged out."}, status=200)
 
 class DentistListView(APIView):
+    permission_classes = [AllowAny]
     def get(self, request):
         dentists = CustomUser.objects.filter(user_type='dentist')
         serializer = CustomUserSerializer(dentists, many=True)

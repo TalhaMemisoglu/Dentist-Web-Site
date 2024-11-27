@@ -5,61 +5,48 @@ body {
   background-color: #f8f8f2;
   color: #333;
   display: flex;
-  flex-direction: column;  
-  justify-content: flex-start;  
-  min-height: 100vh;  
-  padding: 0;  
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 0;
 }
 
-
-.outer-container {
-  max-width: 300px;
+.container {
   padding: 20px;
-  background-color: #e0e0d1;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-
-.main-content-container {
-  max-width: 600px;
-  padding: 20px;
-  background-color: #f2f2e6;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  flex-grow: 1;  
 }
 
 h1 {
   font-size: 1.5em;
   font-weight: bold;
   color: #333;
-  text-align: left; 
+  text-align: left;
   margin-bottom: 1rem;
-  margin-top: 100px;
 }
 
-// Hizmet kutuları
+// Services grid container
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); // Maximum 4 columns
+  gap: 20px;
+  padding: 20px 0;
+}
+
+// Service box
 .service-box {
   background-color: #fff;
   border: 2px solid #333;
-  border-radius: 20px;
-  padding: 0.8rem;
-  margin: 15px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  cursor: pointer;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: left;
   transition: box-shadow 0.3s ease;
-  width: 90%; // Daha küçük boyut
-  align-self: center; // Ortalanmış
+  cursor: pointer;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
   h2 {
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: bold;
     color: #333;
     margin: 0;
@@ -87,35 +74,3 @@ h1 {
   }
 }
 
-
-.load-more-btn {
-  margin: 20px auto;
-  padding: 15px 25px;
-  font-size: 1em;
-  color: $color-blue; // Buton metni rengi
-  background: #583fbc1e; // Arka plan rengi
-  display: inline-block;
-  border-radius: 15px; // Köşe yuvarlama
-  border: none; // Kenarlıkları kaldır
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 700;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: $color-blue; // Hover rengini aktif etmek
-    color: #fff; // Hover'da yazı rengini beyaz yap
-  }
-
-  svg {
-    margin-left: 10px;
-    font-size: 20px;
-    top: -2px;
-    position: relative;
-  }
-}
-
-footer {
-  margin-top: auto;
-  width: 100%;
-}

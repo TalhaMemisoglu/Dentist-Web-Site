@@ -10,6 +10,7 @@ const Schedule = () => {
   
   const location = useLocation();
   const chosenService = location.state?.service; // Safely access the service
+  const chosenDentist = location.state?.dentist; 
 
   // Placeholder state for selected date (currently unused)
   const [selectedDate, setSelectedDate] = useState(null);
@@ -33,6 +34,13 @@ const Schedule = () => {
             </div>
           ) : (
             <p>Seçilen hizmet bulunamadı.</p>
+          )}
+          {chosenDentist ? (
+            <div className="service-box">
+              <h2>Seçtiğiniz Doktor: {chosenDentist.username}</h2>
+            </div>
+          ) : (
+            <p>Seçilen doktor bulunamadı.</p>
           )}
 
           <div className="calendar-hours-container">
