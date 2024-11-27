@@ -27,22 +27,40 @@ Dentist-Web-Site/
 │   └── manage.py
 └── frontend/
     └── package.json
-
+'''
 import subprocess
 import os
 import sys
 import time
+
+def check_npm_installation():
+    try:
+        subprocess.run(['npm', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return True
+    except FileNotFoundError:
+        print("Error: npm is not installed or not in PATH")
+        return False
+
+def check_frontend_setup(frontend_dir):
+    if not os.path.exists(os.path.join(frontend_dir, 'package.json')):
+        print("Error: package.json not found in frontend directory")
+        print("Please run 'npm install' in the frontend directory first")
+        return False
+    return True
 
 def start_backend():
     backend_dir = os.path.join(os.getcwd(), 'backend')
     if not os.path.exists(backend_dir):
         print("Error: Backend directory not found")
         sys.exit(1)
-        
+    
+    venv_python = os.path.join('venv', 'Scripts', 'python.exe')
+    python_cmd = venv_python if os.path.exists(venv_python) else 'python'
+       
     print(f"Starting backend server in: {backend_dir}")
     try:
         backend_process = subprocess.Popen(
-            ['python', 'manage.py', 'runserver'],
+            [python_cmd, 'manage.py', 'runserver'],
             cwd=backend_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -58,6 +76,21 @@ def start_frontend():
     if not os.path.exists(frontend_dir):
         print("Error: Frontend directory not found")
         sys.exit(1)
+
+    # Check npm and frontend setup
+    if not check_npm_installation():
+        sys.exit(1)
+    if not check_frontend_setup(frontend_dir):
+        sys.exit(1)
+
+    # Install dependencies if node_modules doesn't exist
+    if not os.path.exists(os.path.join(frontend_dir, 'node_modules')):
+        print("Installing frontend dependencies...")
+        try:
+            subprocess.run(['npm', 'install'], cwd=frontend_dir, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error installing dependencies: {str(e)}")
+            sys.exit(1)
 
     print(f"Starting frontend server in: {frontend_dir}")
     try:
@@ -75,10 +108,19 @@ def start_frontend():
 
 def monitor_output(process, prefix):
     """Monitor and print output from a process with a prefix"""
-    for line in process.stdout:
-        print(f"[{prefix}] {line.strip()}")
-    for line in process.stderr:
-        print(f"[{prefix} ERROR] {line.strip()}")
+    while True:
+        line = process.stdout.readline()
+        if not line and process.poll() is not None:
+            break
+        if line:
+            print(f"[{prefix}] {line.strip()}")
+    
+    while True:
+        line = process.stderr.readline()
+        if not line and process.poll() is not None:
+            break
+        if line:
+            print(f"[{prefix} ERROR] {line.strip()}")
 
 def main():
     try:
@@ -94,9 +136,7 @@ def main():
         # Monitor processes
         print("\nServers are running. Press Ctrl+C to stop.\n")
         
-
-        # Debugging and improvments may be usefull
-        import threading 
+        import threading
         backend_thread = threading.Thread(
             target=monitor_output,
             args=(backend_process, 'Backend'),
@@ -111,7 +151,6 @@ def main():
         backend_thread.start()
         frontend_thread.start()
 
-        # Keep the script running
         while True:
             if backend_process.poll() is not None:
                 print("Backend server stopped unexpectedly!")
@@ -120,12 +159,19 @@ def main():
                 print("Frontend server stopped unexpectedly!")
                 break
             time.sleep(1)
-# Bit a cheesy approach
+
     except KeyboardInterrupt:
         print("\nShutting down servers...")
         try:
             backend_process.terminate()
             frontend_process.terminate()
+            # Give processes time to terminate gracefully
+            time.sleep(2)
+            # Force kill if still running
+            if backend_process.poll() is None:
+                backend_process.kill()
+            if frontend_process.poll() is None:
+                frontend_process.kill()
         except:
             pass
         print("Servers stopped.")
@@ -135,4 +181,4 @@ if __name__ == "__main__":
     main()
 
 
-'''
+
