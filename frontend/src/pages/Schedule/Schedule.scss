@@ -1,0 +1,69 @@
+/* Schedule.scss */
+
+.appointment-title {
+    margin-top: 100px;
+    margin-bottom: 0px;
+}
+
+.main-content {
+    background-color: white;
+    border: 2px solid black;
+    height: 100%;
+    width: 100%;
+    border-radius: 10%;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.booking-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .service-box {
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: 20px;
+    padding: 0.8rem;
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    width: 90%; // Daha küçük boyut
+    align-self: center; // Ortalanmış
+  
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+}
+  
+  .calendar-hours-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    max-height: 500px;
+  }
+  
+  .calendar-section,
+  .available-hours-section {
+    flex: 1;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .calendar-section h3,
+  .available-hours-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  

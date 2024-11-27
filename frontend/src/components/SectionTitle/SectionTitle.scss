@@ -1,10 +1,10 @@
-@import '../../sass/colors.scss';
+// @import '../../sass/colors.scss';
 
 .section-title {
     margin-bottom: 100px;
 
     span {
-        color: $color-blue;
+        color: blue;
         font-size: 14px;
         text-transform: uppercase;
         font-weight: 600;
@@ -19,7 +19,7 @@
     }
 
     p {
-        color: $color-black;
+        color: black;
         font-weight: 500;
     }
 }

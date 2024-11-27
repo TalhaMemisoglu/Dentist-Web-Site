@@ -11,6 +11,7 @@ import Patients from './pages/Patients/Patients';
 import Choose from './pages/Choose/Choose';
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute"
+import Schedule from './pages/Schedule/Schedule';
 
 function Logout() {
   localStorage.clear()
@@ -35,6 +36,7 @@ function App() {
           <Route path="/logout" element={<Logout/>} />
           <Route path="/patients" element={<Patients/>} />
           <Route path="/choose" element={<Choose/>} />
+          <Route path="/schedule" element={<Schedule/>} />
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </BrowserRouter>

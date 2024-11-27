@@ -1,8 +1,8 @@
-@import '../../sass/colors.scss';
-@import '../../sass/fonts.scss';
+// @import '../../sass/colors.scss';
+// @import '../../sass/fonts.scss';
 
 .icon-box {
-    background: $color-white;
+    background: white;
     width: 80px;
     height: 80px;
     line-height: 80px;
@@ -16,7 +16,7 @@
         content: '';
         width: 100px;
         height: 100px;
-        background: $color-white;
+        background: white;
         top: -10px;
         left: -10px;
         z-index: -1;

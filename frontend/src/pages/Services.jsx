@@ -4,8 +4,6 @@ import Footer from '../sections/Footer/Footer';
 import Gallery from '../sections/Gallery/Gallery';
 import ServiceBanner from '../sections/ServiceBanner/ServiceBanner';
 
-
-
 const Services = () => {
     return (
         <>
