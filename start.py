@@ -35,8 +35,9 @@ import time
 
 def check_npm_installation():
     try:
-        subprocess.run(['npm', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return True
+        result = subprocess.run(['npm', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True) # shell=True for Windows
+        if result.returncode == 0:
+            return True
     except FileNotFoundError:
         print("Error: npm is not installed or not in PATH")
         return False
@@ -94,12 +95,21 @@ def start_frontend():
 
     print(f"Starting frontend server in: {frontend_dir}")
     try:
+        npm_cmd = globals().get('NPM_PATH', 'npm')
         frontend_process = subprocess.Popen(
-            ['npm', 'run', 'dev'],
+            [npm_cmd, 'run', 'dev'],
             cwd=frontend_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            universal_newlines=True
+            universal_newlines=True,
+            shell=True,  # shell=True for Windows
+            encoding='utf-8',
+            errors='replace',
+            env={
+                **os.environ,  # Include current environment
+                'PATH': os.environ['PATH'] + os.pathsep + os.path.dirname(npm_cmd)
+                if npm_cmd != 'npm' else os.environ['PATH']
+            }
         )
         return frontend_process
     except Exception as e:
@@ -108,19 +118,25 @@ def start_frontend():
 
 def monitor_output(process, prefix):
     """Monitor and print output from a process with a prefix"""
-    while True:
-        line = process.stdout.readline()
-        if not line and process.poll() is not None:
-            break
-        if line:
-            print(f"[{prefix}] {line.strip()}")
-    
-    while True:
-        line = process.stderr.readline()
-        if not line and process.poll() is not None:
-            break
-        if line:
-            print(f"[{prefix} ERROR] {line.strip()}")
+    process.stdout.reconfigure(encoding='utf-8', errors='replace')
+    process.stderr.reconfigure(encoding='utf-8', errors='replace')
+
+    try:
+        while True:
+            line = process.stdout.readline()
+            if not line and process.poll() is not None:
+                break
+            if line:
+                print(f"[{prefix}] {line.strip()}")
+        
+        while True:
+            line = process.stderr.readline()
+            if not line and process.poll() is not None:
+                break
+            if line:
+                print(f"[{prefix} ERROR] {line.strip()}")
+    except Exception as e:
+        print(f"Error monitoring {prefix} output: {str(e)}")
 
 def main():
     try:
