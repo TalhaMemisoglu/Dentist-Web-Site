@@ -28,6 +28,8 @@ Dentist-Web-Site/
 └── frontend/
     └── package.json
 '''
+# Works but slow 
+
 import subprocess
 import os
 import sys
