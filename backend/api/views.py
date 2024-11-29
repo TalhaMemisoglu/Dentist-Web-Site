@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated , AllowAny
 from django.contrib.auth import authenticate,login
 from django.contrib.messages import get_messages
 from django.http import JsonResponse
@@ -102,4 +102,15 @@ class DentistListView(APIView):
     def get(self, request):
         dentists = CustomUser.objects.filter(user_type='dentist')
         serializer = CustomUserSerializer(dentists, many=True)
+        return Response(serializer.data)
+    from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .serializers import CustomUserSerializer
+
+class CurrentUserView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        serializer = CustomUserSerializer(request.user)
         return Response(serializer.data)

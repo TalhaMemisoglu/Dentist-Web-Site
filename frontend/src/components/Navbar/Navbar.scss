@@ -26,6 +26,7 @@
                     font-weight: 600;
                     padding: 0;
                     margin: 10px 30px;
+                    
 
                     &:hover {
                         color: $color-blue;
@@ -34,6 +35,9 @@
             }
         }
     }
+}
+.theme-btn2{
+    margin-top:5px ;
 }
 
 // Mobile Responsive
