@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import './Schedule.scss';    
+import './Schedule.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../sections/Footer/Footer';

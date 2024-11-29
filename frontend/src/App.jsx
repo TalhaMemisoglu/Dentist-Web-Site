@@ -1,4 +1,4 @@
-import react from "react"
+import React from "react"
 import './App.scss';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Home from './pages/Home';
@@ -12,6 +12,7 @@ import Choose from './pages/Choose/Choose';
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute"
 import Schedule from './pages/Schedule/Schedule';
+import Profile from './pages/Profile/Profile'
 
 function Logout() {
   localStorage.clear()
@@ -27,7 +28,7 @@ function App() {
   return (
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home/ >} />
           <Route path="/about" element={<About />} />
           <Route path="/singleservice" element={<Services />} />
           <Route path="/contact" element={<Contactus />} />

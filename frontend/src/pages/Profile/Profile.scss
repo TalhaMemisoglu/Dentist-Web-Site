@@ -1,0 +1,231 @@
+// Variables for colors and spacing
+$primary-color: #007bff;
+$light-color: #f8f9fa;
+$border-color: #dee2e6;
+$text-color: #212529;
+$background-color: #ffffff;
+
+$padding-small: 0.75rem;
+$padding-medium: 1.5rem;
+$padding-large: 2rem;
+
+// Base styles
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: $light-color;
+  color: $text-color;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $padding-medium;
+}
+
+h4 {
+  font-weight: bold;
+  margin-bottom: $padding-medium;
+  color: $primary-color;
+}
+
+.card {
+  background-color: $background-color;
+  border: 1px solid $border-color;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: $padding-medium;
+}
+
+// Column Layout
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $padding-medium;
+
+  .column {
+    position: relative;
+    flex: 1;
+    min-width: 300px;
+    background-color: $background-color;
+    border: 1px solid $border-color;
+    border-radius: 0.5rem;
+    padding: $padding-medium;
+
+    .update-btn {
+      position: absolute;
+      bottom: $padding-small;
+      right: $padding-small;
+      padding: $padding-small $padding-medium;
+      font-size: 0.875rem;
+      background-color: $primary-color;
+      color: #fff;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+    }
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+
+    &:disabled {
+      background-color: $border-color;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      border-color: $primary-color;
+      box-shadow: 0 0 5px $primary-color;
+    }
+
+    h5 {
+      font-size: 1.25rem;
+      color: $primary-color;
+      margin-bottom: $padding-small;
+    }
+
+    .form-group {
+      margin-bottom: $padding-small;
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: $padding-small;
+        border: 1px solid $border-color;
+        border-radius: 0.25rem;
+        font-size: 1rem;
+
+        &:focus {
+          border-color: $primary-color;
+          box-shadow: 0 0 4px $primary-color;
+          outline: none;
+        }
+      }
+
+      .alert {
+        margin-top: $padding-small;
+        padding: $padding-small;
+        background-color: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+        border-radius: 0.25rem;
+
+        a {
+          color: $primary-color;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// Navigation Buttons
+.nav-buttons {
+  text-align: right;
+  margin-top: $padding-medium;
+
+  .btn {
+    padding: $padding-small $padding-medium;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+
+    &.btn-primary {
+      background-color: $primary-color;
+      border: none;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+
+    &.btn-default {
+      background-color: $light-color;
+      color: $text-color;
+      border: 1px solid $border-color;
+
+      &:hover {
+        background-color: darken($light-color, 5%);
+      }
+    }
+  }
+}
+
+// Profile Picture Section
+.profile-picture {
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid $border-color;
+    object-fit: cover;
+  }
+
+  .media-body {
+    margin-left: $padding-medium;
+
+    .btn {
+      margin-right: $padding-small;
+
+      &:focus {
+        box-shadow: 0 0 3px $primary-color;
+      }
+    }
+
+    .text-light {
+      font-size: 0.875rem;
+      color: $text-color;
+    }
+  }
+}
+
+// Tabs (for future enhancements)
+.tabs {
+  display: flex;
+  border-bottom: 1px solid $border-color;
+
+  .tab {
+    padding: $padding-small $padding-medium;
+    cursor: pointer;
+    color: $text-color;
+
+    &.active {
+      font-weight: bold;
+      border-bottom: 2px solid $primary-color;
+    }
+
+    &:hover {
+      background-color: $light-color;
+    }
+  }
+}
+
+// Media Query for Responsiveness
+@media (max-width: 768px) {
+  .columns {
+    flex-direction: column;
+  }
+
+  .profile-picture {
+    flex-direction: column;
+    align-items: center;
+
+    .media-body {
+      margin-left: 0;
+      margin-top: $padding-small;
+      text-align: center;
+    }
+  }
+}

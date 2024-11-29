@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Import default styling
 import './Calendar.scss'; // Import custom styling
+import axios from 'axios'
+
+const apiEndpoint = 'http://localhost:8000/api'
 
 const CalendarView = ({ onDateChange }) => {
     const [date, setDate] = useState(new Date()); // Selected date
@@ -15,23 +18,21 @@ const CalendarView = ({ onDateChange }) => {
     ]);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        // Simulated API call logic (commented out)
-        // Uncomment to fetch available dates dynamically
-        /*
-        const fetchAvailableDates = async () => {
-            try {
-                const response = await axios.get(`${apiEndpoint}/available-dates/`);
-                setAvailableDates(response.data.available_dates); // Adjust based on your API response structure
-            } catch (err) {
-                console.error(err);
-                setError('Failed to fetch available dates. Please try again later.');
-            }
-        };
+    // useEffect(() => {
+    //     // Simulated API call logic (commented out)
+    //     // Uncomment to fetch available dates dynamically
+    //     const fetchAvailableDates = async () => {
+    //         try {
+    //             const response = await axios.get(`${apiEndpoint}/available-dates/`);
+    //             setAvailableDates(response.data.available_dates); // Adjust based on your API response structure
+    //         } catch (err) {
+    //             console.error(err);
+    //             setError('Failed to fetch available dates. Please try again later.');
+    //         }
+    //     };
 
-        fetchAvailableDates();
-        */
-    }, []); // Empty dependency array ensures this runs only once on mount
+    //     fetchAvailableDates();
+    // }, []); // Empty dependency array ensures this runs only once on mount
 
     const handleChange = (selectedDate) => {
         setDate(selectedDate);
@@ -40,23 +41,7 @@ const CalendarView = ({ onDateChange }) => {
         if (onDateChange) {
             onDateChange(selectedDate);
         }
-
-        // Simulated API post logic (commented out)
-        // Uncomment to send selected date to the backend
-        /*
-        try {
-            const response = await axios.post(
-                `${apiEndpoint}/date-selected/`,
-                { selected_date: selectedDate.toISOString().split('T')[0] },
-                { headers: { 'Content-Type': 'application/json' } }
-            );
-            console.log('Date selection result:', response.data);
-        } catch (err) {
-            console.error('Failed to save selected date:', err);
-            setError('Failed to save selected date. Please try again.');
-        }
-        */
-    };
+};
 
     const formatShortWeekday = (locale, date) => {
         const daysOfWeek = ['Pz', 'Pzt', 'Salı', 'Çrş', 'Prş', 'Cuma', 'Cmt']; // Custom weekday names
