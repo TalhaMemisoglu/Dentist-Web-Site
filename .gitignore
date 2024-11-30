@@ -12,6 +12,8 @@ db.sqlite3        # Ignore SQLite database file (or any other local database fil
 # Ignore virtual environment directories
 venv/              # Ignore virtual environment directory (adjust if you use a different name)
 .env/              # If you use a `.env` file for environment variables
+myenv/
+env/
 
 # Ignore configuration files for IDEs
 .vscode/           # Ignore Visual Studio Code settings folder
