@@ -166,6 +166,11 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             return Appointment.objects.filter(dentist=user)
         return Appointment.objects.none()
 
+    def perform_create(self, serializer):
+        appointment = serializer.save(patient=self.request.user)
+        appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
+        return appointments
+
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
         appointment = self.get_object()
