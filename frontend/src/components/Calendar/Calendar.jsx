@@ -2,46 +2,23 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Import default styling
 import './Calendar.scss'; // Import custom styling
-import axios from 'axios'
 
-const apiEndpoint = 'http://localhost:8000/api'
+const CalendarView = ({ onDateChange, selectedDate, availableDates }) => {
+    const [date, setDate] = useState(selectedDate || new Date()); // Selected date with fallback to current date
 
-const CalendarView = ({ onDateChange }) => {
-    const [date, setDate] = useState(new Date()); // Selected date
-    const [availableDates, setAvailableDates] = useState([
-        // Static data for available dates
-        '2024-11-25',
-        '2024-11-26',
-        '2024-11-27',
-        '2024-11-28',
-        '2024-11-29',
-    ]);
-    const [error, setError] = useState(null);
-
-    // useEffect(() => {
-    //     // Simulated API call logic (commented out)
-    //     // Uncomment to fetch available dates dynamically
-    //     const fetchAvailableDates = async () => {
-    //         try {
-    //             const response = await axios.get(`${apiEndpoint}/available-dates/`);
-    //             setAvailableDates(response.data.available_dates); // Adjust based on your API response structure
-    //         } catch (err) {
-    //             console.error(err);
-    //             setError('Failed to fetch available dates. Please try again later.');
-    //         }
-    //     };
-
-    //     fetchAvailableDates();
-    // }, []); // Empty dependency array ensures this runs only once on mount
-
+    useEffect(() => {
+        if (selectedDate) {
+            setDate(selectedDate);
+        }
+    }, [selectedDate]); // Update local state if selectedDate prop changes
     const handleChange = (selectedDate) => {
         setDate(selectedDate);
 
-        // Notify parent if provided
+        // Notify parent component
         if (onDateChange) {
             onDateChange(selectedDate);
         }
-};
+    };
 
     const formatShortWeekday = (locale, date) => {
         const daysOfWeek = ['Pz', 'Pzt', 'Salı', 'Çrş', 'Prş', 'Cuma', 'Cmt']; // Custom weekday names
@@ -49,8 +26,7 @@ const CalendarView = ({ onDateChange }) => {
     };
 
     return (
-        <div className="calendar-container" style={styles.container}>
-            {error && <p className="error-message">{error}</p>}
+        <div className="calendar-container">
             <Calendar
                 onChange={handleChange} // Trigger on change
                 value={date}
@@ -67,16 +43,6 @@ const CalendarView = ({ onDateChange }) => {
             />
         </div>
     );
-};
-
-const styles = {
-    container: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh', // Full viewport height
-        backgroundColor: '#f5f5f5', // Light gray background
-    },
 };
 
 export default CalendarView;

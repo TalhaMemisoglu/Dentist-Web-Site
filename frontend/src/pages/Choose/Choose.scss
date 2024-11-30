@@ -26,9 +26,9 @@ h1 {
 // Services grid container
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); // Maximum 4 columns
-  gap: 20px;
-  padding: 20px 0;
+  grid-template-columns: repeat(5, 1fr); // Maximum 4 columns
+  gap: 15px;
+  padding: 0px 0;
 }
 
 // Service box
@@ -72,5 +72,9 @@ h1 {
     margin-top: -1.2em;
     margin-right: 0.3em;
   }
+}
+
+.choose-body {
+  margin-top: 130px;
 }
 

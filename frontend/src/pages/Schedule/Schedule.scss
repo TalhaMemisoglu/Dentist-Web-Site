@@ -1,8 +1,21 @@
 /* Schedule.scss */
+@import './../../sass/fonts.scss';
+@import './../../sass/colors.scss';
 
 .appointment-title {
     margin-top: 100px;
     margin-bottom: 0px;
+}
+
+.content-body {
+  // background-color: blue;
+  width: 100%;  
+}
+
+.service-content {
+  min-width: 200px;
+  justify-content: left;
+  align-content: left;
 }
 
 .main-content {
@@ -31,15 +44,11 @@
     background-color: #fff;
     border: 2px solid #333;
     border-radius: 20px;
-    padding: 0.8rem;
-    margin: 15px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
+    // margin: 15px 0;
     cursor: pointer;
     transition: box-shadow 0.3s ease;
-    width: 90%; // Daha küçük boyut
-    align-self: center; // Ortalanmış
+    width: 100%;
+    flex: 1;
   
     &:hover {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -67,3 +76,82 @@
     margin-bottom: 10px;
   }
   
+.schedule-body {
+  margin-top: 30px;
+  min-width: 530px;
+}
+
+.col-lg-6 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-change {
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  color: $color-blue; /* Apply the blue color from Navbar */
+  text-decoration: underline; /* Add underline to the text */
+  font-weight: bold; /* Make text bold for better visibility */
+  cursor: pointer; /* Make it look clickable */
+  padding: 10px 20px; /* Add some padding for better spacing */
+  transition: color 0.3s ease; /* Smooth color transition */
+
+  &:hover {
+      color: darken($color-blue, 10%); /* Darken color slightly on hover */
+  }
+}
+
+.btn-container {
+  position: relative; /* Ensure the container is positioned properly */
+  height: 100%; /* Adjust height to fill the parent container */
+}
+
+.btn-continue {
+  position: absolute; /* Use absolute positioning */
+  right: 60px; /* Place it 20px from the right edge */
+  bottom: 20px; /* Place it 20px from the bottom edge */
+  background: none; /* Optional: remove background */
+  border: none; /* Optional: remove border */
+  color: $color-blue; /* Use your blue color */
+  text-decoration: underline; /* Optional: add underline */
+  font-weight: bold;
+  padding: 10px 20px;
+  cursor: pointer;
+
+  &:hover {
+    color: darken($color-blue, 10%);
+  }
+}
+
+
+// gpt answer
+
+// .service-box {
+//   display: flex; /* Ensures alignment of child columns */
+//   justify-content: space-between; /* Space between left and right */
+//   align-items: center; /* Center items vertically */
+//   padding: 1rem;
+//   background-color: #fff;
+//   border: 2px solid #333;
+//   border-radius: 20px;
+// }
+
+// .btn-change {
+//   background-color: transparent; /* No background */
+//   border: none; /* No border */
+//   color: cyan; /* Cyan text */
+//   text-decoration: underline; /* Underlined text */
+//   cursor: pointer; /* Pointer on hover */
+//   font-size: 1rem;
+//   padding: 0.5rem;
+//   transition: color 0.3s ease;
+// }
+
+// .btn-change:hover {
+//   color: #00bcd4; /* Slightly darker cyan on hover */
+// }
+
+
+
+
