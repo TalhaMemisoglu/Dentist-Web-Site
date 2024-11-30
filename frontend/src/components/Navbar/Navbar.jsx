@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import React from 'react';
+//import React from 'react';
 import './Navbar.scss';
 import logo from './../../assets/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
 
 const Navbar = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,25 +25,24 @@ const Navbar = () => {
         navigate("/login");
     };
 
-
     const navbarItems = [
         {
-            id:1,
+            id: 1,
             name: 'Anasayfa',
             path: '/',
         },
         {
-            id:2,
+            id: 2,
             name: 'Hakkımızda',
             path: '/about',
         },
         {
-            id:3,
+            id: 3,
             name: 'Hizmetlerimiz',
             path: '/singleservice',
         },
         {
-            id:4,
+            id: 4,
             name: 'İletişim',
             path: '/contact',
         }
@@ -60,18 +58,26 @@ const Navbar = () => {
                             <img src={logo} alt="logo" />
                         </Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
+                            <span className="navbar-toggler-icon"></span>
                         </button>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             {/* Navbar Link */}
                             <ul className="navbar-nav m-auto mb-2 mb-lg-0">
-                            {navbarItems.map((navSingle, index) => (
+                                {navbarItems.map((navSingle, index) => (
                                     <li className="nav-item" key={index}>
                                         <Link className="nav-link" to={navSingle.path}>
                                             {navSingle.name}
                                         </Link>
                                     </li>
                                 ))}
+                                {/* Show Dashboard link if authenticated */}
+                                {isAuthenticated && (
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/sidebar">
+                                            Dashboard
+                                        </Link>
+                                    </li>
+                                )}
                             </ul>
                             
                             {/* Navbar Button */}
@@ -93,7 +99,7 @@ const Navbar = () => {
                                 )}
                             </div>
                             <div className="theme-btn2">
-                            {isAuthenticated ? (
+                                {isAuthenticated ? (
                                     <Link 
                                         to="/login" 
                                         onClick={handleLogout} 

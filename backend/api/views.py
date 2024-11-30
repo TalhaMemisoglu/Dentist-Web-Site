@@ -1,22 +1,19 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions,status
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated , AllowAny
 from django.contrib.auth import authenticate,login
 from django.contrib.messages import get_messages
 from django.http import JsonResponse
 from .models import CustomUser, Profile
 from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer
-from rest_framework.permissions import AllowAny
-
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import permissions, status
-from rest_framework.response import Response
-from rest_framework import generics
-from .models import CustomUser
+
+#Need to decide whether to use Token or JWT!!!!
+
 
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -102,4 +99,11 @@ class DentistListView(APIView):
     def get(self, request):
         dentists = CustomUser.objects.filter(user_type='dentist')
         serializer = CustomUserSerializer(dentists, many=True)
+        return Response(serializer.data)
+
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = CustomUserSerializer(request.user)
         return Response(serializer.data)
