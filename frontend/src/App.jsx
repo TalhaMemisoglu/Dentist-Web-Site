@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute"
 import Schedule from './pages/Schedule/Schedule';
 import Profile from './pages/Profile/Profile'
+import Sidebar from './components/Sidebar/Sidebar';
 
 function Logout() {
   localStorage.clear()
@@ -38,6 +39,7 @@ function App() {
           <Route path="/patients" element={<Patients/>} />
           <Route path="/choose" element={<Choose/>} />
           <Route path="/schedule" element={<Schedule/>} />
+          <Route path="/Sidebar" element={<Sidebar />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </BrowserRouter>
