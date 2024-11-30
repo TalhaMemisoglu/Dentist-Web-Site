@@ -1,32 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import './Sidebar.scss';
-import axios from 'axios';
-import profilePhoto from '../../assets/about/team/1.png';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Sidebar.scss";
+import profilePhoto from "../../assets/about/team/1.png";
+import { ACCESS_TOKEN } from "../../constants";
+
+const USER_TYPE_LABELS = {
+  dentist: "Dentist",
+  patient: "Patient",
+  assistant: "Assistant",
+  manager: "Manager",
+};
 
 const Sidebar = () => {
-  
-  const [userType, setUserType] = useState(!null);
-  console.log('User Type:', userType);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const fetchUserType = async () => {
+    const fetchUserInfo = async () => {
       try {
-        const response = await axios.get('/api/user/', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Token bilgisi
+        const token = localStorage.getItem(ACCESS_TOKEN);
+        if (!token) {
+          console.warn("No token found. Redirecting to login...");
+          navigate("/login"); // Redirect to the login page
+          return;
+        }
+
+        const response = await axios.get("/api/user/", {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setUserType(response.data.user_type); // API'den gelen userType bilgisi
-       
+
+        setUser(response.data);
+
+        // Print user details to the console
+        const { username, user_type: userType, email, phone } = response.data;
+        console.log("User Info:");
+        console.log(`- Username: ${username}`);
+        console.log(`- User Type: ${userType}`);
+        console.log(`- Email: ${email || "No email provided"}`);
+        console.log(`- Phone: ${phone || "No phone number provided"}`);
       } catch (error) {
-        console.error("Error fetching user type:", error);
+        console.error("Error fetching user data:", error);
       }
     };
 
+    fetchUserInfo();
+  }, [navigate]);
 
-    fetchUserType();
-  }, []);
-
-  if (!userType) {
-    return <p>Loading...</p>; // Yükleniyor göstergesi
+  if (!user) {
+    return <p>Loading...</p>;
   }
+
+  const { user_type: userType, username } = user;
 
   return (
     <div className="sidebar">
@@ -37,21 +62,10 @@ const Sidebar = () => {
       </div>
       <div className="profile-section">
         <div className="profile-image">
-          <img 
-            src={profilePhoto} // Profil fotoğrafı
-            alt="Profil" 
-          />
+          <img src={profilePhoto} alt="Profile" />
         </div>
-        <p className="user-name">Helin Saygılı</p>
-        <p className="user-role">
-          {userType === 'admin' 
-            ? 'Admin' 
-            : userType === 'dentist' 
-            ? 'Doktor' 
-            : userType === 'assistant' 
-            ? 'Asistan' 
-            : 'Hasta'}
-        </p>
+        <p className="user-name">{username}</p>
+        <p className="user-role">{USER_TYPE_LABELS[userType] || "Unknown"}</p>
       </div>
       <div className="sidebar-links">
         <ul>
@@ -61,22 +75,7 @@ const Sidebar = () => {
             </a>
           </li>
 
-          {userType === 'admin' && (
-            <>
-              <li>
-                <a href="/add-staff">
-                  <span className="icon">➕</span> Personel Ekle
-                </a>
-              </li>
-              <li>
-                <a href="/remove-staff">
-                  <span className="icon">➖</span> Personel Çıkar
-                </a>
-              </li>
-            </>
-          )}
-
-          {userType === 'dentist' && (
+          {userType === "dentist" && (
             <>
               <li>
                 <a href="/appointments">
@@ -91,22 +90,7 @@ const Sidebar = () => {
             </>
           )}
 
-          {userType === 'assistant' && (
-            <>
-              <li>
-                <a href="/appointments">
-                  <span className="icon">📅</span> Randevular
-                </a>
-              </li>
-              <li>
-                <a href="/add-appointment">
-                  <span className="icon">➕</span> Randevu Ekle
-                </a>
-              </li>
-            </>
-          )}
-
-          {userType === 'patient' && (
+          {userType === "patient" && (
             <>
               <li>
                 <a href="/patient-appointments">
@@ -133,51 +117,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-/*import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './Sidebar.scss';
-
-
-const Sidebar= () => {
-  const [userType, setUserType] = useState(null);
-
-  useEffect(() => {
-    const fetchUserType = async () => {
-      try {
-        const response = await axios.get('/api/user/', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Replace with your token logic
-        });
-        setUserType(response.data.user_type);
-      } catch (error) {
-        console.error("Error fetching user type:", error);
-      }
-    };
-
-    fetchUserType();
-  }, []);
-
-  if (!userType) {
-    return <p>Loading...</p>; // Show a loading indicator while fetching user type
-  }
-
-  switch (userType) {
-    case 'admin':
-      return <AdminDashboard />;
-    case 'doctor':
-      return <DoctorDashboard />;
-    case 'patient':
-      return <PatientDashboard />;
-    case 'assistant':
-      return <AssistantDashboard />;
-    default:
-      return <p>Unknown user type</p>;
-  }
-};
-
-const AdminDashboard = () => <h1>Welcome to Admin Dashboard</h1>;
-const DoctorDashboard = () => <h1>Welcome to Doctor Dashboard</h1>;
-const PatientDashboard = () => <h1>Welcome to Patient Dashboard</h1>;
-const AssistantDashboard = () => <h1>Welcome to Assistant Dashboard</h1>;
-
-export default Sidebar; */
