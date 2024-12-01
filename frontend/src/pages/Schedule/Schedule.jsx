@@ -9,78 +9,93 @@ import axios from 'axios';
 
 const apiEndpoint = 'http://localhost:8000';
 
-const Schedule = ({ dentistId }) => {
+const api = axios.create({
+  baseURL: apiEndpoint,
+  headers: {
+      'Content-Type': 'application/json',
+  }
+});
 
-  const location = useLocation();
-  const chosenService = location.state?.service; // Safely access the service
-  const chosenDentist = location.state?.dentist; // Safely access the dentist
-
-  const [selectedDate, setSelectedDate] = useState(null); // State for selectedDate
-  const [availableHours, setAvailableHours] = useState([]); // State for availableHours
-  const [availableDates, setAvailableDates] = useState([]);
-  const [selectedTime, setSelectedTime] = useState(null); // State for selectedTime
-  const [error, setError] = useState(null); // State for error handling
-
-  useEffect(() => {
-    if (selectedDate) {
-      const fetchAvailableHours = async () => {
-        // try {
-        //   const formattedDate = selectedDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-        //   const response = await axios.get(
-        //     `${apiEndpoint}/booking/dentists/${dentistId}/available_slots/`,
-        //     { params: { date: formattedDate } } // Pass date as a query parameter
-        //   );
-        //   setAvailableHours(response.data.available_hours || []); // Update available hours
-        //   setError(null); // Clear any previous error
-        // } catch (err) {
-        //   console.error(err);
-        //   setError('Failed to fetch available hours. Please try again later.');
-        //   setAvailableHours([]); // Reset available hours on error
-        // }
-        try {
-          const response = await axios.get(`${apiEndpoint}/api/booking/dentists/${dentistId}/available_dates/`);
-          console.log(response.data); // Log the response to see the structure and data
-          const dates = response.data.available_dates;
-          setAvailableDates(dates);
-        } catch (err) {
-          console.error(err); // Log the error if any
-        }
-      };
-
-      fetchAvailableHours();
-    }
-  }, [selectedDate]);
-
-  // Fetch available dates and set the first available date as the selected date
-  useEffect(() => {
-    const fetchAvailableDates = async () => {
-      // try {
-      //   const response = await axios.get(
-      //     `${apiEndpoint}/api/booking/dentists/${dentistId}/available_dates/`
-      //   );
-      //   const dates = response.data.available_dates;
-      //   setAvailableDates(dates);
-
-      //   // Set the first available date if it's available
-      //   if (dates.length > 0) {
-      //     setSelectedDate(new Date(dates[0])); // Setting the first available date
-      //   }
-      // } catch (err) {
-      //   console.error(err);
-      //   setError('Failed to fetch available dates. Please try again later.');
-      // }
-      try {
-        const response = await axios.get(`${apiEndpoint}/api/booking/dentists/${dentistId}/available_dates/`);
-        console.log(response.data); // Log the response to see the structure and data
-        const dates = response.data.available_dates;
-        setAvailableDates(dates);
-      } catch (err) {
-        console.error(err); // Log the error if any
+// Add auth token interceptor
+api.interceptors.request.use(
+  (config) => {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
       }
+      return config;
+  },
+  (error) => {
+      return Promise.reject(error);
+  }
+);
+
+
+const Schedule = () => {
+
+    const location = useLocation();
+    const chosenService = location.state?.service;
+    const chosenDentist = location.state?.dentist;
+    
+    // Get dentistId from chosenDentist
+    const dentistId = chosenDentist?.id;
+
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [availableHours, setAvailableHours] = useState([]);
+    const [availableDates, setAvailableDates] = useState([]);
+    const [selectedTime, setSelectedTime] = useState(null);
+    const [error, setError] = useState(null);
+
+
+ // Fetch available dates
+    useEffect(() => {
+        const fetchAvailableDates = async () => {
+          if (!dentistId) {
+            console.error('No dentist ID');
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('access_token');
+            console.log('Token:', token); // Debug log
+
+            const response = await api.get(`/api/booking/dentists/${dentistId}/available_dates/`);
+            const dates = response.data.available_dates;
+            setAvailableDates(dates);
+        } catch (error) {
+            console.error('Error details:', error.response?.data);
+            if (error.response?.status === 401) {
+                // Handle unauthorized - maybe redirect to login
+                navigate('/login');
+            }
+        }
     };
 
     fetchAvailableDates();
-  }, [selectedDate]);
+    }, [dentistId]);
+     // Only depend on dentistId
+
+    // Fetch available hours when date is selected
+    useEffect(() => {
+        const fetchAvailableHours = async () => {
+            if (!dentistId || !selectedDate) return;
+
+            try {
+                const response = await api.get(
+                    `/api/booking/dentists/${dentistId}/available_slots/`,
+                    { params: { date: selectedDate } }
+                );
+                setAvailableHours(response.data.available_slots);
+            } catch (err) {
+                console.error('Error fetching hours:', err);
+                setError(err.response?.data?.detail || 'Failed to fetch hours');
+            }
+        };
+
+        if (selectedDate) {
+            fetchAvailableHours();
+        }
+    }, [dentistId, selectedDate]);
 
   // Handle the date selection from the calendar
   const handleDateSelection = (date) => {
@@ -94,29 +109,32 @@ const Schedule = ({ dentistId }) => {
 
   // Submit appointment
   const handleSubmit = async () => {
-    const appointmentData = {
-      date: selectedDate.toISOString().split('T')[0], // Format as YYYY-MM-DD
-      time: selectedTime,
-
-      dentistId: dentistId, // neden bu sekilde erisilebiliyor
-
-      serviceId: chosenService?.id,
-    };
+    if (!dentistId || !selectedDate || !selectedTime) {
+        setError('Please select all required fields');
+        return;
+    }
 
     try {
-      const response = await axios.post(`${apiEndpoint}/appointments`, appointmentData);
+        const response = await api.post('/api/booking/appointments/', {
+            dentist: dentistId,
+            appointment_date: selectedDate,
+            appointment_time: selectedTime.start_time,
+            duration: 60 // or chosenService.duration
+        });
 
-      if (response.status === 200) {
-        alert('Randevu başarıyla oluşturuldu!');
-        // Redirect or further action
-      } else {
-        alert('Bir hata oluştu. Lütfen tekrar deneyin.');
-      }
+        if (response.status === 201) {
+            alert('Appointment created successfully!');
+            // Redirect or further action
+        }
     } catch (err) {
-      console.error(err);
-      alert('Randevu oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+        console.error('Booking error:', err);
+        setError(err.response?.data?.detail || 'Failed to create appointment');
     }
 };
+
+if (error) {
+  return <div className="error-message">{error}</div>;
+}
 
 return (
   <>
