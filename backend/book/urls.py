@@ -7,9 +7,4 @@ router = DefaultRouter()
 router.register(r'dentists', DentistViewSet)
 router.register(r'appointments', AppointmentViewSet, basename='appointment')
 
-# User URLs
-urlpatterns = [
-   #TODO
-   path('', include(router.urls)),
-   # test 
-]
+urlpatterns = router.urls
