@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from book.views import DentistViewSet, AppointmentViewSet
+from api.views import CreateUserView, ProfileView, LoginView, LogoutView, DentistListView,CurrentUserView
 
 # Define views explicitly
 dentist_list = DentistViewSet.as_view({'get': 'list'})
@@ -16,7 +17,12 @@ upcoming_appointments = AppointmentViewSet.as_view({'get': 'upcoming'})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/", include("api.urls")),  # Includes all endpoints from the `api` app
+    path('api/register/', CreateUserView.as_view(), name='register'),
+    path('api/profile/', ProfileView.as_view(), name='profile'),
+    path('api/login/', LoginView.as_view(), name='login'),
+    path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/user/', CurrentUserView.as_view(), name='current-user'),
+    path('api/dentists/', DentistListView.as_view(), name='dentist-list'),
     path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("api-auth/", include("rest_framework.urls")),  # Optional, for DRF's browsable API login

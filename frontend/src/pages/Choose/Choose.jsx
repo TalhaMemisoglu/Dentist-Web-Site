@@ -10,13 +10,13 @@ const Choose = () => {
   const navigate = useNavigate();
   const [showAllServices, setShowAllServices] = useState(false);
   // needs to be replaced
-  // const [dentists, setDentists] = useState([]);
+  const [dentists, setDentists] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDentist, setSelectedDentist] = useState(null);
 
   // static dentists for testing purposes
   // id is necessary
-  const [dentists, setDentists] = useState([
+  /*const [dentists, setDentists] = useState([
     { id: 1, name: "John", surname: "Doe", specialty: "Orthodontist" },
     { id: 2, name: "Jane", surname: "Smith", specialty: "Pediatric Dentist" },
     { id: 3, name: "Emily", surname: "Brown", specialty: "Endodontist" },
@@ -27,22 +27,22 @@ const Choose = () => {
     { id: 8, name: "Chris", surname: "Martinez", specialty: "Cosmetic Dentist" },
     { id: 9, name: "Anna", surname: "Taylor", specialty: "Orthodontist" },
     { id: 10, name: "Daniel", surname: "Lee", specialty: "Pediatric Dentist" },
-  ]);
+  ]);*/
 
 
   useEffect(() => {
-    // const fetchDentists = async () => {
-    //   api
-    //     .get("/api/dentists/")
-    //     .then((res) => res.data)
-    //     .then((data) => {
-    //         setDentists(data);
-    //         console.log(data);
-    //     })
-    //     .catch((err) => alert(err));
-    // };
+     const fetchDentists = async () => {
+       api
+         .get("/api/dentists/")
+         .then((res) => res.data)
+         .then((data) => {
+             setDentists(data);
+             console.log(data);
+         })
+         .catch((err) => alert(err));
+     };
 
-    // fetchDentists();
+     fetchDentists();
   }, []);
   
   // Handle the selection of service and dentist
@@ -113,7 +113,7 @@ const Choose = () => {
                     borderColor: dentist.id === selectedDentist?.id ? 'blue' : 'gray',
                   }}
                 >
-                  <h2>{dentist.name} {dentist.surname}</h2>
+                  <h2>{dentist.username} {dentist.surname}</h2>
                   <div className="line-between"></div>
                   <p className="specialty">{dentist.specialty}</p>
                   <span className="arrow">→</span>
