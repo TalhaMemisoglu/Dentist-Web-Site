@@ -5,31 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../sections/Footer/Footer';
 import CalendarView from '../../components/Calendar/Calendar';
-import axios from 'axios';
-
-const apiEndpoint = 'http://localhost:8000';
-
-const api = axios.create({
-  baseURL: apiEndpoint,
-  headers: {
-      'Content-Type': 'application/json',
-  }
-});
-
-// Add auth token interceptor
-api.interceptors.request.use(
-  (config) => {
-      const token = localStorage.getItem('access_token');
-      if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-  },
-  (error) => {
-      return Promise.reject(error);
-  }
-);
-
+import api from "../../api";
 
 const Schedule = () => {
 
@@ -47,33 +23,21 @@ const Schedule = () => {
     const [error, setError] = useState(null);
 
 
- // Fetch available dates
     useEffect(() => {
-        const fetchAvailableDates = async () => {
-          if (!dentistId) {
-            console.error('No dentist ID');
-            return;
-        }
+      const fetchAvailableDates = async (dentistId) => {
+          try {
+              const res = await api.get(`/api/booking/dentists/${dentistId}/available_dates/`);
+              setAvailableDates(res.data.available_dates); // Adjust based on the API response
+              console.log(res.data);
+          } catch (err) {
+              alert("Error fetching available dates: " + err.message);
+          }
+      };
 
-        try {
-            const token = localStorage.getItem('access_token');
-            console.log('Token:', token); // Debug log
-
-            const response = await api.get(`/api/booking/dentists/${dentistId}/available_dates/`);
-            const dates = response.data.available_dates;
-            setAvailableDates(dates);
-        } catch (error) {
-            console.error('Error details:', error.response?.data);
-            if (error.response?.status === 401) {
-                // Handle unauthorized - maybe redirect to login
-                navigate('/login');
-            }
-        }
-    };
-
-    fetchAvailableDates();
-    }, [dentistId]);
-     // Only depend on dentistId
+      if (dentistId) {
+          fetchAvailableDates(dentistId);
+      }
+  }, [dentistId]); // Include dentistId as a dependency if it's dynamic
 
     // Fetch available hours when date is selected
     useEffect(() => {
