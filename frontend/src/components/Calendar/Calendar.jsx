@@ -6,19 +6,27 @@ import './Calendar.scss'; // Import custom styling
 const CalendarView = ({ onDateChange, selectedDate, availableDates }) => {
     const [date, setDate] = useState(selectedDate || new Date()); // Selected date with fallback to current date
 
+    // Extract only date strings from availableDates
+    const availableDateStrings = availableDates.map((d) => d.date);
+    // console.log("uygun gunler stringi: ", availableDateStrings);
+
     useEffect(() => {
         if (selectedDate) {
             setDate(selectedDate);
         }
-    }, [selectedDate]); // Update local state if selectedDate prop changes
+    }, [selectedDate]);
+
     const handleChange = (selectedDate) => {
         setDate(selectedDate);
-
+    
         // Notify parent component
         if (onDateChange) {
-            onDateChange(selectedDate);
+            // Use local timezone to format the date
+            const formattedDate = selectedDate.toLocaleDateString('en-CA'); // "YYYY-MM-DD"
+            onDateChange(formattedDate);
         }
     };
+
 
     const formatShortWeekday = (locale, date) => {
         const daysOfWeek = ['Pz', 'Pzt', 'Salı', 'Çrş', 'Prş', 'Cuma', 'Cmt']; // Custom weekday names
@@ -28,11 +36,12 @@ const CalendarView = ({ onDateChange, selectedDate, availableDates }) => {
     return (
         <div className="calendar-container">
             <Calendar
-                onChange={handleChange} // Trigger on change
+                onChange={handleChange}
                 value={date}
-                tileDisabled={({ date }) =>
-                    !availableDates.includes(date.toISOString().split('T')[0]) // Disable unavailable dates
-                }
+                tileDisabled={({ date }) => {
+                    const formattedDate = date.toLocaleDateString('en-CA'); // "YYYY-MM-DD" formatına uygun
+                    return !availableDateStrings.includes(formattedDate);
+                }}
                 showNeighboringMonth={false}
                 showFixedNumberOfWeeks={false}
                 next2Label={null}

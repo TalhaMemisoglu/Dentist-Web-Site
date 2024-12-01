@@ -9,13 +9,18 @@
 
 .content-body {
   // background-color: blue;
-  width: 100%;  
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .service-content {
-  min-width: 200px;
-  justify-content: left;
-  align-content: left;
+
+}
+
+.dentist-content {
+  justify-content: flex-end;
+  margin-left: 50 px;
 }
 
 .main-content {
@@ -44,7 +49,6 @@
     background-color: #fff;
     border: 2px solid #333;
     border-radius: 20px;
-    // margin: 15px 0;
     cursor: pointer;
     transition: box-shadow 0.3s ease;
     width: 100%;
@@ -98,7 +102,7 @@
   transition: color 0.3s ease; /* Smooth color transition */
 
   &:hover {
-      color: darken($color-blue, 10%); /* Darken color slightly on hover */
+      color: darken(#0690d4, 10%); /* Darken color slightly on hover */
   }
 }
 
@@ -108,50 +112,90 @@
 }
 
 .btn-continue {
-  position: absolute; /* Use absolute positioning */
-  right: 60px; /* Place it 20px from the right edge */
-  bottom: 20px; /* Place it 20px from the bottom edge */
-  background: none; /* Optional: remove background */
-  border: none; /* Optional: remove border */
-  color: $color-blue; /* Use your blue color */
-  text-decoration: underline; /* Optional: add underline */
+  border: 1px solid #333; // Border color
+  border-radius: 20px; // Rounded corners
+  padding: 10px 20px; // Space inside button
+  background-color: #0690d4; // Default background
+  font-size: 14px; // Font size
+  color: white; // Text color
+  cursor: pointer;
+  transition: all 0.3s ease; // Smooth transition for hover effects
   font-weight: bold;
   padding: 10px 20px;
   cursor: pointer;
+  width: auto;
 
   &:hover {
-    color: darken($color-blue, 10%);
+    // color: darken(#0690d4, 10%); // just fine as it is
+  }
+
+  &:disabled {
+    background-color: gray; // Gray background for disabled button
+    color: black; // Dark gray text for disabled button
+    cursor: not-allowed; // Change cursor for disabled button
   }
 }
 
+.hours-section {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-bottom: 20px;
 
-// gpt answer
+  ul {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(80px, 1fr));
+    gap: 15px;
+    padding: 0px;
+    margin: 0px;
+    grid-auto-rows: min-content;
 
-// .service-box {
-//   display: flex; /* Ensures alignment of child columns */
-//   justify-content: space-between; /* Space between left and right */
-//   align-items: center; /* Center items vertically */
-//   padding: 1rem;
-//   background-color: #fff;
-//   border: 2px solid #333;
-//   border-radius: 20px;
-// }
+  }
 
-// .btn-change {
-//   background-color: transparent; /* No background */
-//   border: none; /* No border */
-//   color: cyan; /* Cyan text */
-//   text-decoration: underline; /* Underlined text */
-//   cursor: pointer; /* Pointer on hover */
-//   font-size: 1rem;
-//   padding: 0.5rem;
-//   transition: color 0.3s ease;
-// }
+  li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-// .btn-change:hover {
-//   color: #00bcd4; /* Slightly darker cyan on hover */
-// }
+    button {
+      border: 1px solid #333; // Border color
+      border-radius: 25px; // Rounded corners
+      padding: 10px 30px; // Space inside button
+      background-color: white; // Default background
+      font-size: 15px; // Font size
+      color: black; // Text color
+      cursor: pointer;
+      transition: all 0.3s ease; // Smooth transition for hover effects
 
+      &:hover {
+        background-color: #f0f0f0; // Light gray background on hover
+        transform: scale(1.04); // Slightly enlarge on hover
+      }
 
+      &.selected-time {
+        background-color: #0690d4; // Blue background for selected
+        color: white; // White text for selected
+        border: 1px solid #0056b3; // Darker blue border for selected
+      }
+    }
+  }
+}
 
+.available-hours {
+  flex: 10;
+  // background-color: red;
+}
+
+.create-appointment {
+  // background-color: purple;
+  flex: 1;
+  align-self: flex-end;
+}
+
+.no-hour {
+  display: flex;
+  flex: 10;
+  justify-content: center;
+  align-items: center;
+}
 
