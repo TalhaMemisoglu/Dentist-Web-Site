@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from django.utils import timezone
 from datetime import datetime, timedelta
 from .models import Appointment
@@ -10,7 +11,7 @@ from api.models import CustomUser
 class DentistViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CustomUser.objects.filter(user_type='dentist', is_active=True)
     serializer_class = DentistSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_work_hours(self, date):
         # 9 to 5 
