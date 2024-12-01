@@ -9,11 +9,18 @@ const Patients = () => {
   const navigate = useNavigate(); // navigate fonksiyonunu başlat
 
   const handleExistingPatientClick = () => {
-    navigate('/login'); // "Eski Hasta" butonuna tıklandığında login sayfasına yönlendir
+    navigate('/login', { // Make login then redirect to choose
+      state: { redirectTo: '/choose' } 
+    });
   };
 
   const handleNewPatientClick = () => {
-    navigate('/choose'); // "Yeni Hasta" butonuna tıklandığında new patient sayfasına yönlendir
+    navigate('/register', { // Make register then redirect to choose
+      state: { 
+        //isNewPatient: true,
+        redirectAfterRegister: '/choose' 
+      }
+    }); // "Yeni Hasta" butonuna tıklandığında new patient sayfasına yönlendir
   };
 
   return (
