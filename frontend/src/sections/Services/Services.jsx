@@ -17,7 +17,7 @@ const Services = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-6 col-sm-6">
-                        <SectionTitle title="Ağız sağlığınız hakkında iyi hissedin" subTitle="Hizmetlerimiz"/>
+                        <SectionTitle title="Ağız sağlığınız hakkında iyi hissedin" subTitle="HİZMETLERİMİZ"/>
                     </div>
                     <div className="col-lg-6 col-sm-6">
                         <p className='service-title-text'>

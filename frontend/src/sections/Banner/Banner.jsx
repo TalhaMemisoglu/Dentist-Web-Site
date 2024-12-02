@@ -1,6 +1,6 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import './Banner.scss';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import icon from '../../assets/banner/icons/Calling.png';
 import bannerImg from '../../assets/banner/1.png';
 import doctorImg from '../../assets/banner/doctor.png';
@@ -11,6 +11,17 @@ import shapeThree from '../../assets/banner/vector_03.png';
 import shapeFour from '../../assets/banner/pattern.png';
 
 const Banner = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    // Check authentication status on component mount
+    useEffect(() => {
+        const token = localStorage.getItem("access");
+        if (token) {
+            setIsAuthenticated(true);
+        } else {
+            setIsAuthenticated(false);
+        }
+    }, []);
 
     return (
         <section className='section-bg section-common banner-section'>
@@ -21,11 +32,11 @@ const Banner = () => {
                             <div className="col-lg-6">
                                 <div className="banner-text" data-aos="fade-up" data-aos-duration="2000">
                                     <h1>Gülüşünüzü profesyonellere emanet edin.</h1>
-                                    <p>Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>
+                                    <p>Randevu almak için hemen bize ulaşın.</p>
 
                                     <div className="banner-bottom">
                                         <div className="theme-btn">
-                                            <Link to="/appointment">Randevu al</Link>
+                                            <Link to={isAuthenticated ? '/choose' : '/patients'}>Randevu al</Link>
                                         </div>
 
                                         <div className="banner-call">

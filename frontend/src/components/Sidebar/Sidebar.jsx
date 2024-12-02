@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./Sidebar.scss";
 import profilePhoto from "../../assets/about/team/1.png";
@@ -22,7 +22,7 @@ const Sidebar = () => {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (!token) {
           console.warn("No token found. Redirecting to login...");
-          navigate("/login"); // Redirect to the login page
+          navigate("/login"); // Eğer token yoksa giriş sayfasına yönlendir
           return;
         }
 
@@ -31,14 +31,6 @@ const Sidebar = () => {
         });
 
         setUser(response.data);
-
-        // Print user details to the console
-        const { username, user_type: userType, email, phone } = response.data;
-        console.log("User Info:");
-        console.log(`- Username: ${username}`);
-        console.log(`- User Type: ${userType}`);
-        console.log(`- Email: ${email || "No email provided"}`);
-        console.log(`- Phone: ${phone || "No phone number provided"}`);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -56,7 +48,10 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <button className="home-button">
+        <button 
+          className="home-button"
+          onClick={() => navigate('/')} // Anasayfa rotasına yönlendirme
+        >
           <span className="home-icon">🏠</span> Anasayfa
         </button>
       </div>
@@ -70,22 +65,22 @@ const Sidebar = () => {
       <div className="sidebar-links">
         <ul>
           <li>
-            <a href={`/${userType}-dashboard`}>
+            <Link to={`/${userType}-dashboard`}>
               <span className="icon">📊</span> Dashboard
-            </a>
+            </Link>
           </li>
 
           {userType === "dentist" && (
             <>
               <li>
-                <a href="/appointments">
+                <Link to="/appointments">
                   <span className="icon">📅</span> Randevular
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/add-appointment">
+                <Link to="/add-appointment">
                   <span className="icon">➕</span> Randevu Ekle
-                </a>
+                </Link>
               </li>
             </>
           )}
@@ -93,22 +88,22 @@ const Sidebar = () => {
           {userType === "patient" && (
             <>
               <li>
-                <a href="/patient-appointments">
+                <Link to="/patient-appointments">
                   <span className="icon">📅</span> Randevularım
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/book-appointment">
+                <Link to="/choose">
                   <span className="icon">📅</span> Randevu Al
-                </a>
+                </Link>
               </li>
             </>
           )}
 
           <li>
-            <a href="/profile">
+            <Link to="/profile">
               <span className="icon">⚙️</span> Profil
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
