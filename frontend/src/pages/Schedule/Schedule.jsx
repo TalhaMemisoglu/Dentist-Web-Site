@@ -6,6 +6,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../sections/Footer/Footer';
 import CalendarView from '../../components/Calendar/Calendar';
 import api from "../../api";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 
 const Schedule = () => {
 
