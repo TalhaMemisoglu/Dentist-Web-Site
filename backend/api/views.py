@@ -95,6 +95,7 @@ class LogoutView(APIView):
         return Response({"message": "Successfully logged out."}, status=200)
 
 class DentistListView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
     def get(self, request):
         dentists = CustomUser.objects.filter(user_type='dentist')

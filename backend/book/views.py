@@ -9,9 +9,14 @@ from .models import Appointment
 from .serializers import AppointmentSerializer, DentistSerializer
 from api.models import CustomUser
 
+from pytz import timezone as pytz_timezone
+local_timezone = pytz_timezone("Europe/Istanbul")  # Replace with desired time zone
+local_now = timezone.localtime(timezone.now(), local_timezone)
+
 class DentistViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CustomUser.objects.filter(user_type='dentist', is_active=True)
     serializer_class = DentistSerializer
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def get_work_hours(self, date):
@@ -32,7 +37,7 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
     def available_dates(self, request, pk=None):
         """Get available dates for next 30 days"""
         dentist = self.get_object()
-        start_date = timezone.now().date()
+        start_date = local_now.date()
         end_date = start_date + timedelta(days=30)
         
         # Get all booked appointments
@@ -50,7 +55,7 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
         
         while current_date <= end_date:
             # Skip past and non-work dates
-            if current_date.weekday() < 5 and current_date >= timezone.now().date():
+            if current_date.weekday() < 5 and current_date >= local_now.date():
                 # 9 to 5 8 slot 1-hour each
                 booked_count = next(
                     (item['appointment_count'] for item in booked_appointments 
@@ -89,7 +94,7 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
 
         try:
             date = datetime.strptime(date_str, '%Y-%m-%d').date()
-            if date < timezone.now().date():
+            if date < local_now.date():
                 return Response(
                     {"error": "Cannot book appointments in the past"},
                     status=status.HTTP_400_BAD_REQUEST
@@ -125,7 +130,7 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
         
         while current_time < end_time:
             # If current date, skip past times
-            if date == timezone.now().date() and current_time < timezone.now().time():
+            if date == local_now.date() and current_time < local_now.time():
                 current_time = (datetime.combine(date, current_time) + 
                               timedelta(hours=1)).time()
                 continue
@@ -183,7 +188,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        if appointment.appointment_date < timezone.now().date():
+        if appointment.appointment_date < local_now.date():
             return Response(
                 {"error": "Cannot cancel past appointments"},
                 status=status.HTTP_400_BAD_REQUEST
@@ -197,7 +202,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def upcoming(self, request):
         appointments = self.get_queryset().filter(
-            appointment_date__gte=timezone.now().date(),
+            appointment_date__gte=local_now.date(),
             status__in=['scheduled', 'confirmed']
         )
         serializer = self.get_serializer(appointments, many=True)
