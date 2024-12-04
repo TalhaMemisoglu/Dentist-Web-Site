@@ -63,11 +63,11 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
                     0
                 )
                 
-                if booked_count < 8:
+                if booked_count < 7:
                     available_dates.append({
                         'date': current_date.strftime('%Y-%m-%d'),
                         'day_name': current_date.strftime('%A'),
-                        'available_slots': 8 - booked_count
+                        'available_slots': 7 - booked_count
                     })
             
             current_date += timedelta(days=1)
