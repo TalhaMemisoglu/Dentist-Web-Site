@@ -24,6 +24,16 @@ class Appointment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def clean(self):
+        print("\n=== Appointment clean method ===")
+        print(f"Cleaning appointment with data:")
+        print(f"- Patient: {self.patient}")
+        print(f"- Dentist: {self.dentist}")
+        print(f"- Date: {self.appointment_date}")
+        print(f"- Time: {self.appointment_time}")
+        print(f"- Patient ID: {self.patient.id}")
+        print(f"- Dentist ID: {self.dentist.id}")
+
+
         if self.appointment_date < timezone.now().date():
             raise ValidationError("Cannot book appointments in the past")
 

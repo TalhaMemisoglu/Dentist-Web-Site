@@ -174,22 +174,49 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return Appointment.objects.none()
 
     def perform_create(self, serializer):
-        serializer.save(patient=self.request.user)
+        print(f"\n=== Perform Create ===")
+        print(f"Serializer data before save: {serializer.validated_data}")
+        serializer.save()
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        appointments = self.perform_create(serializer)
+        print("\n=== ViewSet create method detailed logs ===")
+        print(f"Request user: {request.user}")
+        print(f"User authenticated: {request.user.is_authenticated}")
+        print(f"User type: {request.user.user_type}")
+        print(f"Raw request data: {request.data}")
+        print(f"User_id: {request.user.id}")
 
-        updated_appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
-        appointments_serializer = self.get_serializer(updated_appointments, many=True)
+        mutable_data = request.data.copy()
+        mutable_data['patient'] = request.user.id
         
-
-        return Response({
-            'user_id': request.user.id,
-            'user_type': request.user.user_type,
-            'appointments': appointments_serializer.data
-        }, status=status.HTTP_201_CREATED)
+        try:
+            serializer = self.get_serializer(data=mutable_data)
+            serializer.is_valid(raise_exception=True)
+            
+            self.perform_create(serializer)
+            
+            updated_appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
+            appointments_serializer = self.get_serializer(updated_appointments, many=True)
+            
+            return Response({
+                'message': 'Appointment created successfully',
+                'user_id': request.user.id,
+                'user_type': request.user.user_type,
+                'appointments': appointments_serializer.data
+            }, status=status.HTTP_201_CREATED)
+            
+        except serializer.ValidationError as e:
+            print(f"Validation error: {str(e)}")
+            return Response(
+                {'detail': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            print(f"Unexpected error: {str(e)}")
+            return Response(
+                {'detail': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()

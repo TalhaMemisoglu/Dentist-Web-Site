@@ -18,11 +18,15 @@ const Schedule = () => {
   // Get dentistId from chosenDentist
   const dentistId = chosenDentist?.id;
 
+
+  // const [userId, setUserId] = useState(null);
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [availableHours, setAvailableHours] = useState([]);
   const [availableDates, setAvailableDates] = useState([]);
   const [selectedTime, setSelectedTime] = useState(null);
   const [error, setError] = useState(null);
+
 
 
   useEffect(() => {
@@ -82,7 +86,7 @@ const Schedule = () => {
 
     try {
       const response = await api.post('/api/booking/appointments/', {
-        patient: 5,
+        // patient: userId,
         dentist: dentistId,
         appointment_date: selectedDate,
         appointment_time: selectedTime.start_time,

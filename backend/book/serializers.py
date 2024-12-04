@@ -22,16 +22,15 @@ class AppointmentSerializer(serializers.ModelSerializer):
         read_only_fields = ['id','patient_name','created_at']
 
     def validate(self, data):
-        request = self.context.get('request')
-        if request and request.user.user_type == 'patient':
-            data['patient'] = request.user
-
-        # print(f"Patient Name: {data['patient'].username}")
+        print("\n=== Serializer validate method ===")
+        print(f"Incoming data: {data}")
         
-        appointment = Appointment(**data)
-        # print(f"appointment: {appointment}")
         try:
+            appointment = Appointment(**data)
+            print("Created appointment instance for validation")
             appointment.clean()
+            print("Appointment validation passed")
+            return data
         except ValidationError as e:
+            print(f"Validation error: {str(e)}")
             raise serializers.ValidationError(str(e))
-        return data
