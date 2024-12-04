@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './Schedule.scss';
+import './Appointment.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../sections/Footer/Footer';
@@ -14,7 +14,6 @@ const Schedule = () => {
   const location = useLocation();
   const chosenService = location.state?.service;
   const chosenDentist = location.state?.dentist;
-  // console.log("dentist info: ", chosenDentist);
 
   // Get dentistId from chosenDentist
   const dentistId = chosenDentist?.id;
@@ -80,10 +79,6 @@ const Schedule = () => {
       setError('Please select all required fields');
       return;
     }
-
-    // console.log("dnetistID: ", dentistId);
-    // console.log("selectedDate: ", selectedDate);
-    // console.log("selectedTime: ", selectedTime.start_time);
 
     try {
       const response = await api.post('/api/booking/appointments/', {
