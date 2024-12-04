@@ -174,9 +174,31 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return Appointment.objects.none()
 
     def perform_create(self, serializer):
-        appointment = serializer.save(patient=self.request.user)
-        appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
-        return appointments
+        serializer.save(patient=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        appointments = self.perform_create(serializer)
+
+        updated_appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
+        appointments_serializer = self.get_serializer(updated_appointments, many=True)
+        
+
+        return Response({
+            'user_id': request.user.id,
+            'user_type': request.user.user_type,
+            'appointments': appointments_serializer.data
+        }, status=status.HTTP_201_CREATED)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            'user_id': request.user.id,
+            'user_type': request.user.user_type,
+            'appointments': serializer.data
+        })
 
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
@@ -197,13 +219,37 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         appointment.status = 'cancelled'
         appointment.save()
         
-        return Response({"status": "Appointment cancelled successfully"})
+        appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
+        serializer = self.get_serializer(appointments, many=True)
+        
+        return Response({
+            'message': 'Appointment cancelled successfully',
+            'user_id': request.user.id,
+            'user_type': request.user.user_type,
+            'appointments': serializer.data
+        })
 
     @action(detail=False)
     def upcoming(self, request):
         appointments = self.get_queryset().filter(
-            appointment_date__gte=local_now.date(),
+            appointment_date__gte=timezone.now().date(),
             status__in=['scheduled', 'confirmed']
-        )
+        ).order_by('appointment_date', 'appointment_time')
+        
         serializer = self.get_serializer(appointments, many=True)
-        return Response(serializer.data)
+        return Response({
+            'user_id': request.user.id,
+            'user_type': request.user.user_type,
+            'appointments': serializer.data
+        })
+
+    @action(detail=False)
+    def my_appointments(self, request):
+        appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
+        serializer = self.get_serializer(appointments, many=True)
+        
+        return Response({
+            'user_id': request.user.id,
+            'user_type': request.user.user_type,
+            'appointments': serializer.data
+        })

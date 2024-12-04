@@ -19,7 +19,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
             'appointment_date', 'appointment_time', 'duration', 
             'status', 'notes', 'created_at'
         ]
-        read_only_fields = ['created_at']
+        read_only_fields = ['id','patient_name','created_at']
 
     def validate(self, data):
         request = self.context.get('request')
