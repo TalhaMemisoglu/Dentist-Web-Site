@@ -10,6 +10,10 @@ class CustomUser(AbstractUser):             #For custom user model which we will
         #('assistant','Assistant'),             #Will activate later
         #('manager','Manager'), 
     )
+
+    # # get_full_name added
+    # def get_full_name(self):
+    #     return f"{self.first_name} {self.last_name}"
     
     user_type = models.CharField(max_length=10, choices=USER_TYPES, default='patient')
     phone = models.CharField(max_length=200, null=True, blank=True)  # Optional phone field

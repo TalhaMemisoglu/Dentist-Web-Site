@@ -25,8 +25,11 @@ class AppointmentSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if request and request.user.user_type == 'patient':
             data['patient'] = request.user
+
+        # print(f"Patient Name: {data['patient'].username}")
         
         appointment = Appointment(**data)
+        # print(f"appointment: {appointment}")
         try:
             appointment.clean()
         except ValidationError as e:

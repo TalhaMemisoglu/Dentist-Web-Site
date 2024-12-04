@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Schedule.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../../components/Navbar/Navbar';
@@ -9,6 +9,7 @@ import api from "../../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 
 const Schedule = () => {
+  const navigate = useNavigate();
 
   const location = useLocation();
   const chosenService = location.state?.service;
@@ -80,20 +81,24 @@ const Schedule = () => {
       return;
     }
 
+    // console.log("dnetistID: ", dentistId);
+    // console.log("selectedDate: ", selectedDate);
+    // console.log("selectedTime: ", selectedTime.start_time);
+
     try {
       const response = await api.post('/api/booking/appointments/', {
+        patient: 5,
         dentist: dentistId,
         appointment_date: selectedDate,
         appointment_time: selectedTime.start_time,
-        duration: 60 // or chosenService.duration
       });
 
       if (response.status === 201) {
         alert('Appointment created successfully!');
-        // Redirect or further action
+        navigate('/');
       }
     } catch (err) {
-      console.error('Booking error:', err);
+      console.error('Booking error:', err.response?.data || err.message || err);
       setError(err.response?.data?.detail || 'Failed to create appointment');
     }
   };
