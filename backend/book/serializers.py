@@ -34,3 +34,36 @@ class AppointmentSerializer(serializers.ModelSerializer):
         except ValidationError as e:
             print(f"Validation error: {str(e)}")
             raise serializers.ValidationError(str(e))
+
+
+class AdminCalendarAppointmentSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+    start = serializers.SerializerMethodField()
+    end = serializers.SerializerMethodField()
+    className = serializers.SerializerMethodField()
+    patient_name = serializers.SerializerMethodField()
+    dentist_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Appointment
+        fields = ['id', 'title', 'start', 'end', 'className', 
+                 'patient_name', 'dentist_name', 'status', 'notes']
+
+    def get_title(self, obj):
+        return f"{obj.patient.get_full_name()} - Dt. {obj.dentist.get_full_name()}"
+
+    def get_start(self, obj):
+        return datetime.combine(obj.appointment_date, obj.appointment_time).isoformat()
+
+    def get_end(self, obj):
+        start = datetime.combine(obj.appointment_date, obj.appointment_time)
+        return (start + timedelta(minutes=obj.duration)).isoformat()
+
+    def get_className(self, obj):
+        return f'status-{obj.status}'
+
+    def get_patient_name(self, obj):
+        return obj.patient.get_full_name()
+
+    def get_dentist_name(self, obj):
+        return obj.dentist.get_full_name()
