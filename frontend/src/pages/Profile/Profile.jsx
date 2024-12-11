@@ -51,7 +51,7 @@ const Profile = () => {
   // handle save changes
   const saveDetails = async () => {
     try {
-      const response = await axios.put(`/api/profile/update`, profileDetails);
+      const response = await axios.put(`profile/update`, profileDetails);
       console.log("Updated successfully:", response.data);
       setOriginalDetails(profileDetails); // Update the original state after saving
       setIsEdited(false);
