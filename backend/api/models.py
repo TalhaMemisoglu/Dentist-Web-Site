@@ -7,19 +7,20 @@ class CustomUser(AbstractUser):             #For custom user model which we will
     USER_TYPES = (
         ('dentist', 'Dentist'),
         ('patient', 'Patient'),
-        #('assistant','Assistant'),             #Will activate later
-        #('manager','Manager'), 
+        ('assistant','Assistant'),             
+        ('manager','Manager'), 
     )
     
     user_type = models.CharField(max_length=10, choices=USER_TYPES, default='patient')
     phone = models.CharField(max_length=200, null=True, blank=True)  # Optional phone field
-    email = models.EmailField(max_length=254, null=True, blank=True)  # Optional email field
+    email = models.EmailField(max_length=254,unique=True)  #required email field
+    verified = models.BooleanField(default=False)  # Added verified field
 
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)   #Should be used
     name = models.CharField(max_length=200, null=True)                  #Should be used
-    email = models.EmailField(null=True, blank=True, unique=True)
-    phone = models.CharField(max_length=15, null=True, blank=True, unique=True)
+    email = models.EmailField(null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True)  #whether should be unique or not
     #date_created = models.DateTimeField(auto_now_add=True, null=True)   #Could be used idk
     
     def __str__(self):             #it will display the associated user's username followed by "Profile" when you print.
