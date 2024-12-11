@@ -7,8 +7,8 @@ def create_profile(sender, instance, created, **kwargs):    #explicitly sending 
     if created:
         Profile.objects.create(
             user=instance,
-            email=instance.email,  # Pass email from CustomUser
-            phone=instance.phone,  # Pass phone from CustomUser
+            email=instance.email,  # Pass the email from CustomUser
+            phone=instance.phone   # Pass the phone from CustomUser
         )
 
 
