@@ -13,8 +13,8 @@ import Choose from './pages/Choose/Choose';
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Appointment from './pages/Appointment/Appointment';
-import Profile from './pages/Profile/Profile'; // Profile bileşeni import edildi
-import Sidebar from './components/Sidebar/Sidebar';
+import Profile from './pages/Profile/Profile';
+import Sidebar from './components/Sidebar/Sidebar'; // component eklenmemeli bir sayfa icinde kullanilmali. app.jsx'de sadece sayfalar import edilmeli!
 import Schedule from "./pages/Schedule/Schedule";
 
 function Logout() {
