@@ -22,7 +22,7 @@ const Sidebar = () => {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (!token) {
           console.warn("No token found. Redirecting to login...");
-          navigate("/login"); // Eğer token yoksa giriş sayfasına yönlendir
+          navigate("/login"); // Redirect to login if no token is found
           return;
         }
 
@@ -43,14 +43,14 @@ const Sidebar = () => {
     return <p>Loading...</p>;
   }
 
-  const { user_type: userType, username } = user;
+  const { user_type: userType, first_name: firstName, last_name: lastName } = user;
 
   return (
     <div className="sidebar">
       <div className="sidebar-header">
         <button 
           className="home-button"
-          onClick={() => navigate('/')} // Anasayfa rotasına yönlendirme
+          onClick={() => navigate('/')}
         >
           <span className="home-icon">🏠</span> Anasayfa
         </button>
@@ -59,7 +59,7 @@ const Sidebar = () => {
         <div className="profile-image">
           <img src={profilePhoto} alt="Profile" />
         </div>
-        <p className="user-name">{username}</p>
+        <p className="user-name">{firstName} {lastName}</p>
         <p className="user-role">{USER_TYPE_LABELS[userType] || "Unknown"}</p>
       </div>
       <div className="sidebar-links">
@@ -95,6 +95,36 @@ const Sidebar = () => {
               <li>
                 <Link to="/choose">
                   <span className="icon">📅</span> Randevu Al
+                </Link>
+              </li>
+            </>
+          )}
+
+          {userType === "assistant" && (
+            <>
+              <li>
+                <Link to="/assistant-schedule">
+                  <span className="icon">📋</span> Çalışma Programı
+                </Link>
+              </li>
+              <li>
+                <Link to="/manage-patient-records">
+                  <span className="icon">📂</span> Hasta Kayıtları
+                </Link>
+              </li>
+            </>
+          )}
+
+          {userType === "manager" && (
+            <>
+              <li>
+                <Link to="/manage-staff">
+                  <span className="icon">👥</span> Personel Yönetimi
+                </Link>
+              </li>
+              <li>
+                <Link to="/reports">
+                  <span className="icon">📈</span> Raporlar
                 </Link>
               </li>
             </>
