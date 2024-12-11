@@ -321,7 +321,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 'patient_id': appointment.patient.id,
                 'patient_name': appointment.patient.get_full_name(),
                 'dentist_id': appointment.dentist.id,
-                'dentist_name': appointment.dentist.get_full_name()
+                'dentist_name': appointment.dentist.get_full_name(),
+                #'treatment': appointment.patient.
             })
 
         return Response(calendar_data)
@@ -500,7 +501,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                     'duration': appointment.duration,
                     'patient_name': appointment.patient.get_full_name(),
                     'status': appointment.status,
-                    'notes': appointment.notes
+                    'notes': appointment.notes,
+                    #'treatment': appointment.patient.
                 })
 
             return Response({

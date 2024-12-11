@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from book.views import DentistViewSet, AppointmentViewSet
+from book.views import DentistViewSet, AppointmentViewSet, AdminCalendarViewSet
 from api.views import CreateUserView, ProfileView, LoginView, LogoutView, DentistListView,CurrentUserView
 
 # Define views explicitly
@@ -14,6 +14,22 @@ appointment_list = AppointmentViewSet.as_view({'get': 'list', 'post': 'create'})
 appointment_detail = AppointmentViewSet.as_view({'get': 'retrieve'})
 cancel_appointment = AppointmentViewSet.as_view({'post': 'cancel'})
 upcoming_appointments = AppointmentViewSet.as_view({'get': 'upcoming'})
+
+
+calendar_all = AdminCalendarViewSet.as_view({'get': 'all_appointments'})
+calendar_by_dentist = AdminCalendarViewSet.as_view({'get': 'appointments_by_dentist'})
+calendar_by_date = AdminCalendarViewSet.as_view({'get': 'appointments_by_date'})
+calendar_stats = AdminCalendarViewSet.as_view({'get': 'stats'})
+
+
+dentist_calendar = AppointmentViewSet.as_view({'get': 'dentist_calendar'})
+dentist_daily_schedule = AppointmentViewSet.as_view({'get': 'dentist_daily_schedule'})
+
+
+admin_calendar_all = AdminCalendarViewSet.as_view({'get': 'all_appointments'})
+admin_calendar_by_dentist = AdminCalendarViewSet.as_view({'get': 'appointments_by_dentist'})
+admin_calendar_by_date = AdminCalendarViewSet.as_view({'get': 'appointments_by_date'})
+admin_calendar_stats = AdminCalendarViewSet.as_view({'get': 'stats'})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,4 +55,14 @@ urlpatterns = [
     path('api/booking/appointments/<int:pk>/', appointment_detail, name='appointment-detail'),
     path('api/booking/appointments/<int:pk>/cancel/', cancel_appointment, name='cancel-appointment'),
     path('api/booking/appointments/upcoming/', upcoming_appointments, name='upcoming-appointments'),
+
+    # Admin calendar URLs
+    path('api/admin/calendar/', calendar_all, name='admin-calendar'),
+    path('api/admin/calendar/by-dentist/', calendar_by_dentist, name='admin-calendar-by-dentist'),
+    path('api/admin/calendar/by-date/', calendar_by_date, name='admin-calendar-by-date'),
+    path('api/admin/calendar/stats/', calendar_stats, name='admin-calendar-stats'),
+
+    # Dentist calendar URLs
+    path('api/booking/appointments/dentist-calendar/', dentist_calendar, name='dentist-calendar'),
+    path('api/booking/appointments/daily-schedule/', dentist_daily_schedule, name='dentist-daily-schedule'),
 ]
