@@ -57,13 +57,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
         ]
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(source='user.get_full_name', read_only=True)
     appointments = AppointmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile
         fields = [
-            'id', 'user_name', 'name', 'email', 'phone', 'appointments'
+            'id', 'first_name','last_name', 'email', 'phone', 'appointments'
         ]
         
         
