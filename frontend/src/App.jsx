@@ -15,6 +15,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Schedule from './pages/Schedule/Schedule';
 import Profile from './pages/Profile/Profile'; // Profile bileşeni import edildi
 import Sidebar from './components/Sidebar/Sidebar';
+import VerifyEmail from './pages/VerifyEmail'
 
 function Logout() {
   localStorage.clear();
@@ -30,7 +31,8 @@ function App() {
   return (
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Schedule />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/schedule" element={<Schedule />} />
           <Route path="/about" element={<About />} />
           <Route path="/singleservice" element={<Services />} />
           <Route path="/contact" element={<Contactus />} />
