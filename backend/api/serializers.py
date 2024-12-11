@@ -4,37 +4,43 @@ from .models import CustomUser, Profile
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ["id", "username", "email", "phone", "password","user_type"]
+        fields = ['first_name', 'last_name', 'email','phone', 'password']
         extra_kwargs = {
-            "password": {"write_only": True}
+            'password': {'write_only': True}
         }
 
-    def validate(self, data):
-        """
-        Check if either email or phone is provided.
-        """
-        if not data.get('email') and not data.get('phone'):
-            raise serializers.ValidationError("Either email or phone must be provided.")
-        
-        return data
-
-    # No need to override `create()` if you're relying on signals to create the profile
     def create(self, validated_data):
-        # Create the user
-        user = CustomUser.objects.create_user(**validated_data)
+        first_name = validated_data.pop('first_name')
+        last_name = validated_data.pop('last_name')
+
+        # Create the user without username first
+        user = CustomUser.objects.create(
+            first_name=first_name,
+            last_name=last_name,
+            **validated_data
+        )
+        
+        # Generate a username after user creation using the id field
+        username = f"{first_name.lower()}{last_name.lower()}{user.id}"
+
+        # Update the user's username with the generated value
+        user.username = username
+        user.set_password(validated_data['password'])
+        user.save()
+
         return user
     
 # Login Serializer    
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField()
     password = serializers.CharField()
 
     def validate(self, data):
-        username = data.get('username')
+        email = data.get('email')
         password = data.get('password')
 
-        if not username or not password:
-            raise serializers.ValidationError("Both username and password are required.")
+        if not email or not password:
+            raise serializers.ValidationError("Both email and password are required.")
 
         return data
 
@@ -50,3 +56,4 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'phone', 'email', 'user_type']
+        
