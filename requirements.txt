@@ -9,4 +9,5 @@ sqlparse
 psycopg[binary]
 python-dotenv
 pillow
-django-allauth
+django-allauthpi
+celery
