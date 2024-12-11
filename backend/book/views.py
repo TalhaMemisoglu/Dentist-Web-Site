@@ -2,13 +2,14 @@ from rest_framework import viewsets, permissions, status
 from django.db.models import Count
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from django.utils import timezone
 from datetime import datetime, timedelta, time
 from .models import Appointment
 from .serializers import AppointmentSerializer, DentistSerializer, AdminCalendarAppointmentSerializer
 from api.models import CustomUser
 from django.db.models import Q
+from rest_framework.viewsets import ViewSet
 
 from pytz import timezone as pytz_timezone
 local_timezone = pytz_timezone("Europe/Istanbul")  # Replace with desired time zone
@@ -522,67 +523,66 @@ GET /api/admin-calendar/stats/
 """
 
 
+class AdminCalendarViewSet(ViewSet):
+    permission_classes = [IsAdminUser]
 
-# class AdminCalendarViewSet(ViewSet):
-#     permission_classes = [IsAdminUser]
+    @action(detail=False, methods=['get'])
+    def all_appointments(self, request):
+        appointments = Appointment.objects.all().select_related('patient', 'dentist')
+        serializer = CalendarAppointmentSerializer(appointments, many=True)
+        return Response(serializer.data)
 
-#     @action(detail=False, methods=['get'])
-#     def all_appointments(self, request):
-#         appointments = Appointment.objects.all().select_related('patient', 'dentist')
-#         serializer = CalendarAppointmentSerializer(appointments, many=True)
-#         return Response(serializer.data)
+    @action(detail=False, methods=['get'])
+    def appointments_by_dentist(self, request):
+        dentist_id = request.query_params.get('dentist_id')
+        if not dentist_id:
+            return Response(
+                {"error": "dentist_id is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-#     @action(detail=False, methods=['get'])
-#     def appointments_by_dentist(self, request):
-#         dentist_id = request.query_params.get('dentist_id')
-#         if not dentist_id:
-#             return Response(
-#                 {"error": "dentist_id is required"},
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
-
-#         appointments = Appointment.objects.filter(
-#             dentist_id=dentist_id
-#         ).select_related('patient', 'dentist')
+        appointments = Appointment.objects.filter(
+            dentist_id=dentist_id
+        ).select_related('patient', 'dentist')
         
-#         serializer = CalendarAppointmentSerializer(appointments, many=True)
-#         return Response(serializer.data)
+        serializer = CalendarAppointmentSerializer(appointments, many=True)
+        return Response(serializer.data)
 
-#     @action(detail=False, methods=['get'])
-#     def appointments_by_date(self, request):
-#         start_date = request.query_params.get('start_date')
-#         end_date = request.query_params.get('end_date')
+    @action(detail=False, methods=['get'])
+    def appointments_by_date(self, request):
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
 
-#         try:
-#             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-#             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-#         except (ValueError, TypeError):
-#             return Response(
-#                 {"error": "Invalid date format. Use YYYY-MM-DD"},
-#                 status=status.HTTP_400_BAD_REQUEST
-#             )
+        try:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        except (ValueError, TypeError):
+            return Response(
+                {"error": "Invalid date format. Use YYYY-MM-DD"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-#         appointments = Appointment.objects.filter(
-#             appointment_date__range=[start_date, end_date]
-#         ).select_related('patient', 'dentist')
+        appointments = Appointment.objects.filter(
+            appointment_date__range=[start_date, end_date]
+        ).select_related('patient', 'dentist')
 
-#         serializer = CalendarAppointmentSerializer(appointments, many=True)
-#         return Response(serializer.data)
+        serializer = CalendarAppointmentSerializer(appointments, many=True)
+        return Response(serializer.data)
 
-#     @action(detail=False, methods=['get'])
-#     def stats(self, request):
-#         today = timezone.now().date()
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        today = timezone.now().date()
         
-#         return Response({
-#             'total': Appointment.objects.count(),
-#             'upcoming': Appointment.objects.filter(
-#                 appointment_date__gte=today,
-#                 status__in=['scheduled', 'confirmed']
-#             ).count(),
-#             'by_status': Appointment.objects.values('status').annotate(
-#                 count=Count('id')
-#             ),
-#             'by_dentist': Appointment.objects.values(
-#                 'dentist__username'
-#             ).annotate(count=Count('id'))
-#         })
+        return Response({
+            'total': Appointment.objects.count(),
+            'upcoming': Appointment.objects.filter(
+                appointment_date__gte=today,
+                status__in=['scheduled', 'confirmed']
+            ).count(),
+            'by_status': Appointment.objects.values('status').annotate(
+                count=Count('id')
+            ),
+            'by_dentist': Appointment.objects.values(
+                'dentist__username'
+            ).annotate(count=Count('id'))
+        })
