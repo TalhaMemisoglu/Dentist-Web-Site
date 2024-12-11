@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser, Profile
+from book.models import Appointment
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,14 +45,27 @@ class LoginSerializer(serializers.Serializer):
 
         return data
 
-# Profile Serializer
+class AppointmentSerializer(serializers.ModelSerializer):
+    patient_name = serializers.CharField(source='patient.get_full_name', read_only=True)
+    dentist_name = serializers.CharField(source='dentist.get_full_name', read_only=True)
+
+    class Meta:
+        model = Appointment
+        fields = [
+            'id', 'patient_name', 'dentist_name', 'appointment_date', 
+            'appointment_time', 'duration', 'status', 'notes'
+        ]
+
 class ProfileSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.get_full_name', read_only=True)
+    appointments = AppointmentSerializer(many=True, read_only=True)
+
     class Meta:
         model = Profile
-        fields = ["id", "user", "name", "email", "phone"]
-        extra_kwargs = {
-            "user": {"read_only": True},  # User will be assigned automatically
-        }
+        fields = [
+            'id', 'user_name', 'name', 'email', 'phone', 'appointments'
+        ]
+        
         
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
