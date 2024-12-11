@@ -29,7 +29,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=15, null=True, blank=True)  # Unique if needed
 
     def __str__(self):             
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}" if self.first_name and self.last_name else self.user.username
     
     def save(self, *args, **kwargs):    
         super().save(*args, **kwargs)
