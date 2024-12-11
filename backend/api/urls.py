@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import CreateUserView, ProfileView, LoginView, LogoutView, DentistListView,CurrentUserView
+from .views import CreateUserView, ProfileView, LoginView, LogoutView, DentistListView,CurrentUserView,VerifyEmailView
 from book.views import AppointmentViewSet
 from rest_framework.routers import DefaultRouter    
 
@@ -13,5 +13,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('user/', CurrentUserView.as_view(), name='current-user'),
     path('dentists/', DentistListView.as_view(), name='dentist-list'),
+    path('verify-email/<int:user_id>/', VerifyEmailView.as_view(), name='verify-email'),
     path('', include(router.urls)),
 ]
