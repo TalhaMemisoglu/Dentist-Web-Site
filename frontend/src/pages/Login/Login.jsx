@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 
 const Login = () => {
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -17,10 +17,10 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const res = await api.post("/api/token/", { username, password });
+            const res = await api.post("/api/token/", { email, password });
             localStorage.setItem(ACCESS_TOKEN, res.data.access);
             localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-            navigate("/");
+            navigate("/"); // Redirect to homepage after successful login
         } catch (error) {
             alert("Login failed: " + error.message);
         } finally {
@@ -44,11 +44,11 @@ const Login = () => {
                                 <div className="form-group">
                                     <div className="input-group mb-3 col">
                                         <input
-                                            type="text"
+                                            type="email"
                                             className="form-control form-control-lg fs-6"
-                                            placeholder="Username"
-                                            value={username}
-                                            onChange={(e) => setUsername(e.target.value)}
+                                            placeholder="Email address"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             required
                                         />
                                     </div>
@@ -81,7 +81,7 @@ const Login = () => {
                                         className="btn btn-lg btn-primary w-100 fs-6 button-group"
                                         disabled={loading}
                                     >
-                                        {loading ? "Loading..." : "Giriş Yap"}
+                                        {loading ? "Loading..." : "Login"}
                                     </button>
                                 </div>
 
