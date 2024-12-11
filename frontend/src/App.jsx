@@ -15,7 +15,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Schedule from './pages/Schedule/Schedule';
 import Profile from './pages/Profile/Profile'; // Profile bileşeni import edildi
 import Sidebar from './components/Sidebar/Sidebar';
-import VerifyEmail from "./pages/VerifyEmail";
 
 function Logout() {
   localStorage.clear();
@@ -31,7 +30,7 @@ function App() {
   return (
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Schedule />} />
           <Route path="/about" element={<About />} />
           <Route path="/singleservice" element={<Services />} />
           <Route path="/contact" element={<Contactus />} />
@@ -41,7 +40,7 @@ function App() {
           <Route path="/patients" element={<Patients />} />
           <Route path="/choose" element={<Choose />} />
           <Route path="/schedule" element={<Schedule />} />
-          <Route path="/profile" element={<Profile />} /> {/* Profile route */}
+          <Route path="/profile" element={<Profile />} /> {/* Profile rotası eklendi */}
           <Route path="/sidebar" element={<Sidebar />} />
           <Route path="/verify-email/:userId" element={<VerifyEmail />} /> {/* Email Verification Page */}
           <Route path="*" element={<NotFound />} />

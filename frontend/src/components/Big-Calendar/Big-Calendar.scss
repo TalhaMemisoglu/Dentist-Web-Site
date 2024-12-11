@@ -1,0 +1,48 @@
+/* Expand weekdays to occupy the full width */
+.rbc-time-view .rbc-time-header .rbc-header {
+    flex-grow: 1; /* Make all headers (weekdays) equal width */
+}
+
+.rbc-time-view .rbc-time-header .rbc-header:nth-child(6),   // saturday
+.rbc-time-view .rbc-time-header .rbc-header:nth-child(7) { // sunday
+    display: none; /* Hide Saturday and Sunday headers */
+}
+
+.rbc-time-view .rbc-time-content .rbc-day-slot:nth-child(6),
+.rbc-time-view .rbc-time-content .rbc-day-slot:nth-child(7) {
+    display: none; /* Hide Saturday and Sunday day slots */
+}
+
+.rbc-row-content {
+    display: none;
+}
+
+/* Hide Saturday and Sunday headers in month view */
+.rbc-month-view .rbc-header:nth-child(7), /* Sunday Header */
+.rbc-month-view .rbc-header:nth-child(6) { /* Saturday Header */
+    display: none;
+}
+
+.rbc-header {
+    justify-content: center;
+}
+
+/* Stretch remaining weekdays to fill the full width */
+.rbc-month-view .rbc-row-bg,
+.rbc-month-view .rbc-header {
+    display: flex;
+}
+
+/* Hide Saturday and Sunday grid columns */
+.rbc-month-view .rbc-day-bg:nth-child(7), /* Sunday Column */
+.rbc-month-view .rbc-day-bg:nth-child(6), /* saturday column */
+.rbc-month-view .rbc-date-cell:nth-child(7), /* Sunday Cells */
+.rbc-month-view .rbc-date-cell:nth-child(6) {   /* saturday column */
+    display: none;
+}
+
+.rbc-button-link {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+}

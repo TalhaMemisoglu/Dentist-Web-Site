@@ -59,7 +59,7 @@ const Choose = () => {
       alert('Lütfen hem hizmet hem de doktor seçin.');
       return;
     }
-    navigate(`/schedule`, {
+    navigate(`/appointment`, {
       state: { service: selectedService, dentist: selectedDentist },
     });
   };

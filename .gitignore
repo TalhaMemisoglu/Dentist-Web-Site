@@ -44,3 +44,4 @@ poetry.lock       # Ignore poetry lock file
 
 # Ignore database files in Docker volumes (if applicable)
 docker-compose.yml
+backend/db.sqlite3

@@ -100,3 +100,43 @@ const Login = () => {
 };
 
 export default Login;
+
+
+/*const Login = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+
+        try {
+            const res = await api.post("/api/token/", { username, password });
+            const { access, refresh } = res.data;
+            
+            localStorage.setItem(ACCESS_TOKEN, access);
+            localStorage.setItem(REFRESH_TOKEN, refresh);
+            
+            // Optional: decode token to get user info
+            const payload = JSON.parse(atob(access.split('.')[1]));
+            if (payload.user_type) {
+                localStorage.setItem('user_type', payload.user_type);
+            }
+
+            navigate("/");
+        } catch (error) {
+            let errorMessage = "Login failed";
+            if (error.response?.data?.detail) {
+                errorMessage = error.response.data.detail;
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+            setError(errorMessage);
+        } finally {
+            setLoading(false);
+        }
+    }; */

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DentistViewSet, AppointmentViewSet
+from .views import DentistViewSet, AppointmentViewSet, AdminCalendarViewSet
 
 # Define views explicitly
 dentist_list = DentistViewSet.as_view({'get': 'list'})
