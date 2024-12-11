@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User,AbstractUser
 from django.core.exceptions import ValidationError
+from book.models import Appointment
 
 
 class CustomUser(AbstractUser):             #For custom user model which we will need for dentist patient and etc.
@@ -21,19 +22,15 @@ class CustomUser(AbstractUser):             #For custom user model which we will
     verified = models.BooleanField(default=False)  # Added verified field
 
 class Profile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)   #Should be used
-    name = models.CharField(max_length=200, null=True)                  #Should be used
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=200, null=True, blank=True)
+    last_name = models.CharField(max_length=200, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    phone = models.CharField(max_length=15, null=True, blank=True)  #whether should be unique or not
-    #date_created = models.DateTimeField(auto_now_add=True, null=True)   #Could be used idk
-    
-    def __str__(self):             #it will display the associated user's username followed by "Profile" when you print.
-        return self.name if self.name else f"{self.user.username}"#return self.name
-        
-        
-   #def save(self, *args, **kwargs):    #This is a method that is called when an instance of a model is saved.
-        #Will add more features here later, Huge potential for this method
+    phone = models.CharField(max_length=15, null=True, blank=True)  # Unique if needed
+    appointments = models.ManyToManyField('Appointment', blank=True)
 
-        
-        
+    def __str__(self):             
+        return f"{self.first_name} {self.last_name}"
+    
+    def save(self, *args, **kwargs):    
         super().save(*args, **kwargs)
