@@ -87,12 +87,12 @@ const Sidebar = () => {
             <>
               <li>
                 <Link to="/appointments">
-                  <span className="icon">📅</span> Randevular
+                  <span className="icon">📅</span> Takvimi Gör
                 </Link>
               </li>
               <li>
                 <Link to="/add-appointment">
-                  <span className="icon">➕</span> Randevu Ekle
+                  <span className="icon">➕</span> Randevu Geçmişi
                 </Link>
               </li>
             </>
@@ -117,12 +117,12 @@ const Sidebar = () => {
             <>
               <li>
                 <Link to="/assistant-schedule">
-                  <span className="icon">📋</span> Çalışma Programı
+                  <span className="icon">📋</span> Randevular
                 </Link>
               </li>
               <li>
                 <Link to="/manage-patient-records">
-                  <span className="icon">📂</span> Hasta Kayıtları
+                  <span className="icon">📂</span> Randevu Ekle
                 </Link>
               </li>
             </>
@@ -132,12 +132,12 @@ const Sidebar = () => {
             <>
               <li>
                 <Link to="/manage-staff">
-                  <span className="icon">👥</span> Personel Yönetimi
+                  <span className="icon">👥</span> Personel Ekle
                 </Link>
               </li>
               <li>
                 <Link to="/reports">
-                  <span className="icon">📈</span> Raporlar
+                  <span className="icon">📈</span> Personel Çıkar
                 </Link>
               </li>
             </>
