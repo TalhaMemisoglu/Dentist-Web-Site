@@ -1,8 +1,8 @@
 import { useState } from "react";
 import api from "../../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
-import './Login.scss'; // Import the SCSS file
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import './Login.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 
@@ -10,19 +10,52 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");  // Added error state for more explicit error handling
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        setLoading(true);
         e.preventDefault();
+        setLoading(true);
+        setError("");  // Reset error message on new submit attempt
+
+        console.log("Login attempt:", { email, password }); // Debug: log input values
 
         try {
-            const res = await api.post("/api/token/", { email, password });
-            localStorage.setItem(ACCESS_TOKEN, res.data.access);
-            localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-            navigate("/"); // Redirect to homepage after successful login
+            const res = await api.post("/api/login/", { email, password });
+            console.log("Response from backend:", res); // Debug: log response
+
+            if (res.status === 200 && res.data) {
+                const { access, refresh } = res.data; // JWT fields
+
+                console.log("Access Token:", access); // Debug: log the access token
+                console.log("Refresh Token:", refresh); // Debug: log the refresh token
+
+                // Save JWT tokens in localStorage
+                localStorage.setItem(ACCESS_TOKEN, access);
+                localStorage.setItem(REFRESH_TOKEN, refresh);
+
+                alert("Login successful!");
+                navigate("/"); // Redirect to homepage
+            } else {
+                throw new Error("Invalid login response");
+            }
         } catch (error) {
-            alert("Login failed: " + error.message);
+            console.error("Login error:", error); // Debug: log error to understand its nature
+
+            if (error.response) {
+                console.error("Error response:", error.response);  // Debug: log response error
+                const errorMessage = error.response.data.detail || "Invalid credentials.";
+                setError(errorMessage); // Show the error in UI
+                alert(`Login failed: ${errorMessage}`);
+            } else if (error.request) {
+                console.error("No response received:", error.request); // Debug: log if no response is received
+                setError("No response from server. Please try again.");
+                alert("Login failed: No response from server.");
+            } else {
+                console.error("Unexpected error:", error.message); // Debug: log unexpected errors
+                setError("Something went wrong. Please try again.");
+                alert("Login failed: Something went wrong.");
+            }
         } finally {
             setLoading(false);
         }
@@ -85,6 +118,8 @@ const Login = () => {
                                     </button>
                                 </div>
 
+                                {error && <div className="error-message text-danger">{error}</div>} {/* Display error message */}
+
                                 <div className="row">
                                     <small>
                                         Don't have an account? <Link to="/register">Register</Link>
@@ -100,43 +135,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
-/*const Login = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError("");
-
-        try {
-            const res = await api.post("/api/token/", { username, password });
-            const { access, refresh } = res.data;
-            
-            localStorage.setItem(ACCESS_TOKEN, access);
-            localStorage.setItem(REFRESH_TOKEN, refresh);
-            
-            // Optional: decode token to get user info
-            const payload = JSON.parse(atob(access.split('.')[1]));
-            if (payload.user_type) {
-                localStorage.setItem('user_type', payload.user_type);
-            }
-
-            navigate("/");
-        } catch (error) {
-            let errorMessage = "Login failed";
-            if (error.response?.data?.detail) {
-                errorMessage = error.response.data.detail;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-            setError(errorMessage);
-        } finally {
-            setLoading(false);
-        }
-    }; */

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from "../../api";
-import './Register.scss';  // Import your SCSS file
-import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS
+import './Register.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../../components/Navbar/Navbar';
 
 const Register = () => {
@@ -15,37 +15,34 @@ const Register = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        setLoading(true);
         e.preventDefault();
+        setLoading(true);
 
         try {
-            // Send the registration data with first_name, last_name, email, phone, and password
-            await api.post("/api/register/", { 
+            await api.post("/api/register/", {
                 first_name: firstName,
                 last_name: lastName,
                 password,
                 email,
-                phone 
+                phone,
             });
-            navigate("/login"); // Redirect to login after successful registration
+
+            alert("Registration successful! Please check your email for verification.");
+            navigate("/login"); // Redirect to login page
         } catch (error) {
-            // Check if the error response contains a message or validation errors
             if (error.response && error.response.data) {
-                // If it's a validation error, we can display the specific field errors
-                if (error.response.data.detail) {
-                    alert(error.response.data.detail);  // General error message (like "Username already exists")
-                } else {
-                    // Loop through and display field-specific errors (if any)
-                    const errors = error.response.data;
-                    let errorMessage = '';
-                    for (const field in errors) {
-                        errorMessage += `${field}: ${errors[field].join(', ')}\n`;
+                const errors = error.response.data;
+
+                // Handle field-specific validation errors
+                let errorMessage = errors.detail || "Registration failed.";
+                for (const field in errors) {
+                    if (field !== "detail") {
+                        errorMessage += `\n${field}: ${errors[field].join(', ')}`;
                     }
-                    alert(errorMessage); // Show all validation errors for the user
                 }
+                alert(errorMessage);
             } else {
-                // If there's no specific error message from the backend, show a general error
-                alert("Registration failed. Please try again.");
+                alert("Registration failed: Something went wrong.");
             }
         } finally {
             setLoading(false);

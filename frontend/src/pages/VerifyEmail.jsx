@@ -10,15 +10,18 @@ const VerifyEmail = () => {
 
   const verifyEmail = async () => {
     try {
-      await axios.get(`verify-email/${userId}`);
+      const response = await axios.get(`/api/verify-email/${userId}/`);
+      console.log('API Response:', response.data);
       alert('Email verified successfully!');
       window.close();
     } catch (error) {
+      console.error('Error:', error.response || error.message);
       setError('Error verifying email. Please try again later.');
     } finally {
       setLoading(false);
     }
   };
+  
 
   React.useEffect(() => {
     verifyEmail();

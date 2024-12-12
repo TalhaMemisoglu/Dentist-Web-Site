@@ -20,19 +20,31 @@ const Sidebar = () => {
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem(ACCESS_TOKEN);
+        console.log("Token retrieved from localStorage:", token);  // Debug: token fetched from localStorage
+
         if (!token) {
           console.warn("No token found. Redirecting to login...");
           navigate("/login"); // Redirect to login if no token is found
           return;
         }
 
+        console.log("Token from localStorage:", token);
+        
         const response = await axios.get("/api/user/", {
           headers: { Authorization: `Bearer ${token}` },
         });
+        
+        console.log("Response from backend:", response); // Debug: Response from the backend
+        console.log("Authorization Header Sent:", `Bearer ${token}`); // Debug: Check the header sent
 
-        setUser(response.data);
+        if (response.status === 200) {
+          console.log("User data:", response.data); // Debug: User data fetched from the API
+          setUser(response.data);
+        } else {
+          console.error("Failed to fetch user data:", response.status); // Debug: if not 200 OK
+        }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching user data:", error.response || error.message); // Debug: Detailed error message
       }
     };
 
@@ -40,6 +52,7 @@ const Sidebar = () => {
   }, [navigate]);
 
   if (!user) {
+    console.log("User data not available, showing loading..."); // Debug: Log when user data is not loaded yet
     return <p>Loading...</p>;
   }
 

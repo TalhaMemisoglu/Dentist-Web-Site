@@ -1,60 +1,58 @@
-from rest_framework import generics, permissions, status
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import generics, status
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import CustomUser, Profile
-from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer
+from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer,UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
+from django.db import transaction
 
 
 # Email Verification View
-class VerifyEmailView(APIView):
-    permission_classes = [permissions.AllowAny]
+class VerifyEmailView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
 
     def get(self, request, user_id):
         try:
-            # Get the user by ID
-            user = get_object_or_404(get_user_model(), id=user_id)
+            print(f"GET request for user_id={user_id}")
+            user = get_object_or_404(CustomUser, id=user_id)
+            print(f"User before update: {user.email}, Verified={user.verified}")
 
-            # Mark the user as verified
             if user.verified:
                 return Response({"message": "Email is already verified!"}, status=status.HTTP_200_OK)
 
             user.verified = True
             user.save()
+            print(f"User after update: {user.email}, Verified={user.verified}")
 
             return Response({"message": "Email verified successfully!"}, status=status.HTTP_200_OK)
         except Exception as e:
+            print(f"Error: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 # User Registration View with Email Verification
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         user_data = response.data
         user = CustomUser.objects.get(email=user_data['email'])
 
-        # Ensure the user is unverified initially
         user.verified = False
         user.save()
 
-        # Generate JWT tokens
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
 
-        # Send email verification
         verification_link = f"{settings.FRONTEND_URL}/verify-email/{user.id}"
         subject = "Verify Your Email Address"
         message = f"Click the link to verify your email: {verification_link}"
@@ -73,8 +71,71 @@ class CreateUserView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+# Custom Token Obtain Pair View for Email Authentication
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = LoginSerializer  # Use the LoginSerializer to authenticate by email and password
+
+
+# Login View with Email and Password Authentication
+class LoginView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            password = serializer.validated_data['password']
+
+            # Debugging: Print email and password
+            print("Attempting to authenticate user:", email)
+
+            # Use Django's default authenticate method for email/password login
+            user = authenticate(request, username=email, password=password)
+
+            # Debugging: Check if user is authenticated
+            if user:
+                print(f"User {email} authenticated successfully.")  # Print user info if authentication is successful
+                if not user.verified:
+                    return Response({"error": "Please verify your email before logging in."}, status=status.HTTP_400_BAD_REQUEST)
+
+                # Generate tokens
+                refresh = RefreshToken.for_user(user)
+
+                # Debugging statement: Print the tokens to the console
+                print("Access Token:", str(refresh.access_token))  # Print access token
+                print("Refresh Token:", str(refresh))  # Print refresh token
+
+                return Response({
+                    "access": str(refresh.access_token),  # Update to 'access' instead of 'access_token'
+                    "refresh": str(refresh),  # Update to 'refresh' instead of 'refresh_token'
+                    "user_type": user.user_type,
+                })
+            else:
+                print(f"Authentication failed for {email}.")  # Print if authentication fails
+
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+# Logout View (if still needed)
+class LogoutView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh_token")
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"message": "Successfully logged out."}, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 # Profile Management Views
-class ProfileView(APIView):
+class ProfileView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -85,49 +146,9 @@ class ProfileView(APIView):
         except Profile.DoesNotExist:
             return Response({"error": "Profile not found."}, status=404)
 
-#Login View
-class LoginView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            email = serializer.validated_data['email']
-            password = serializer.validated_data['password']
-            user = authenticate(email=email, password=password)
-
-            if user:
-                if not user.verified:
-                    return Response({"error": "Please verify your email before logging in."}, status=status.HTTP_400_BAD_REQUEST)
-
-                token, _ = Token.objects.get_or_create(user=user)
-                return Response({
-                    "token": token.key,
-                    "user_type": user.user_type
-                })
-
-            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# Logout View
-class LogoutView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        try:
-            request.user.auth_token.delete()
-        except Token.DoesNotExist:
-            return Response({"error": "No active session found."}, status=400)
-
-        return Response({"message": "Successfully logged out."}, status=200)
-
 
 # Dentist List View
-class DentistListView(APIView):
-    authentication_classes = []
+class DentistListView(generics.GenericAPIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
@@ -137,9 +158,19 @@ class DentistListView(APIView):
 
 
 # Current User View
-class CurrentUserView(APIView):
+class CurrentUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = CustomUserSerializer(request.user)
+        # Log the token received in the request header
+        print(f"Received token: {request.headers.get('Authorization')}")  # Debug: Check the token
+        user = request.user
+
+        if not user.is_authenticated:
+            print("User is not authenticated.")  # Debug: If user is not authenticated
+            return Response({"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        print(f"Authenticated user: {user.email}")  # Debug: Print user info if authenticated
+        
+        serializer = UserSerializer(user)
         return Response(serializer.data)

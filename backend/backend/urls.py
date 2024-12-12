@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView,TokenVerifyView
 from book.views import DentistViewSet, AppointmentViewSet, AdminCalendarViewSet
-from api.views import CreateUserView, ProfileView, LoginView, LogoutView, DentistListView,CurrentUserView
+from api.views import CreateUserView, ProfileView, LoginView, LogoutView, DentistListView,CurrentUserView,CustomTokenObtainPairView,VerifyEmailView
 
 # Define views explicitly
 dentist_list = DentistViewSet.as_view({'get': 'list'})
@@ -38,13 +38,12 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
     path('api/user/', CurrentUserView.as_view(), name='current-user'),
+    path('api/verify-email/<int:user_id>/', VerifyEmailView.as_view(), name='verify-email'),
     path('api/dentists/', DentistListView.as_view(), name='open-dentist-list'),
-    path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
-    path("api-auth/", include("rest_framework.urls")),  # Optional, for DRF's browsable API login
-    #The api-auth/ endpoint provides session-based login for DRF’s browsable API. It doesn’t align 
-    #with JWT, which is stateless and doesn’t use sessions.
-    #Removing it avoids confusion and enforces consistency in authentication across your project.
+    # JWT token routes
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/booking/dentists/', dentist_list, name='dentist-list'),
     path('api/booking/dentists/<int:pk>/', dentist_detail, name='dentist-detail'),
     path('api/booking/dentists/<int:pk>/available_dates/', available_dates, name='available-dates'),

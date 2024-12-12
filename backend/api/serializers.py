@@ -5,7 +5,7 @@ from book.models import Appointment
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email','phone', 'password']
+        fields = ['id','first_name', 'last_name', 'email','phone', 'password']
         extra_kwargs = {
             'password': {'write_only': True}
         }
