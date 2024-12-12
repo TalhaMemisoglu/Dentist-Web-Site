@@ -12,7 +12,9 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator  # For genera
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  # Encoding/decoding user IDs for URLs
 from django.utils.encoding import force_bytes, force_str  # Converting between bytes and string representations
 from .models import CustomUser, Profile
-from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer, UserSerializer
+from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer, UserSerializer, UserProfileUpdateSerializer, PasswordUpdateSerializer
+from rest_framework.generics import UpdateAPIView
+from rest_framework.views import APIView
 
 
 # Email Verification View
@@ -226,3 +228,34 @@ class PasswordResetView(generics.GenericAPIView):
             # Debug: Log the exception
             print("Error during password reset:", str(e))
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+class UpdateUserProfileView(UpdateAPIView):
+    queryset = CustomUser.objects.all()  # Define the model queryset
+    serializer_class = UserProfileUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # Override to fetch the current logged-in user
+        return self.request.user
+    
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import logging
+
+logger = logging.getLogger(__name__)
+
+class UpdatePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        logger.debug(f"Received password update request for user: {request.user.username}")
+        serializer = PasswordUpdateSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            logger.debug("Password update serializer validated successfully.")
+            serializer.update(request.user, serializer.validated_data)
+            logger.info("Password updated successfully for user.")
+            return Response({"message": "Password updated successfully."}, status=status.HTTP_200_OK)
+        logger.error(f"Password update serializer validation failed: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.auth.hashers import check_password
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -119,3 +120,46 @@ class PasswordResetRequestSerializer(serializers.Serializer):
 
         
 
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(read_only=True)  # Prevent email updates
+                                                    #Should make a warning if email tries to be updated
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email', 'phone']  # Include fields you want to allow updates for
+        
+
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.password_validation import validate_password
+import logging
+
+logger = logging.getLogger(__name__)
+
+class PasswordUpdateSerializer(serializers.Serializer):
+    currentPassword = serializers.CharField(write_only=True)
+    newPassword = serializers.CharField(write_only=True)
+
+    def validate_current_password(self, value):
+        user = self.context['request'].user
+        logger.debug(f"Validating current password for user: {user.username}")
+        if not check_password(value, user.password):
+            logger.error("Current password validation failed.")
+            raise serializers.ValidationError("Current password is incorrect.")
+        logger.debug("Current password validated successfully.")
+        return value
+
+    def validate_new_password(self, value):
+        logger.debug("Validating new password with Django validators.")
+        try:
+            validate_password(value)  # Use Django's password validators
+        except Exception as e:
+            logger.error(f"New password validation failed: {e}")
+            raise
+        logger.debug("New password validated successfully.")
+        return value
+
+    def update(self, instance, validated_data):
+        logger.debug(f"Updating password for user: {instance.username}")
+        instance.set_password(validated_data['newPassword'])
+        instance.save()
+        logger.debug("Password updated and saved successfully.")
+        return instance
