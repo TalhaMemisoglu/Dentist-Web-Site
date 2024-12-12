@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Profile.scss';
+import api from "../../api";
 
 const Profile = () => {
-   // axiox.get() kullan fetch'le
-  // it's a state for static profile details
-  const [profileDetails, setProfileDetails] = useState(() => ({
-    name: "John",
-    surname: "Doe",
-    email: "john.doe@example.com",
-    phone: "123-456-7890",
-  }));
+  // Track if any field has been edited
+  const [isEdited, setIsEdited] = useState(false);
 
   // State to manage active page
   const [activePage, setActivePage] = useState('account');
-
-  // state to store a copy of original state
-  const [originalDetails, setOriginalDetails] = useState({ ...profileDetails });
 
   // Password States
   const [currentPassword, setCurrentPassword] = useState('');
@@ -28,9 +20,42 @@ const Profile = () => {
   const [currentPasswordWarning, setCurrentPasswordWarning] = useState('');
   const [newPasswordWarning, setNewPasswordWarning] = useState('');
   const [repeatPasswordWarning, setRepeatPasswordWarning] = useState('');
-    
-  // Track if any field has been edited
-  const [isEdited, setIsEdited] = useState(false);
+
+  // Loading and error states
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // State to store profile details
+  const [profileDetails, setProfileDetails] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+  });
+
+  // state to store a copy of original state
+  const [originalDetails, setOriginalDetails] = useState({ ...profileDetails });
+
+  // Fetch profile details from the API
+  useEffect(() => {
+    const fetchProfileDetails = async () => {
+      try {
+        setIsLoading(true);
+        const response = await api.get("api/user");
+        console.log(response.data);
+
+        setProfileDetails(response.data);
+        setOriginalDetails(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching profile details:", err);
+        setError("Failed to load profile details. Please try again.");
+        setIsLoading(false);
+      }
+    };
+
+    fetchProfileDetails();
+  }, []);
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -42,16 +67,16 @@ const Profile = () => {
       [name]: value,
     }));
 
-  // Check if any changes exist compared to the original state
-  setIsEdited(Object.keys(profileDetails).some(
-    (key) => profileDetails[key] !== originalDetails[key]
-  ));
-};
+    // Check if any changes exist compared to the original state
+    setIsEdited(Object.keys(profileDetails).some(
+      (key) => profileDetails[key] !== originalDetails[key]
+    ));
+  };
 
   // handle save changes
   const saveDetails = async () => {
     try {
-      const response = await axios.put(`profile/update`, profileDetails);
+      const response = await api.put(`api/profile/update`, profileDetails);
       console.log("Updated successfully:", response.data);
       setOriginalDetails(profileDetails); // Update the original state after saving
       setIsEdited(false);
@@ -60,7 +85,6 @@ const Profile = () => {
       alert(`Failed to update profile.`);
     }
   };
-  
 
   // Cancel all changes
   const cancelChanges = () => {
@@ -68,7 +92,10 @@ const Profile = () => {
     setIsEdited(false); // Reset edit flag
   };
 
-  // Password Part
+  /* ------------------------------- */
+  /* -------- Password Part -------- */
+  /* ------------------------------- */
+
   useEffect(() => {
     // Clear warnings initially
     setCurrentPasswordWarning('');
@@ -110,7 +137,7 @@ const Profile = () => {
 
   const savePassword = async () => {
     try {
-      const response = await axios.put(`/api/profile/change-password`, {
+      const response = await api.put(`/api/profile/change-password`, {
         currentPassword,
         newPassword,
       });
@@ -126,6 +153,34 @@ const Profile = () => {
     }
   };
 
+  /* ---------------------------------- */
+  /* -------- Appointment Part -------- */
+  /* ---------------------------------- */
+
+  // State for appointments
+  const [appointments, setAppointments] = useState([]);
+
+  // Fetch appointments from API
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        setIsLoading(true);
+        setError("");
+        const response = await api.get("/api/appointments");
+        console.log("Fetched appointments:", response.data);
+        setAppointments(response.data);
+      } catch (err) {
+        console.error("Error fetching appointments:", err);
+        setError("Failed to load appointments. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (activePage === "appointments") {
+      fetchAppointments();
+    }
+  }, [activePage]);
 
   const renderContent = () => {
     switch (activePage) {
@@ -134,7 +189,7 @@ const Profile = () => {
           <div className="container">
             <div className="card mt-4">
               <div className="card-body">
-                {["name", "surname", "email", "phone"].map((field) => (
+                {["first_name", "last_name", "email", "phone"].map((field) => (
                   <div key={field} className="form-group">
                     <label className="form-label">
                       {field.charAt(0).toUpperCase() + field.slice(1)}
@@ -248,8 +303,31 @@ const Profile = () => {
           <div>
             <h4>Appointments</h4>
             <div className="card-body">
-              <p>Here you can view and manage your appointments.</p>
-              {/* Add appointment management UI here */}
+              {isLoading ? (
+                <p>Loading appointments...</p>
+              ) : error ? (
+                <p className="text-danger">{error}</p>
+              ) : appointments.length === 0 ? (
+                <p>No appointments found.</p>
+              ) : (
+                <div className="appointments-timeline">
+                  {appointments.map((appointment, index) => (
+                    <div key={index} className="timeline-item">
+                      <div className="timeline-dot"></div>
+                      <div className="timeline-content">
+                        <p className="appointment-date">
+                          {new Date(appointment.date).toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'short',
+                          })}, {appointment.time}
+                        </p>
+                        <p className="appointment-treatment">{appointment.treatment_name}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         );
@@ -258,7 +336,6 @@ const Profile = () => {
     }
   };
 
-  // sutun ve geri kalan yapiyi olusturan main_view_maker
   return (
     <div className="container mt-5">
       <h4 className="font-weight-bold text-center">Profile Settings</h4>
