@@ -5,6 +5,7 @@ import './Login.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../sections/Footer/Footer';
 import RequestPasswordReset from "../PasswordReset/RequestPasswordReset";
 
 const Login = () => {
@@ -70,7 +71,7 @@ const Login = () => {
                     <div className="col-12 min-width">
                         <div className="row align-items-center">
                             <div className="header-text mb-4">
-                                <h2>Login Screen</h2>
+                                <h2>Login</h2>
                                 <p>Let's put a smile on your face :)</p>
                             </div>
 
@@ -131,6 +132,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 };
