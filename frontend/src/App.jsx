@@ -16,6 +16,8 @@ import Schedule from './pages/Schedule/Schedule';
 import Profile from './pages/Profile/Profile'; // Profile bileşeni import edildi
 import Sidebar from './components/Sidebar/Sidebar';
 import VerifyEmail from './pages/VerifyEmail'
+import RequestPasswordReset from './pages/PasswordReset/RequestPasswordReset'
+import ResetPassword from './pages/PasswordReset/ResetPassword'
 
 function Logout() {
   localStorage.clear();
@@ -45,6 +47,8 @@ function App() {
           <Route path="/profile" element={<Profile />} /> {/* Profile rotası eklendi */}
           <Route path="/sidebar" element={<Sidebar />} />
           <Route path="/verify-email/:userId" element={<VerifyEmail />} /> {/* Email Verification Page */}
+          <Route path="/request-password-reset" element={<RequestPasswordReset />} />
+          <Route path="/password-reset/:uid/:token" element={<ResetPassword />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -1,15 +1,18 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.permissions import AllowAny,IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics, status
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import CustomUser, Profile
-from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer,UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import transaction
+from django.contrib.auth.tokens import PasswordResetTokenGenerator  # For generating secure tokens for password reset
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  # Encoding/decoding user IDs for URLs
+from django.utils.encoding import force_bytes, force_str  # Converting between bytes and string representations
+from .models import CustomUser, Profile
+from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer, UserSerializer
 
 
 # Email Verification View
@@ -33,8 +36,6 @@ class VerifyEmailView(generics.GenericAPIView):
         except Exception as e:
             print(f"Error: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 
 # User Registration View with Email Verification
 class CreateUserView(generics.CreateAPIView):
@@ -70,11 +71,9 @@ class CreateUserView(generics.CreateAPIView):
             'refresh_token': str(refresh),
         }, status=status.HTTP_201_CREATED)
 
-
 # Custom Token Obtain Pair View for Email Authentication
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = LoginSerializer  # Use the LoginSerializer to authenticate by email and password
-
 
 # Login View with Email and Password Authentication
 class LoginView(generics.GenericAPIView):
@@ -86,41 +85,30 @@ class LoginView(generics.GenericAPIView):
             email = serializer.validated_data['email']
             password = serializer.validated_data['password']
 
-            # Debugging: Print email and password
             print("Attempting to authenticate user:", email)
 
-            # Use Django's default authenticate method for email/password login
             user = authenticate(request, username=email, password=password)
 
-            # Debugging: Check if user is authenticated
             if user:
-                print(f"User {email} authenticated successfully.")  # Print user info if authentication is successful
+                print(f"User {email} authenticated successfully.")
                 if not user.verified:
                     return Response({"error": "Please verify your email before logging in."}, status=status.HTTP_400_BAD_REQUEST)
 
-                # Generate tokens
                 refresh = RefreshToken.for_user(user)
 
-                # Debugging statement: Print the tokens to the console
-                print("Access Token:", str(refresh.access_token))  # Print access token
-                print("Refresh Token:", str(refresh))  # Print refresh token
-
                 return Response({
-                    "access": str(refresh.access_token),  # Update to 'access' instead of 'access_token'
-                    "refresh": str(refresh),  # Update to 'refresh' instead of 'refresh_token'
+                    "access": str(refresh.access_token),
+                    "refresh": str(refresh),
                     "user_type": user.user_type,
                 })
             else:
-                print(f"Authentication failed for {email}.")  # Print if authentication fails
+                print(f"Authentication failed for {email}.")
 
             return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
-# Logout View (if still needed)
+# Logout View
 class LogoutView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -132,7 +120,6 @@ class LogoutView(generics.GenericAPIView):
             return Response({"message": "Successfully logged out."}, status=200)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 # Profile Management Views
 class ProfileView(generics.GenericAPIView):
@@ -146,7 +133,6 @@ class ProfileView(generics.GenericAPIView):
         except Profile.DoesNotExist:
             return Response({"error": "Profile not found."}, status=404)
 
-
 # Dentist List View
 class DentistListView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -156,21 +142,87 @@ class DentistListView(generics.GenericAPIView):
         serializer = CustomUserSerializer(dentists, many=True)
         return Response(serializer.data)
 
-
 # Current User View
 class CurrentUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # Log the token received in the request header
-        print(f"Received token: {request.headers.get('Authorization')}")  # Debug: Check the token
+        print(f"Received token: {request.headers.get('Authorization')}")
         user = request.user
 
         if not user.is_authenticated:
-            print("User is not authenticated.")  # Debug: If user is not authenticated
+            print("User is not authenticated.")
             return Response({"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        print(f"Authenticated user: {user.email}")  # Debug: Print user info if authenticated
-        
+
+        print(f"Authenticated user: {user.email}")
+
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
+# Password Reset Request View
+class PasswordResetRequestView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email")
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = get_object_or_404(CustomUser, email=email)
+
+        # Debug: Check the user
+        print("User found:", user)
+
+        token_generator = PasswordResetTokenGenerator()
+        token = token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.id))
+
+        # Debug: Log the generated token and uid
+        print("Generated Token:", token)
+        print("Generated UID:", uid)
+
+        reset_url = f"{settings.FRONTEND_URL}/password-reset/{uid}/{token}/"
+        
+        # Debug: Log the reset URL
+        print("Reset URL:", reset_url)
+
+        subject = "Password Reset Request"
+        message = f"Click the link to reset your password: {reset_url}"
+
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+
+        return Response({"message": "Password reset email sent successfully!"}, status=status.HTTP_200_OK)
+
+# Password Reset View
+class PasswordResetView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, uid, token):
+        new_password = request.data.get("new_password")
+        if not new_password:
+            return Response({"error": "New password is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            # Debug: Log the decoded user ID
+            print("Decoded UID:", user_id)
+
+            user = get_object_or_404(CustomUser, id=user_id)
+
+            token_generator = PasswordResetTokenGenerator()
+
+            # Debug: Check if token is valid
+            token_is_valid = token_generator.check_token(user, token)
+            print("Token check result:", token_is_valid)
+
+            if not token_is_valid:
+                return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+
+            user.set_password(new_password)
+            user.save()
+
+            return Response({"message": "Password reset successfully!"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            # Debug: Log the exception
+            print("Error during password reset:", str(e))
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

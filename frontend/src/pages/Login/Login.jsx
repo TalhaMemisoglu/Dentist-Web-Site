@@ -5,6 +5,7 @@ import './Login.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
+import RequestPasswordReset from "../PasswordReset/RequestPasswordReset";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -105,7 +106,7 @@ const Login = () => {
                                         </label>
                                     </div>
                                     <div className="forgot">
-                                        <small><a href="#">Forgot Password?</a></small>
+                                        <small><Link to="/request-password-reset">Forgot Password?</Link></small>
                                     </div>
                                 </div>
                                 <div className="input-group mb-3">
