@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from "../../api";
-import './Register.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../sections/Footer/Footer'
 
 const Register = () => {
     const [firstName, setFirstName] = useState("");
@@ -33,7 +33,6 @@ const Register = () => {
             if (error.response && error.response.data) {
                 const errors = error.response.data;
 
-                // Handle field-specific validation errors
                 let errorMessage = errors.detail || "Registration failed.";
                 for (const field in errors) {
                     if (field !== "detail") {
@@ -50,126 +49,119 @@ const Register = () => {
     };
 
     return (
-      <>
-      <Navbar />
-      <div className="register-container">
-        <div className="container d-flex justify-content-center align-items-center min-vh-100">
-          <div className="row border rounded-5 p-3 bg-white shadow box-area">
-            <div className="col-12 min-width">
-              <div className="row align-items-center">
-                <div className="header-text mb-4">
-                  <h2>Register Screen</h2>
-                  <p>Let's put a smile on your face :)</p>
+        <>
+            <Navbar />
+            <div className="container d-flex justify-content-center align-items-center min-vh-100">
+                <div
+                    className="row border rounded-5 p-4 bg-white shadow-lg w-100"
+                    style={{ maxWidth: "600px", marginTop: "70px" }}
+                >
+                    <div className="col-12">
+                        <div className="text-start mb-4">
+                            <h2>Register</h2>
+                            <p className="text-muted">Let's put a smile on your face :)</p>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            {/* First Name and Last Name */}
+                            <div className="row mb-3">
+                                <div className="col">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg fs-6"
+                                        placeholder="First Name"
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="col">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg fs-6"
+                                        placeholder="Last Name"
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Phone Number */}
+                            <div className="mb-3">
+                                <div className="input-group">
+                                    <span className="input-group-text">+90</span>
+                                    <input
+                                        type="tel"
+                                        className="form-control form-control-lg fs-6"
+                                        placeholder="Phone Number"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Email */}
+                            <div className="mb-3">
+                                <input
+                                    type="email"
+                                    className="form-control form-control-lg fs-6"
+                                    placeholder="Email Address"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            {/* Password */}
+                            <div className="mb-3">
+                                <input
+                                    type="password"
+                                    className="form-control form-control-lg fs-6"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            {/* Terms and Conditions */}
+                            <div className="form-check mb-3">
+                                <input
+                                    type="checkbox"
+                                    id="termsCheck"
+                                    className="form-check-input"
+                                    required
+                                />
+                                <label htmlFor="termsCheck" className="form-check-label">
+                                    I agree to the <a href="#">Terms</a>.
+                                </label>
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="mb-3">
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary btn-lg w-100 fs-6"
+                                    disabled={loading}
+                                >
+                                    {loading ? "Registering..." : "Register"}
+                                </button>
+                            </div>
+
+                            {/* Login Redirect */}
+                            <div className="text-center">
+                                <small>
+                                    Already have an account? <Link to="/login">Login</Link>
+                                </small>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-  
-                <form onSubmit={handleSubmit} className="form-container">
-                  <div className="form-group">
-                    <div className="input-group mb-3 row">
-                      <div className="col">
-                        <input
-                          type="text"
-                          className="form-control form-control-lg fs-6"
-                          placeholder="First Name"
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="form-group">
-                    <div className="input-group mb-3 row">
-                      <div className="col">
-                        <input
-                          type="text"
-                          className="form-control form-control-lg fs-6"
-                          placeholder="Last Name"
-                          value={lastName}
-                          onChange={(e) => setLastName(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div className="form-group mb-3">
-                    <div className="input-group">
-                      <div className="input-group-prepend">
-                        <span className="input-group-text">+90</span>
-                      </div>
-                      <input
-                        type="tel"
-                        className="form-control"
-                        placeholder="Phone number"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                      />
-                    </div>
-                  </div>
-  
-                  <div className="form-group">
-                    <div className="input-group mb-3">
-                      <input
-                        type="email"
-                        className="form-control form-control-lg fs-6"
-                        placeholder="Email address"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="input-group mb-1">
-                      <input
-                        type="password"
-                        className="form-control form-control-lg fs-6"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
-                  </div>
-  
-                  <div className="form-group">
-                    <div className="input-group mb-3 d-flex justify-content-between">
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id="formCheck"
-                        />
-                        <label
-                          htmlFor="formCheck"
-                          className="form-check-label text-secondary"
-                        >
-                          <small>
-                            I agree to all <a href="#">Terms, Privacy Policy</a> and
-                            <a href="#">Fees</a>
-                          </small>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div className="input-group mb-3">
-                    <button
-                      className="btn btn-lg btn-primary w-100 fs-6 button-group"
-                      disabled={loading}
-                    >
-                      {loading ? "Registering..." : "Register"}
-                    </button>
-                  </div>
-  
-                  <div className="row">
-                    <small>
-                      Already have an account? <Link to="/login">Login</Link>
-                    </small>
-                  </div>
-                </form>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </>
-);
+            <Footer />
+        </>
+    );
 };
 
 export default Register;
