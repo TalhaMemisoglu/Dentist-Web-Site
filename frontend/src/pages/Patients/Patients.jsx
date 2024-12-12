@@ -1,61 +1,83 @@
 import React from 'react';
-import './Patients.scss'; // SCSS dosyasını import edin
-import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS'yi import edin
-import { useNavigate } from 'react-router-dom'; // Navigasyon için useNavigate import edin
+import './Patients.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../sections/Footer/Footer';
 
 const Patients = () => {
-  const navigate = useNavigate(); // navigate fonksiyonunu başlat
+  const navigate = useNavigate();
 
   const handleExistingPatientClick = () => {
-    navigate('/login', { // Make login then redirect to choose
-      state: { redirectTo: '/choose' } 
-    });
+    navigate('/login', { state: { redirectTo: '/choose' } });
   };
 
   const handleNewPatientClick = () => {
-    navigate('/register', { // Make register then redirect to choose
-      state: { 
-        //isNewPatient: true,
-        redirectAfterRegister: '/choose' 
-      }
-    }); // "Yeni Hasta" butonuna tıklandığında new patient sayfasına yönlendir
+    navigate('/register', { state: { redirectAfterRegister: '/choose' } });
   };
 
   return (
-      <>
-      <Navbar/>
-     
-      <div className="appointment-container">
-      
-      <div className="main-content">
-      <h1 className="page-title">Ziyaretinizi Planlayalım</h1>
-      <p></p>
-        <div className="question-box">
-          <h2>Daha önce klinikte bulundunuz mu?</h2>
-          <div className="button-container">
-            <button 
-              className="btn-new-patient"
-              onClick={handleNewPatientClick} // On button click, navigate to new patient page
-            >
-              Yeni Hasta
-            </button>
-            <span className="button-text">Yeniyim.</span>
+    <>
+      <Navbar />
+      <div className="appointment-container d-flex justify-content-center align-items-center">
+        <div className="main-content" style={{ maxWidth: '600px', width: '100%' }}>
+          <h1 className="page-title" style={{ fontSize: '28px', textAlign: 'center' }}>
+            Ziyaretinizi Planlayalım
+          </h1>
+          <div className="question-box" style={{ width: '100%', padding: '40px' }}>
+            <h2 style={{ fontSize: '20px', textAlign: 'center' }}>Daha önce klinikte bulundunuz mu?</h2>
+            <div className="button-container" style={{ marginTop: '30px' }}>
+              <button
+                className="btn-new-patient"
+                style={{
+                  padding: '12px 16px',
+                  fontSize: '16px',
+                  width: '100%',
+                  maxWidth: '300px',
+                }}
+                onClick={handleNewPatientClick}
+              >
+                Yeni Hasta
+              </button>
+              <span
+                className="button-text"
+                style={{
+                  fontSize: '14px',
+                  marginTop: '5px',
+                  textAlign: 'center',
+                }}
+              >
+                Yeniyim.
+              </span>
 
-            <button 
-              className="btn-existing-patient"
-              onClick={handleExistingPatientClick} // On button click, navigate to login page
-            >
-              Eski Hasta
-            </button>
-            <span className="button-text">Daha önce klinikte bulundum.</span>
+              <button
+                className="btn-existing-patient"
+                style={{
+                  padding: '12px 16px',
+                  fontSize: '16px',
+                  width: '100%',
+                  maxWidth: '300px',
+                }}
+                onClick={handleExistingPatientClick}
+              >
+                Eski Hasta
+              </button>
+              <span
+                className="button-text"
+                style={{
+                  fontSize: '14px',
+                  marginTop: '5px',
+                  textAlign: 'center',
+                }}
+              >
+                Daha önce klinikte bulundum.
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <Footer/>
-      </>
+      <Footer />
+    </>
   );
 };
 
