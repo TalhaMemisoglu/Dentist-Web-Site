@@ -33,12 +33,7 @@ admin_calendar_stats = AdminCalendarViewSet.as_view({'get': 'stats'})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/register/', CreateUserView.as_view(), name='register'),
-    path('api/profile/', ProfileView.as_view(), name='profile'),
-    path('api/login/', LoginView.as_view(), name='login'),
-    path('api/logout/', LogoutView.as_view(), name='logout'),
-    path('api/user/', CurrentUserView.as_view(), name='current-user'),
-    path('api/verify-email/<int:user_id>/', VerifyEmailView.as_view(), name='verify-email'),
+    path('api/', include('api.urls')),  # Include all URLs from the `api` app
     path('api/dentists/', DentistListView.as_view(), name='open-dentist-list'),
     # JWT token routes
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
