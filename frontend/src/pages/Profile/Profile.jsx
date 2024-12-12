@@ -76,8 +76,9 @@ const Profile = () => {
   // handle save changes
   const saveDetails = async () => {
     try {
-      const response = await api.put(`api/profile/update`, profileDetails);
+      const response = await api.put(`api/profile/update/`, profileDetails);
       console.log("Updated successfully:", response.data);
+      alert(`Profile updated successfully.`);
       setOriginalDetails(profileDetails); // Update the original state after saving
       setIsEdited(false);
     } catch (error) {
@@ -137,7 +138,7 @@ const Profile = () => {
 
   const savePassword = async () => {
     try {
-      const response = await api.put(`/api/profile/change-password`, {
+      const response = await api.put(`/api/profile/change-password/`, {
         currentPassword,
         newPassword,
       });
