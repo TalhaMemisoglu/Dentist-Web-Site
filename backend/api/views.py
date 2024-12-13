@@ -16,6 +16,12 @@ from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerialize
 from rest_framework.generics import UpdateAPIView
 from rest_framework.views import APIView
 
+'''
+ Adjust later if necessary
+from rest_framework.permissions import IsAdminUser
+from .serializers import StaffManagementSerializer
+'''
+
 
 # Email Verification View
 class VerifyEmailView(generics.GenericAPIView):
@@ -259,3 +265,106 @@ class UpdatePasswordView(APIView):
             return Response({"message": "Password updated successfully."}, status=status.HTTP_200_OK)
         logger.error(f"Password update serializer validation failed: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+'''
+    API endpoints
+
+    List all staff
+    GET /api/admin/staff/
+
+    Add new staff member
+    POST /api/admin/staff/
+    {
+        "email": "dentist@example.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "phone": "05339999999",
+        "user_type": "dentist"
+    }
+
+    Get specific staff member
+    GET /api/admin/staff/1/
+
+    Update staff member
+    PUT /api/admin/staff/1/
+    {
+        "phone": "05339999999",
+        "email": "newemail@example.com"
+    }
+
+    Remove staff member
+    DELETE /api/admin/staff/1/
+'''
+
+
+
+'''
+
+class StaffManagementView(APIView):
+    permission_classes = [IsAdminUser]
+
+    # List all staff members
+    def get(self, request):
+        staff = CustomUser.objects.filter(
+            user_type__in=['dentist', 'assistant', 'manager']
+        ).order_by('user_type', 'username')
+        serializer = StaffManagementSerializer(staff, many=True)
+        return Response(serializer.data)
+    
+    # Add new staff member
+    def post(self, request):
+        serializer = StaffManagementSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class StaffDetailView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get_staff_member(self, user_id):
+        try:
+            return CustomUser.objects.get(
+                id=user_id,
+                user_type__in=['dentist', 'assistant', 'manager']
+            )
+        except CustomUser.DoesNotExist:
+            return None
+    
+    # Get specific staff member details
+    def get(self, request, user_id):
+        staff = self.get_staff_member(user_id)
+        if not staff:
+            return Response(
+                {"error": "Staff member not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer = StaffManagementSerializer(staff)
+        return Response(serializer.data)
+
+    # Update staff member details
+    def put(self, request, user_id):
+        staff = self.get_staff_member(user_id)
+        if not staff:
+            return Response(
+                {"error": "Staff member not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer = StaffManagementSerializer(staff, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Remove staff member
+    def delete(self, request, user_id):
+        staff = self.get_staff_member(user_id)
+        if not staff:
+            return Response(
+                {"error": "Staff member not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        staff.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+'''

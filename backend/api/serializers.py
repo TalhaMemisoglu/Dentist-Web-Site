@@ -9,7 +9,12 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth.hashers import check_password
+'''
+ Not well nourished about mail sending mechanisim adjust later if necessary
 
+from django.core.mail import send_mail
+from django.conf import settings
+'''
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -163,3 +168,60 @@ class PasswordUpdateSerializer(serializers.Serializer):
         instance.save()
         logger.debug("Password updated and saved successfully.")
         return instance
+
+
+'''
+class StaffManagementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'phone', 'user_type']
+        read_only_fields = ['username']  # Username will be auto-generated?
+
+    def validate_user_type(self, value):
+        valid_staff_types = ['dentist', 'assistant', 'manager']
+        if value not in valid_staff_types:
+            raise serializers.ValidationError(f"User type must be one of: {', '.join(valid_staff_types)}")
+        return value
+
+    def create(self, validated_data):
+        # Generate username
+        first_name = validated_data.get('first_name', '').lower()
+        last_name = validated_data.get('last_name', '').lower()
+        base_username = f"{first_name}{last_name}"
+        username = base_username
+        counter = 1
+        while CustomUser.objects.filter(username=username).exists():
+            username = f"{base_username}{counter}"
+            counter += 1
+        validated_data['username'] = username
+
+        # Generate random password
+        temp_password = CustomUser.objects.make_random_password()
+        
+        # Create user
+        user = CustomUser.objects.create_user(
+            username=username,
+            password=temp_password,
+            **validated_data
+        )
+
+        # Send email with credentials
+        try:
+            send_mail(
+                "Your Account Credentials",
+                f"""
+                Your account has been created with the following credentials:
+                Username: {username}
+                Temporary Password: {temp_password}
+                
+                Please change your password after your first login.
+                """,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Failed to send email: {e}")
+
+        return user
+'''
