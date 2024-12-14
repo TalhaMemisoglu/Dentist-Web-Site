@@ -105,8 +105,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',  # Replace with your PostgreSQL database name
         'USER': 'postgres',       # Replace with your PostgreSQL username
-        'PASSWORD': r'+(\Quycz1Na4#97"',   # Replace with your PostgreSQL password
-        'HOST': '34.118.17.39',    # Replace with the public IP or private IP of your PostgreSQL instance
+        'PASSWORD': r'Ell]@-qPY@HFH+vP',   # Replace with your PostgreSQL password
+        'HOST': '34.116.249.15',    # Replace with the public IP or private IP of your PostgreSQL instance
         'PORT': '5432',                # Default PostgreSQL port
     }
 }
