@@ -20,6 +20,16 @@ class CustomUser(AbstractUser):             #For custom user model which we will
     phone = models.CharField(max_length=200, null=True, blank=True)  # Optional phone field
     email = models.EmailField(max_length=254,unique=True)  #required email field
     verified = models.BooleanField(default=False)  # Added verified field
+    
+    
+    def save(self, *args, **kwargs):
+        # Automatically set verified based on user_type
+        if self.user_type == 'patient':
+            self.verified = False  # Patients are not verified by default
+        else:
+            self.verified = True  # All other types are automatically verified
+        super().save(*args, **kwargs)  # Call the parent class's save method
+        
 
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
