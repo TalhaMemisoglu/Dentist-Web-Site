@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../sections/Footer/Footer';
+
 
 const RequestPasswordReset = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // Added missing state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,34 +16,85 @@ const RequestPasswordReset = () => {
 
     try {
       await axios.post("/api/password-reset-request/", { email });
-      setMessage("Password reset email sent. Check your inbox.");
+      setMessage("Şifre sıfırlama maili gönderildi. Gelen kutunu kontrol et.");
     } catch (error) {
-      setMessage("Error sending password reset email.");
+      setMessage("Mail gönderilirken hata yaşandı.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? (
-            <span className="spinner"></span>
-          ) : (
-            "Send Reset Email"
-          )}
-        </button>
-      </form>
-      {message && <p className="message">{message}</p>}
-    </div>
+    <>
+    <Navbar />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          backgroundColor: "#f7f7f7",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "400px",
+            backgroundColor: "#fff",
+            padding: "20px",
+            borderRadius: "20px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            textAlign: "center",
+          }}
+        >
+          <h2 style={{ marginBottom: "20px" }}>Şifreni mi unuttun? 🤣</h2>
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: "20px", textAlign: "left" }}>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="Mailine sıfırlama linki gönderelim"
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                }}
+              />
+            </div>
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                padding: "10px",
+                fontSize: "16px",
+                backgroundColor: "#0590D4",
+                color: "#fff",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                transition: "background-color 0.3s",
+              }}
+              onMouseOver={(e) => (
+                e.target.style.backgroundColor = "#fff",
+                e.target.style.color = "#0590D4",
+                e.target.style.boxShadow = "0 0 0 2px #0590D4 inset"
+              )}
+              onMouseOut={(e) => (
+                e.target.style.backgroundColor = "#0590D4",
+                e.target.style.color = "#fff"
+              )}
+            >
+              Gönder
+            </button>
+          </form>
+        </div>
+      </div>
+      <Footer />
+    </>
   );
 };
 
