@@ -11,3 +11,4 @@ python-dotenv
 pillow
 django-allauth
 celery
+django-celery-beat

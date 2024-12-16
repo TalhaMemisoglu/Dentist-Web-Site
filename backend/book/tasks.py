@@ -1,12 +1,9 @@
 import os
 from celery import shared_task
 from django.utils.timezone import now, timedelta
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from email.mime.text import MIMEText
-import base64
-from .models import Appointment
+from django.core.mail import send_mail
 from django.conf import settings
+from .models import Appointment
 
 @shared_task
 def send_appointment_reminders():
@@ -17,14 +14,6 @@ def send_appointment_reminders():
         appointment_time__range=(one_hour_from_now.time(), (one_hour_from_now + timedelta(minutes=59)).time()),
         status__in=['scheduled', 'confirmed']
     )
-
-    # Load Gmail credentials
-    token_path = os.path.join(settings.BASE_DIR, 'token.json')
-    if not os.path.exists(token_path):
-        raise FileNotFoundError("Token file not found. Authenticate with Google first.")
-
-    creds = Credentials.from_authorized_user_file(token_path, settings.GMAIL_API_SCOPES)
-    service = build('gmail', 'v1', credentials=creds)
 
     for appointment in appointments:
         patient_email = appointment.patient.email
@@ -38,17 +27,14 @@ def send_appointment_reminders():
             "Thank you!"
         )
 
-        # MIME encode the message
-        mime_message = MIMEText(message_body)
-        mime_message['to'] = patient_email
-        mime_message['subject'] = subject
-        encoded_message = base64.urlsafe_b64encode(mime_message.as_bytes()).decode()
-
-        # Send the email
+        # Send the email using Django's send_mail function
         try:
-            service.users().messages().send(
-                userId='me',
-                body={'raw': encoded_message}
-            ).execute()
+            send_mail(
+                subject,  # Subject of the email
+                message_body,  # Email body
+                settings.DEFAULT_FROM_EMAIL,  # From email address
+                [patient_email],  # To email address
+                fail_silently=False  # Raise error if sending fails
+            )
         except Exception as e:
             print(f"Failed to send email to {patient_email}: {e}")
