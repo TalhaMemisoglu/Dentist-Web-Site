@@ -23,12 +23,14 @@ class CustomUser(AbstractUser):             #For custom user model which we will
     
     
     def save(self, *args, **kwargs):
-        # Automatically set verified based on user_type
-        if self.user_type == 'patient':
-            self.verified = False  # Patients are not verified by default
-        else:
-            self.verified = True  # All other types are automatically verified
+        # Only automatically set verified if it's a new object (i.e., on creation)
+        if not self.pk:  # Object is being created
+            if self.user_type == 'patient':
+                self.verified = False  # Patients are not verified by default
+            else:
+                self.verified = True  # All other types are automatically verified
         super().save(*args, **kwargs)  # Call the parent class's save method
+
         
 
 class Profile(models.Model):
