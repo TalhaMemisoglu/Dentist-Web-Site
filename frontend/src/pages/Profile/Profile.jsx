@@ -42,7 +42,6 @@ const Profile = () => {
       try {
         setIsLoading(true);
         const response = await api.get("api/user");
-        console.log(response.data);
 
         setProfileDetails(response.data);
         setOriginalDetails(response.data);
@@ -78,7 +77,6 @@ const Profile = () => {
     try {
       const response = await api.put(`api/profile/update/`, profileDetails);
       console.log("Updated successfully:", response.data);
-      alert(`Profile updated successfully.`);
       setOriginalDetails(profileDetails); // Update the original state after saving
       setIsEdited(false);
     } catch (error) {
@@ -142,7 +140,6 @@ const Profile = () => {
         currentPassword,
         newPassword,
       });
-      console.log("Password updated successfully:", response.data);
       alert('Password updated successfully');
       setCurrentPassword('');
       setNewPassword('');

@@ -4,6 +4,7 @@ import api from "../../api";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../sections/Footer/Footer'
+import "./Register.scss"
 
 const Register = () => {
     const [firstName, setFirstName] = useState("");
