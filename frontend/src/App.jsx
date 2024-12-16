@@ -13,6 +13,7 @@ import Choose from './pages/Choose/Choose';
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Schedule from './pages/Schedule/Schedule';
+import Appointment from './pages/Appointment/Appointment'
 import Profile from './pages/Profile/Profile'; // Profile bileşeni import edildi
 import Sidebar from './components/Sidebar/Sidebar';
 import VerifyEmail from './pages/VerifyEmail'
@@ -42,6 +43,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/patients" element={<Patients />} />
+          <Route path="/appointment" element={<Appointment />} />
           <Route path="/choose" element={<Choose />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/profile" element={<Profile />} /> {/* Profile rotası eklendi */}

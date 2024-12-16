@@ -113,7 +113,7 @@ const Choose = () => {
                     borderColor: dentist.id === selectedDentist?.id ? 'blue' : 'gray',
                   }}
                 >
-                  <h2>{dentist.username} {dentist.surname}</h2>
+                  <h2>{dentist.first_name} {dentist.last_name}</h2>
                   <div className="line-between"></div>
                   <p className="specialty">{dentist.specialty}</p>
                   <span className="arrow">→</span>

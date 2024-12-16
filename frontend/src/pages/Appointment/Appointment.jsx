@@ -72,6 +72,10 @@ const Schedule = () => {
     setSelectedDate(date);
   };
 
+  const handleChange = () => {
+    navigate('/choose');
+  };
+
   // Handle time selection
   const handleTimeSelection = (time) => {
     setSelectedTime(time);
@@ -126,8 +130,10 @@ const Schedule = () => {
 
                     {/* Change Button */}
                     <div className='col-auto change-button'>
-                      <button className='btn-change'>Change</button>
-                    </div>
+                    <button className='btn-change' onClick={handleChange}>
+                      Change
+                    </button>
+                  </div>
                   </div>
                 ) : (
                   <p>Seçilen hizmet bulunamadı.</p>
@@ -139,14 +145,16 @@ const Schedule = () => {
                   <div className="service-box row">
                     {/* Show Chosen Dentist Info */}
                     <div className='col d-content'>
-                      <h2>{chosenDentist.username}</h2>
+                      <h2>{`${chosenDentist.first_name} ${chosenDentist.last_name}`}</h2>
                       <p>{chosenDentist.user_type}</p>
                     </div>
 
                     {/* Change Button */}
                     <div className='col-auto change-button'>
-                      <button className='btn-change'>Change</button>
-                    </div>
+                    <button className='btn-change' onClick={handleChange}>
+                      Change
+                    </button>
+                  </div>
                   </div>
                 ) : (
                   <p>Seçilen doktor bulunamadı.</p>
