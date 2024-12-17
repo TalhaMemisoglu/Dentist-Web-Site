@@ -287,7 +287,8 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             'message': 'Appointment marked as completed',
             'user_id': request.user.id,
             'user_type': request.user.user_type,
-            'appointments': serializer.data
+            'appointments': serializer.data,
+            'treatment': appointment.treatment
         })
 
 
