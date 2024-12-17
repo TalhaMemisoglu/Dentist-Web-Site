@@ -2,86 +2,171 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-  
+
     .appointments-title {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-      color: #0590d4;
-    }
-  
-    .appointments-content {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-  
-      .error-message,
-      .no-appointments {
         text-align: center;
-        font-size: 1.2rem;
-        color: #dc3545;
-      }
-  
-      .appointment-card {
-        background-color: #ffffff;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 15px 20px;
-        transition: transform 0.3s, box-shadow 0.3s;
-  
-        &:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-        }
-  
-        .appointment-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 1px solid #f1f1f1;
-          margin-bottom: 10px;
-          padding-bottom: 10px;
-  
-          .appointment-date {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #555;
-          }
-  
-          .status {
-            font-size: 0.9rem;
-            color: #0590d4;
-            font-weight: 600;
-  
-            &.scheduled {
-              color: #28a745;
-            }
-  
-            &.canceled {
-              color: #dc3545;
-            }
-          }
-        }
-  
-        .appointment-body {
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
-  
-          .appointment-treatment {
-            font-size: 1.1rem;
-            color: #333;
-            margin: 0;
-          }
-  
-          .appointment-details {
-            font-size: 0.9rem;
-            color: #777;
-            margin: 0;
-          }
-        }
-      }
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #0590d4;
     }
-  }
+
+    .appointments-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .error-message,
+        .no-appointments {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #dc3545;
+        }
+
+        .appointment-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+            position: relative;
+            /* Allow precise positioning */
+
+            .appointment-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                /* Align to the top */
+                margin-bottom: 10px;
+
+                .date-time {
+                    font-size: 1rem;
+                    font-weight: bold;
+                    color: #333;
+                }
+
+                .status-dot {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%; // Makes the dot circular
+
+                    &.scheduled {
+                        background-color: #28a745;
+                        /* Green for done */
+                    }
+
+                    &.canceled {
+                        background-color: #dc3545;
+                        /* Red for canceled */
+                    }
+
+                    &.continuing {
+                        background-color: #007bff;
+                        /* Blue for continuing */
+                    }
+                }
+
+                .status {
+                    text-transform: lowercase;
+                    font-size: 0.9rem;
+                    color: #0590d4;
+                    font-weight: 600;
+
+                    &.scheduled {
+                        color: #28a745;
+                    }
+
+                    &.canceled {
+                        color: #dc3545;
+                    }
+
+                    &.continuing {
+                        background-color: #007bff;
+                        color: #fff;
+                    }
+                }
+            }
+
+            .appointment-body {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+
+                p {
+                    margin: 0;
+                    color: #555;
+
+                    strong {
+                        color: #333;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.appointment-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.appointment-info p {
+    margin: 0;
+    /* Removes default margins for clean alignment */
+    font-size: 1rem;
+    /* Optional: Adjust font size */
+    color: #333;
+    /* Optional: Font color */
+}
+
+.cancel-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+
+    .trash-button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #dc3545;
+        /* Red for trash icon */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: color 0.3s ease;
+
+        .cancel-text {
+            opacity: 0;
+            transform: scaleX(0);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: #dc3545;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        &.expanded {
+            background-color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+
+            .cancel-text {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+    }
+}
+
+.trash-button:hover svg {
+    color: #b52a2a;
+    /* Darker red on hover */
+}
