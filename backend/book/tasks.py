@@ -38,3 +38,38 @@ def send_appointment_reminders():
             )
         except Exception as e:
             print(f"Failed to send email to {patient_email}: {e}")
+
+
+
+@shared_task
+def auto_cancel_past_appointments():
+    """Automatically cancel past uncompleted appointments and notify patients"""
+    past_appointments = Appointment.objects.filter(
+        appointment_date__lt=now().date(),
+        status__in=['scheduled', 'confirmed']
+    )
+    
+    updated_count = 0
+    for appointment in past_appointments:
+        appointment.status = 'cancelled'
+        appointment.save()
+        updated_count += 1
+        
+        # Send cancellation notification
+        try:
+            send_mail(
+                "Appointment Cancelled - No Show",
+                f"Sayin {appointment.patient.get_full_name()},\n\n"
+                f"{appointment.appointment_date} tarihli"
+                f"{appointment.appointment_time.strftime('%H:%M')} saatindeki "
+                f"Dt. {appointment.dentist.get_full_name()} ile olan randevunuz iptal edilmiştir.\n\n "
+                f"Tekrar randevu oluşturmak için web sitemizden faydalanabilirsiniz.\n\n"
+                f"Anlayaşiniz için teşşkür ederiz, temiz ve sağlikli günler dileriz.",
+                settings.DEFAULT_FROM_EMAIL,
+                [appointment.patient.email],
+                fail_silently=False
+            )
+        except Exception as e:
+            print(f"Failed to send cancellation email to {appointment.patient.email}: {e}")
+    
+    return f"Updated {updated_count} past appointments to cancelled"

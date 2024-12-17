@@ -10,6 +10,7 @@ from .serializers import AppointmentSerializer, DentistSerializer, AdminCalendar
 from api.models import CustomUser
 from django.db.models import Q
 from rest_framework.viewsets import ViewSet
+from django.db.models.functions import Now
 
 from pytz import timezone as pytz_timezone
 local_timezone = pytz_timezone("Europe/Istanbul")  # Replace with desired time zone
@@ -231,16 +232,36 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             'appointments': serializer.data
         })
 
+    @action(detail=False, methods=['get']) # GET /api/booking/appointments/update_past_appointments/
+    def update_past_appointments(self, request):
+        """Update status of past appointments that weren't completed"""
+        # Get all past appointments that are still scheduled/confirmed
+        past_appointments = Appointment.objects.filter(
+            appointment_date__lt=timezone.now().date(),
+            status__in=['scheduled', 'confirmed']
+        )
+
+        updated_count = past_appointments.count()
+        # Update their status to cancelled
+        past_appointments.update(status='cancelled')
+
+        return Response({
+            'message': f'Updated {updated_count} past appointments to cancelled',
+            'updated_appointments': updated_count
+        })
+
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
         appointment = self.get_object()
         
+        # Check if appointment is in a valid state to be completed
         if appointment.status not in ['scheduled', 'confirmed']:
             return Response(
                 {"error": "Only scheduled or confirmed appointments can be marked as completed"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Check if appointment time has passed
         appointment_datetime = datetime.combine(
             appointment.appointment_date, 
             appointment.appointment_time
@@ -251,9 +272,14 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Mark as completed
         appointment.status = 'completed'
         appointment.save()
         
+        # Auto-cancel past uncompleted appointments
+        self.update_past_appointments(request)
+        
+        # Return updated appointments list
         appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
         serializer = self.get_serializer(appointments, many=True)
         
@@ -261,38 +287,51 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             'message': 'Appointment marked as completed',
             'user_id': request.user.id,
             'user_type': request.user.user_type,
-            'appointments': serializer.data,
-            'treatment': appointment.treatment
+            'appointments': serializer.data
         })
+
+
+
+
+    def auto_cancel_past_appointments():
+        
+        past_appointments = Appointment.objects.filter(
+            appointment_date__lt=Now().date(),
+            status__in=['scheduled', 'confirmed']
+        )
+        updated_count = past_appointments.count()
+        past_appointments.update(status='cancelled')
+        return updated_count
 
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
-        appointment = self.get_object()
-        
-        if appointment.status != 'scheduled':
-            return Response(
-                {"error": "Only scheduled appointments can be cancelled"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            appointment = self.get_object()
+            
+            if appointment.status != 'scheduled':
+                return Response(
+                    {"error": "Only scheduled appointments can be cancelled"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-        if appointment.appointment_date < local_now.date():
-            return Response(
-                {"error": "Cannot cancel past appointments"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            if appointment.appointment_date < local_now.date():
+                return Response(
+                    {"error": "Cannot cancel past appointments"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-        appointment.status = 'cancelled'
-        appointment.save()
-        
-        appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
-        serializer = self.get_serializer(appointments, many=True)
-        
-        return Response({
-            'message': 'Appointment cancelled successfully',
-            'user_id': request.user.id,
-            'user_type': request.user.user_type,
-            'appointments': serializer.data
-        })
+            appointment.status = 'cancelled'
+            appointment.save()
+            
+            appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
+            serializer = self.get_serializer(appointments, many=True)
+            
+            return Response({
+                'message': 'Appointment cancelled successfully',
+                'user_id': request.user.id,
+                'user_type': request.user.user_type,
+                'appointments': serializer.data,
+                'treatment': appointment.treatment
+            })
 
     @action(detail=False)
     def upcoming(self, request):

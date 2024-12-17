@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-    'book',  # Remove after complete migration to rest of API
+    'book',  
     'django_celery_beat',
     'django.contrib.sites',  # Required by Django Allauth
     'allauth',
