@@ -1,0 +1,26 @@
+.profile-page-container {
+    display: flex;
+    /* Use Flexbox to align items side by side */
+    height: 100vh;
+    /* Full viewport height */
+
+    .sidebar-wrapper {
+        flex: 0 0 250px;
+        /* Sidebar fixed width of 250px */
+        background-color: #f8f9fa;
+        /* Optional: background color for sidebar */
+        border-right: 1px solid #ddd;
+        /* Optional: divider line */
+    }
+
+    .profile-wrapper {
+        flex: 1;
+        /* Take up the remaining space */
+        padding: 20px;
+        /* Add some spacing */
+        background-color: #ffffff;
+        /* Background color for profile page */
+        overflow-y: auto;
+        /* Enable scrolling if content overflows */
+    }
+}
