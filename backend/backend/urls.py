@@ -13,16 +13,19 @@ available_slots = DentistViewSet.as_view({'get': 'available_slots'})
 appointment_list = AppointmentViewSet.as_view({'get': 'list', 'post': 'create'})
 appointment_detail = AppointmentViewSet.as_view({'get': 'retrieve'})
 cancel_appointment = AppointmentViewSet.as_view({'post': 'cancel'})
+complete_appointment = AppointmentViewSet.as_view({'post': 'complete'})
 upcoming_appointments = AppointmentViewSet.as_view({'get': 'upcoming'})
+my_appointments = AppointmentViewSet.as_view({'get': 'my_appointments'})
+update_past_appointments = AppointmentViewSet.as_view({'get': 'update_past_appointments'})
 
 
-calendar_all = AdminCalendarViewSet.as_view({'get': 'all_appointments'})
-calendar_by_dentist = AdminCalendarViewSet.as_view({'get': 'appointments_by_dentist'})
-calendar_by_date = AdminCalendarViewSet.as_view({'get': 'appointments_by_date'})
-calendar_stats = AdminCalendarViewSet.as_view({'get': 'stats'})
+calendar_appointments = AppointmentViewSet.as_view({'get': 'calendar_appointments'})
+appointments_by_date = AppointmentViewSet.as_view({'get': 'appointments_by_date'})
+appointments_stats = AppointmentViewSet.as_view({'get': 'appointments_stats'})
 
 
 dentist_calendar = AppointmentViewSet.as_view({'get': 'dentist_calendar'})
+dentist_appointments_by_date = AppointmentViewSet.as_view({'get': 'dentist_appointments_by_date'})
 dentist_daily_schedule = AppointmentViewSet.as_view({'get': 'dentist_daily_schedule'})
 
 
@@ -48,15 +51,24 @@ urlpatterns = [
     path('api/booking/appointments/', appointment_list, name='appointment-list'),
     path('api/booking/appointments/<int:pk>/', appointment_detail, name='appointment-detail'),
     path('api/booking/appointments/<int:pk>/cancel/', cancel_appointment, name='cancel-appointment'),
+    path('api/booking/appointments/<int:pk>/complete/', complete_appointment, name='complete-appointment'),
     path('api/booking/appointments/upcoming/', upcoming_appointments, name='upcoming-appointments'),
+    path('api/booking/appointments/my-appointments/', my_appointments, name='my-appointments'),
+    path('api/booking/appointments/update-past/', update_past_appointments, name='update-past-appointments'),
 
-    # Admin calendar URLs
+    # Assistant calendar
+    path('api/booking/appointments/calendar/', calendar_appointments, name='calendar-appointments'),
+    path('api/booking/appointments/by-date/', appointments_by_date, name='appointments-by-date'),
+    path('api/booking/appointments/stats/', appointments_stats, name='appointments-stats'),
+    
+    # Admin calendar 
     path('api/admin/calendar/', calendar_all, name='admin-calendar'),
     path('api/admin/calendar/by-dentist/', calendar_by_dentist, name='admin-calendar-by-dentist'),
     path('api/admin/calendar/by-date/', calendar_by_date, name='admin-calendar-by-date'),
     path('api/admin/calendar/stats/', calendar_stats, name='admin-calendar-stats'),
 
-    # Dentist calendar URLs
+    # Dentist calendar 
     path('api/booking/appointments/dentist-calendar/', dentist_calendar, name='dentist-calendar'),
-    path('api/booking/appointments/daily-schedule/', dentist_daily_schedule, name='dentist-daily-schedule'),
+    path('api/booking/appointments/dentist-by-date/', dentist_appointments_by_date, name='dentist-appointments-by-date'),
+    path('api/booking/appointments/dentist-schedule/', dentist_daily_schedule, name='dentist-daily-schedule'),
 ]
