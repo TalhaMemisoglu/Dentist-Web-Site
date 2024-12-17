@@ -3,7 +3,7 @@ import api from "../../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 import './Login.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../sections/Footer/Footer';
 import RequestPasswordReset from "../PasswordReset/RequestPasswordReset";
@@ -12,49 +12,43 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");  // Added error state for more explicit error handling
+    const [error, setError] = useState("");
+
     const navigate = useNavigate();
+    const location = useLocation(); // Retrieve state passed during navigation
+
+    // Extract the redirect path passed via state (or use default "/")
+    const redirectTo = location.state?.redirectTo || "/";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError("");  // Reset error message on new submit attempt
-
-        console.log("Login attempt:", { email, password }); // Debug: log input values
+        setError("");
 
         try {
             const res = await api.post("/api/login/", { email, password });
-            console.log("Response from backend:", res); // Debug: log response
 
             if (res.status === 200 && res.data) {
-                const { access, refresh } = res.data; // JWT fields
-
-                console.log("Access Token:", access); // Debug: log the access token
-                console.log("Refresh Token:", refresh); // Debug: log the refresh token
+                const { access, refresh } = res.data;
 
                 // Save JWT tokens in localStorage
                 localStorage.setItem(ACCESS_TOKEN, access);
                 localStorage.setItem(REFRESH_TOKEN, refresh);
 
-                alert("Login successful!");
-                navigate("/"); // Redirect to homepage
+                // Redirect dynamically based on the state or default to "/"
+                navigate(redirectTo);
             } else {
                 throw new Error("Invalid login response");
             }
         } catch (error) {
-            console.error("Login error:", error); // Debug: log error to understand its nature
-
             if (error.response) {
-                console.error("Error response:", error.response);  // Debug: log response error
                 const errorMessage = error.response.data.detail || "Invalid credentials.";
-                setError(errorMessage); // Show the error in UI
+                setError(errorMessage);
                 alert(`Login failed: ${errorMessage}`);
             } else if (error.request) {
-                console.error("No response received:", error.request); // Debug: log if no response is received
                 setError("No response from server. Please try again.");
                 alert("Login failed: No response from server.");
             } else {
-                console.error("Unexpected error:", error.message); // Debug: log unexpected errors
                 setError("Something went wrong. Please try again.");
                 alert("Login failed: Something went wrong.");
             }
