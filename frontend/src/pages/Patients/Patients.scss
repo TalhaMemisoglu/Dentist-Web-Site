@@ -2,7 +2,7 @@
 
 .appointment-container {
   font-family: Arial, sans-serif;
-  min-height: 100vh; /* Sayfanın en az ekran yüksekliği kadar olmasını sağlar */
+  min-height: 110vh; /* Sayfanın en az ekran yüksekliği kadar olmasını sağlar */
   display: flex;
   flex-direction: column;
 }
@@ -19,8 +19,8 @@
   font-size: 36px;
   color: #333;
   font-weight: 200px;
-  margin-top: 100px; /* Başlık ile üst arasındaki mesafeyi ayarlayın */
-  margin-bottom: 20px; /* Başlık ile alt arasındaki mesafeyi ayarlayın */
+  margin-top: 1px; /* Başlık ile üst arasındaki mesafeyi ayarlayın */
+  margin-bottom: 1px; /* Başlık ile alt arasındaki mesafeyi ayarlayın */
   text-align: left; /* Sola hizala */
   width: 100%; /* Tüm genişliği kapsaması için */
 
