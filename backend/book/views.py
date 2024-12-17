@@ -232,6 +232,40 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         })
 
     @action(detail=True, methods=['post'])
+    def complete(self, request, pk=None):
+        appointment = self.get_object()
+        
+        if appointment.status not in ['scheduled', 'confirmed']:
+            return Response(
+                {"error": "Only scheduled or confirmed appointments can be marked as completed"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        appointment_datetime = datetime.combine(
+            appointment.appointment_date, 
+            appointment.appointment_time
+        )
+        if appointment_datetime > timezone.now():
+            return Response(
+                {"error": "Cannot complete future appointments"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        appointment.status = 'completed'
+        appointment.save()
+        
+        appointments = self.get_queryset().order_by('-appointment_date', '-appointment_time')
+        serializer = self.get_serializer(appointments, many=True)
+        
+        return Response({
+            'message': 'Appointment marked as completed',
+            'user_id': request.user.id,
+            'user_type': request.user.user_type,
+            'appointments': serializer.data,
+            'treatment': appointment.treatment
+        })
+
+    @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
         appointment = self.get_object()
         
