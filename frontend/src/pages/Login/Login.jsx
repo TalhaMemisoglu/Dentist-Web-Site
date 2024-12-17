@@ -42,15 +42,15 @@ const Login = () => {
             }
         } catch (error) {
             if (error.response) {
-                const errorMessage = error.response.data.detail || "Invalid credentials.";
+                const errorMessage = error.response.data.detail || "Yanlış kişi bilgileri.";
                 setError(errorMessage);
-                alert(`Login failed: ${errorMessage}`);
+                alert(`Giriş Başarısız oldu: ${errorMessage}`);
             } else if (error.request) {
-                setError("No response from server. Please try again.");
-                alert("Login failed: No response from server.");
+                setError("Serverdan yanıt yok. Lütfen tekrar deneyin.");
+                alert("Giriş başarısız oldu: Serverdan yanıt yok.");
             } else {
-                setError("Something went wrong. Please try again.");
-                alert("Login failed: Something went wrong.");
+                setError("Bir şeyler ters gitti. Lütfen tekrar deneyin.");
+                alert("Giriş başarısız oldu: Bir şeyler ters gitti.");
             }
         } finally {
             setLoading(false);
@@ -65,8 +65,8 @@ const Login = () => {
                     <div className="col-12 min-width">
                         <div className="row align-items-center">
                             <div className="header-text mb-4">
-                                <h2>Login</h2>
-                                <p>Let's put a smile on your face :)</p>
+                                <h2>Giriş Yap</h2>
+                                <p>Hadi yüzünüze gülümseme koyalım :)</p>
                             </div>
 
                             <form onSubmit={handleSubmit} className="form-container">
@@ -75,7 +75,7 @@ const Login = () => {
                                         <input
                                             type="email"
                                             className="form-control form-control-lg fs-6"
-                                            placeholder="Email address"
+                                            placeholder="Email adresi"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
@@ -86,7 +86,7 @@ const Login = () => {
                                         <input
                                             type="password"
                                             className="form-control form-control-lg fs-6"
-                                            placeholder="Password"
+                                            placeholder="Şifre"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
@@ -97,11 +97,11 @@ const Login = () => {
                                     <div className="form-check">
                                         <input type="checkbox" className="form-check-input" id="formCheck" />
                                         <label htmlFor="formCheck" className="form-check-label text-secondary">
-                                            <small>Remember Me</small>
+                                            <small>Beni Hatırla</small>
                                         </label>
                                     </div>
                                     <div className="forgot">
-                                        <small><Link to="/request-password-reset">Forgot Password?</Link></small>
+                                        <small><Link to="/request-password-reset">Şifreni mi Unuttun?</Link></small>
                                     </div>
                                 </div>
                                 <div className="input-group mb-3">
@@ -110,7 +110,7 @@ const Login = () => {
                                         className="btn btn-lg btn-primary w-100 fs-6 button-group"
                                         disabled={loading}
                                     >
-                                        {loading ? "Loading..." : "Login"}
+                                        {loading ? "Yükleniyor..." : "Giriş Yap"}
                                     </button>
                                 </div>
 
@@ -118,7 +118,7 @@ const Login = () => {
 
                                 <div className="row">
                                     <small>
-                                        Don't have an account? <Link to="/register">Register</Link>
+                                        Hesabın yok mu? <Link to="/register">Kaydol</Link>
                                     </small>
                                 </div>
                             </form>

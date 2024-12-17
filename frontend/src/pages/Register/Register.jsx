@@ -28,7 +28,7 @@ const Register = () => {
                 phone,
             });
 
-            alert("Registration successful! Please check your email for verification.");
+            alert("Kayıt olma başarılı! Lütfen emailinizi kontrol ediniz.");
             navigate("/login"); // Redirect to login page
         } catch (error) {
             if (error.response && error.response.data) {
@@ -42,7 +42,7 @@ const Register = () => {
                 }
                 alert(errorMessage);
             } else {
-                alert("Registration failed: Something went wrong.");
+                alert("Kayıt başarısız oldu: Bir şeyler ters gitti.");
             }
         } finally {
             setLoading(false);
@@ -59,8 +59,8 @@ const Register = () => {
                 >
                     <div className="col-12">
                         <div className="text-start mb-4">
-                            <h2>Register</h2>
-                            <p className="text-muted">Let's put a smile on your face :)</p>
+                            <h2>Kaydol</h2>
+                            <p className="text-muted">Hadi yüzünüze gülümseme koyalım :)</p>
                         </div>
                         <form onSubmit={handleSubmit}>
                             {/* First Name and Last Name */}
@@ -69,7 +69,7 @@ const Register = () => {
                                     <input
                                         type="text"
                                         className="form-control form-control-lg fs-6"
-                                        placeholder="First Name"
+                                        placeholder="Adınız"
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                         required
@@ -79,7 +79,7 @@ const Register = () => {
                                     <input
                                         type="text"
                                         className="form-control form-control-lg fs-6"
-                                        placeholder="Last Name"
+                                        placeholder="Soyadınız"
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
                                         required
@@ -94,7 +94,7 @@ const Register = () => {
                                     <input
                                         type="tel"
                                         className="form-control form-control-lg fs-6"
-                                        placeholder="Phone Number"
+                                        placeholder="Telefon Numaranız"
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
                                         required
@@ -107,7 +107,7 @@ const Register = () => {
                                 <input
                                     type="email"
                                     className="form-control form-control-lg fs-6"
-                                    placeholder="Email Address"
+                                    placeholder="Email Adresiniz"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
@@ -119,7 +119,7 @@ const Register = () => {
                                 <input
                                     type="password"
                                     className="form-control form-control-lg fs-6"
-                                    placeholder="Password"
+                                    placeholder="Şifreniz"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
@@ -135,7 +135,7 @@ const Register = () => {
                                     required
                                 />
                                 <label htmlFor="termsCheck" className="form-check-label">
-                                    I agree to the <a href="#">Terms</a>.
+                                     <a href="#">Koşulları</a> kabul ediyorum.
                                 </label>
                             </div>
 
@@ -146,14 +146,14 @@ const Register = () => {
                                     className="btn btn-primary btn-lg w-100 fs-6"
                                     disabled={loading}
                                 >
-                                    {loading ? "Registering..." : "Register"}
+                                    {loading ? "Kaydoluyor..." : "Kaydol"}
                                 </button>
                             </div>
 
                             {/* Login Redirect */}
                             <div className="text-center">
                                 <small>
-                                    Already have an account? <Link to="/login">Login</Link>
+                                    Zaten hesabınız var mı? <Link to="/login">Giriş Yap</Link>
                                 </small>
                             </div>
                         </form>
