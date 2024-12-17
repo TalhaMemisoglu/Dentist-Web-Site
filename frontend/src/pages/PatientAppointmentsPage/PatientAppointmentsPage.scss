@@ -1,0 +1,17 @@
+.patient-appointments-page-container {
+    display: flex; /* Sidebar ve içerik yan yana */
+    height: 100vh; /* Tam ekran yüksekliği */
+  
+    .sidebar-wrapper {
+      flex: 0 0 250px; /* Sidebar için sabit genişlik */
+      background-color: #f8f9fa; /* Sidebar arka plan rengi */
+      border-right: 1px solid #ddd; /* Sidebar için sağ tarafa sınır çizgisi */
+    }
+  
+    .appointments-wrapper {
+      flex: 1; /* Geriye kalan alanı kapla */
+      padding: 20px; /* İçerik kenar boşlukları */
+      background-color: #ffffff; /* İçerik arka plan rengi */
+      overflow-y: auto; /* İçerik fazla olursa dikey kaydırma */
+    }
+  }

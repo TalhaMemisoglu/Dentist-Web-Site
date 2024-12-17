@@ -296,39 +296,6 @@ const Profile = () => {
             </div>
           </div>
         );
-      case 'appointments':
-        return (
-          <div>
-            <h4>Appointments</h4>
-            <div className="card-body">
-              {isLoading ? (
-                <p>Loading appointments...</p>
-              ) : error ? (
-                <p className="text-danger">{error}</p>
-              ) : appointments.length === 0 ? (
-                <p>No appointments found.</p>
-              ) : (
-                <div className="appointments-timeline">
-                  {appointments.map((appointment, index) => (
-                    <div key={index} className="timeline-item">
-                      <div className="timeline-dot"></div>
-                      <div className="timeline-content">
-                        <p className="appointment-date">
-                          {new Date(appointment.date).toLocaleDateString('en-US', {
-                            weekday: 'short',
-                            day: 'numeric',
-                            month: 'short',
-                          })}, {appointment.time}
-                        </p>
-                        <p className="appointment-treatment">{appointment.treatment_name}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        );
       default:
         return null;
     }
@@ -339,7 +306,7 @@ const Profile = () => {
       <h4 className="font-weight-bold text-center">Profile Settings</h4>
       <div className="row mt-4">
         {/* Column layout */}
-        <div className="col-md-4">
+        <div className="col-md-6">
           <div
             className={`card text-center p-3 ${activePage === 'account' ? 'bg-primary text-white' : ''}`}
             onClick={() => setActivePage('account')}
@@ -348,22 +315,13 @@ const Profile = () => {
             <h5>Account</h5>
           </div>
         </div>
-        <div className="col-md-4">
+        <div className="col-md-6">
           <div
             className={`card text-center p-3 ${activePage === 'password' ? 'bg-primary text-white' : ''}`}
             onClick={() => setActivePage('password')}
             style={{ cursor: 'pointer' }}
           >
             <h5>Password</h5>
-          </div>
-        </div>
-        <div className="col-md-4">
-          <div
-            className={`card text-center p-3 ${activePage === 'appointments' ? 'bg-primary text-white' : ''}`}
-            onClick={() => setActivePage('appointments')}
-            style={{ cursor: 'pointer' }}
-          >
-            <h5>Appointments</h5>
           </div>
         </div>
       </div>

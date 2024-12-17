@@ -73,7 +73,7 @@ const Navbar = () => {
                                 {/* Show Dashboard link if authenticated */}
                                 {isAuthenticated && (
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/sidebar">
+                                        <Link className="nav-link" to="/patient-appointments-page">
                                             Dashboard
                                         </Link>
                                     </li>
