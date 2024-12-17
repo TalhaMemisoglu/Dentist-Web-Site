@@ -62,10 +62,10 @@ urlpatterns = [
     path('api/booking/appointments/stats/', appointments_stats, name='appointments-stats'),
     
     # Admin calendar 
-    path('api/admin/calendar/', calendar_all, name='admin-calendar'),
-    path('api/admin/calendar/by-dentist/', calendar_by_dentist, name='admin-calendar-by-dentist'),
-    path('api/admin/calendar/by-date/', calendar_by_date, name='admin-calendar-by-date'),
-    path('api/admin/calendar/stats/', calendar_stats, name='admin-calendar-stats'),
+    path('api/admin/calendar/', admin_calendar_all, name='admin-calendar'),
+    path('api/admin/calendar/by-dentist/', admin_calendar_by_dentist, name='admin-calendar-by-dentist'),
+    path('api/admin/calendar/by-date/', admin_calendar_by_date, name='admin-calendar-by-date'),
+    path('api/admin/calendar/stats/', admin_calendar_stats, name='admin-calendar-stats'),
 
     # Dentist calendar 
     path('api/booking/appointments/dentist-calendar/', dentist_calendar, name='dentist-calendar'),
