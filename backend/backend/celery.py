@@ -13,7 +13,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 app.conf.update(
-    worker_pool='spawn',
+    worker_pool='solo',
 )
 
 app.conf.beat_schedule = {
