@@ -87,7 +87,8 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
         """Get available time slots for a specific date"""
         dentist = self.get_object()
         date_str = request.query_params.get('date')
-        
+        treatment = request.query_params.get('treatment')
+
         if not date_str:
             return Response(
                 {"error": "Date parameter is required"},
@@ -158,7 +159,8 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
                 "start": start_time_str,
                 "end": end_time_str
             },
-            "available_slots": available_slots
+            "available_slots": available_slots,
+            "treatment": treatment
         })
     
 
@@ -323,7 +325,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 'patient_name': appointment.patient.get_full_name(),
                 'dentist_id': appointment.dentist.id,
                 'dentist_name': appointment.dentist.get_full_name(),
-                #'treatment': appointment.patient.
+                'treatment': appointment.treatment
             })
 
         return Response(calendar_data)
@@ -428,6 +430,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                     'title': f"Patient: {appointment.patient.get_full_name()}",
                     'start': start_datetime.isoformat(),
                     'end': end_datetime.isoformat(),
+                    'treatment': appointment.treatment,
                     'status': appointment.status,
                     'patient_id': appointment.patient.id,
                     'patient_name': appointment.patient.get_full_name(), 
@@ -503,7 +506,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                     'patient_name': appointment.patient.get_full_name(),
                     'status': appointment.status,
                     'notes': appointment.notes,
-                    #'treatment': appointment.patient.
+                    'treatment': appointment.treatment
                 })
 
             return Response({
@@ -580,6 +583,9 @@ class AdminCalendarViewSet(ViewSet):
                 status__in=['scheduled', 'confirmed']
             ).count(),
             'by_status': Appointment.objects.values('status').annotate(
+                count=Count('id')
+            ),
+            'by_treatment': Appointment.objects.values('treatment').annotate(
                 count=Count('id')
             ),
             'by_dentist': Appointment.objects.values(

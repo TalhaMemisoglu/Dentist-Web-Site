@@ -17,7 +17,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'patient', 'patient_name', 'dentist', 'dentist_name',
             'appointment_date', 'appointment_time', 'duration', 
-            'status', 'notes', 'created_at'
+            'status', 'notes', 'created_at','treatment'
         ]
         read_only_fields = ['id','patient_name','created_at']
 
@@ -47,10 +47,10 @@ class AdminCalendarAppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = ['id', 'title', 'start', 'end', 'className', 
-                 'patient_name', 'dentist_name', 'status', 'notes']
+                 'patient_name', 'dentist_name', 'status', 'notes','treatment']
 
     def get_title(self, obj):
-        return f"{obj.patient.get_full_name()} - Dt. {obj.dentist.get_full_name()}"
+        return f"{obj.patient.get_full_name()} - Dt. {obj.dentist.get_full_name()} {obj.appointment.treatment}"
 
     def get_start(self, obj):
         return datetime.combine(obj.appointment_date, obj.appointment_time).isoformat()

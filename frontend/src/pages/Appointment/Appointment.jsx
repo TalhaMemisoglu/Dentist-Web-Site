@@ -94,6 +94,7 @@ const Schedule = () => {
         dentist: dentistId,
         appointment_date: selectedDate,
         appointment_time: selectedTime.start_time,
+        treatment: chosenService.name
       });
 
       if (response.status === 201) {

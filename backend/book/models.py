@@ -17,6 +17,7 @@ class Appointment(models.Model):
     dentist = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='dentist_appointments')
     appointment_date = models.DateField()
     appointment_time = models.TimeField()
+    treatment = models.CharField(max_length=100, blank=True, null=True)
     duration = models.IntegerField(help_text="Duration in minutes", default=60)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='scheduled')
     notes = models.TextField(blank=True, null=True)
@@ -30,6 +31,7 @@ class Appointment(models.Model):
         print(f"- Dentist: {self.dentist}")
         print(f"- Date: {self.appointment_date}")
         print(f"- Time: {self.appointment_time}")
+        print(f"- Treatment: {self.treatment}")
         print(f"- Patient ID: {self.patient.id}")
         print(f"- Dentist ID: {self.dentist.id}")
 
