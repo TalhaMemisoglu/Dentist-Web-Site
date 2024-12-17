@@ -61,14 +61,14 @@ const PatientAppointments = () => {
 
   return (
     <div className="appointments-container">
-      <h4 className="appointments-title">Your Appointments</h4>
+      <h4 className="appointments-title">Tüm Randevuların</h4>
       <div className="appointments-content">
         {isLoading ? (
-          <p>Loading appointments...</p>
+          <p>Tüm Randevular yükleniyor...</p>
         ) : error ? (
           <p className="error-message">{error}</p>
         ) : appointments.length === 0 ? (
-          <p className="no-appointments">No appointments found.</p>
+          <p className="no-appointments">Randevu bulunamadı.</p>
         ) : (
           appointments.map((appointment, index) => (
             <div key={index} className="appointment-card">
@@ -106,11 +106,11 @@ const PatientAppointments = () => {
                     Tedavi: <strong>{appointment.treatment_name || "Kanal Tedavi"}</strong>
                   </p>
                   <p className="appointment-duration">
-                    Duration: <strong>{appointment.duration || "N/A"} minutes</strong>
+                    Süre: <strong>{appointment.duration || "N/A"} dakika</strong>
                   </p>
                 </div>
                 <p className="appointment-doctor">
-                  Dentist: <strong>{appointment.dentist_name || "Unknown"}</strong>
+                  Doktor: <strong>{appointment.dentist_name || "Unknown"}</strong>
                 </p>
               </div>
 

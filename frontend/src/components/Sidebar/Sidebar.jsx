@@ -87,6 +87,29 @@ const Sidebar = () => {
               </li>
             </>
           )}
+          {userType === "assistant" && (
+            <>
+              <li>
+                <Link to="/#" className={location.pathname === "/#" ? "active" : ""}>
+                  <span className="icon">📅</span> Takvimi Gör
+                </Link>
+              </li>
+            </>
+          )}
+          {userType === "manager" && (
+            <>
+              <li>
+                <Link to="/#" className={location.pathname === "/#" ? "active" : ""}>
+                  <span className="icon">📅</span> Takvimi Gör
+                </Link>
+              </li>
+              <li>
+                <Link to="/#" className={location.pathname === "/#" ? "active" : ""}>
+                  <span className="icon">➕</span> Personel Ekle/Çıkar
+                </Link>
+              </li>
+            </>
+          )}
 
           <li>
             <Link to="/profile-page" className={location.pathname === "/profile-page" ? "active" : ""}>
