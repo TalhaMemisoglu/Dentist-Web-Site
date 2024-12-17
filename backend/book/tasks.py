@@ -64,7 +64,7 @@ def auto_cancel_past_appointments():
                 f"{appointment.appointment_time.strftime('%H:%M')} saatindeki "
                 f"Dt. {appointment.dentist.get_full_name()} ile olan randevunuz iptal edilmiştir.\n\n "
                 f"Tekrar randevu oluşturmak için web sitemizden faydalanabilirsiniz.\n\n"
-                f"Anlayaşiniz için teşşkür ederiz, temiz ve sağlikli günler dileriz.",
+                f"Anlayişiniz için teşekkür ederiz, ve sağlikli günler dileriz.",
                 settings.DEFAULT_FROM_EMAIL,
                 [appointment.patient.email],
                 fail_silently=False
