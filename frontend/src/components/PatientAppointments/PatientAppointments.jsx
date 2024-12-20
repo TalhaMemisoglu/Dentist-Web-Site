@@ -23,7 +23,7 @@ const PatientAppointments = () => {
   // Function to cancel an appointment
   const cancelAppointment = async (id) => {
     try {
-      await api.delete(`/api/booking/appointments/${id}/cancel`);
+      await api.delete(`/api/booking/appointments/${id}/cancel/`);
       setAppointments((prevAppointments) =>
         prevAppointments.filter((appointment) => appointment.id !== id)
       );

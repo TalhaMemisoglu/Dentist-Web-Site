@@ -304,7 +304,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         past_appointments.update(status='cancelled')
         return updated_count
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post', 'delete'])
     def cancel(self, request, pk=None):
             appointment = self.get_object()
             

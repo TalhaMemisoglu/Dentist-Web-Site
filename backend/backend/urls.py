@@ -12,7 +12,7 @@ available_slots = DentistViewSet.as_view({'get': 'available_slots'})
 
 appointment_list = AppointmentViewSet.as_view({'get': 'list', 'post': 'create'})
 appointment_detail = AppointmentViewSet.as_view({'get': 'retrieve'})
-cancel_appointment = AppointmentViewSet.as_view({'post': 'cancel'})
+cancel_appointment = AppointmentViewSet.as_view({'post': 'cancel', 'delete': 'cancel'})
 complete_appointment = AppointmentViewSet.as_view({'post': 'complete'})
 upcoming_appointments = AppointmentViewSet.as_view({'get': 'upcoming'})
 my_appointments = AppointmentViewSet.as_view({'get': 'my_appointments'})
