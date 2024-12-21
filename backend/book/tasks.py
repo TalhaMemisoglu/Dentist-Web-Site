@@ -17,14 +17,14 @@ def send_appointment_reminders():
 
     for appointment in appointments:
         patient_email = appointment.patient.email
-        subject = "Appointment Reminder"
+        subject = "Randevu hatırlatması"
         message_body = (
-            f"Dear {appointment.patient.get_full_name()},\n\n"
-            f"This is a reminder for your appointment with Dr. {appointment.dentist.get_full_name()}.\n"
-            f"Date: {appointment.appointment_date}\n"
-            f"Time: {appointment.appointment_time.strftime('%H:%M')}\n\n"
-            "Please ensure you arrive on time.\n\n"
-            "Thank you!"
+            f"Sayın {appointment.patient.get_full_name()},\n\n"
+            f"Bu, {appointment.dentist.get_full_name()} Dr. ile olan randevunuzun hatırlatmasıdır.\n"
+            f"Tarih: {appointment.appointment_date}\n"
+            f"Saat: {appointment.appointment_time.strftime('%H:%M')}\n\n"
+            "Lütfen zamanında gelmeye özen gösteriniz.\n\n"
+            "Teşekkür ederiz!"
         )
 
         # Send the email using Django's send_mail function
@@ -58,13 +58,13 @@ def auto_cancel_past_appointments():
         # Send cancellation notification
         try:
             send_mail(
-                "Appointment Cancelled - No Show",
-                f"Sayin {appointment.patient.get_full_name()},\n\n"
+                "Randevu iptali - Gelmediğiniz için",
+                f"Sayın {appointment.patient.get_full_name()},\n\n"
                 f"{appointment.appointment_date} tarihli"
                 f"{appointment.appointment_time.strftime('%H:%M')} saatindeki "
                 f"Dt. {appointment.dentist.get_full_name()} ile olan randevunuz iptal edilmiştir.\n\n "
                 f"Tekrar randevu oluşturmak için web sitemizden faydalanabilirsiniz.\n\n"
-                f"Anlayişiniz için teşekkür ederiz, ve sağlikli günler dileriz.",
+                f"Anlayışınız için teşekkür ederiz, ve sağlıklı günler dileriz.",
                 settings.DEFAULT_FROM_EMAIL,
                 [appointment.patient.email],
                 fail_silently=False

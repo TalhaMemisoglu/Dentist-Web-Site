@@ -15,6 +15,9 @@ from .models import CustomUser, Profile
 from .serializers import CustomUserSerializer, ProfileSerializer, LoginSerializer, UserSerializer, UserProfileUpdateSerializer, PasswordUpdateSerializer
 from rest_framework.generics import UpdateAPIView
 from rest_framework.views import APIView
+import logging
+
+logger = logging.getLogger(__name__)
 
 '''
  Adjust later if necessary
@@ -34,13 +37,13 @@ class VerifyEmailView(generics.GenericAPIView):
             print(f"User before update: {user.email}, Verified={user.verified}")
 
             if user.verified:
-                return Response({"message": "Email is already verified!"}, status=status.HTTP_200_OK)
+                return Response({"message": "E-posta zaten doğrulanmış!"}, status=status.HTTP_200_OK)
 
             user.verified = True
             user.save()
             print(f"User after update: {user.email}, Verified={user.verified}")
 
-            return Response({"message": "Email verified successfully!"}, status=status.HTTP_200_OK)
+            return Response({"message": "E-posta başarıyla doğrulandı!"}, status=status.HTTP_200_OK)
         except Exception as e:
             print(f"Error: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -63,15 +66,15 @@ class CreateUserView(generics.CreateAPIView):
         access_token = str(refresh.access_token)
 
         verification_link = f"{settings.FRONTEND_URL}/verify-email/{user.id}"
-        subject = "Verify Your Email Address"
-        message = f"Click the link to verify your email: {verification_link}"
+        subject = "E-posta Adresinizi Doğrulayın"
+        message = f"E-postanızı doğrulamak için bu bağlantıya tıklayın: {verification_link}"
 
         try:
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": f"E-posta gönderimi sırasında bir hata oluştu: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        success_message = f'Account created for {user.username}! Please verify your email.'
+        success_message = f'{user.username} için hesap oluşturuldu! Lütfen e-postanızı doğrulayın.'
         return Response({
             'message': success_message,
             'user': user_data,
@@ -100,7 +103,7 @@ class LoginView(generics.GenericAPIView):
             if user:
                 print(f"User {email} authenticated successfully.")
                 if not user.verified:
-                    return Response({"error": "Please verify your email before logging in."}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"error": "Lütfen giriş yapmadan önce e-postanızı doğrulayın."}, status=status.HTTP_400_BAD_REQUEST)
 
                 refresh = RefreshToken.for_user(user)
 
@@ -112,7 +115,7 @@ class LoginView(generics.GenericAPIView):
             else:
                 print(f"Authentication failed for {email}.")
 
-            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Geçersiz kimlik bilgileri"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -125,7 +128,7 @@ class LogoutView(generics.GenericAPIView):
             refresh_token = request.data.get("refresh_token")
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({"message": "Successfully logged out."}, status=200)
+            return Response({"message": "Başarıyla çıkış yapıldı."}, status=200)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -139,7 +142,7 @@ class ProfileView(generics.GenericAPIView):
             serializer = ProfileSerializer(profile)
             return Response(serializer.data)
         except Profile.DoesNotExist:
-            return Response({"error": "Profile not found."}, status=404)
+            return Response({"error": "Profil bulunamadı."}, status=404)
 
 # Dentist List View
 class DentistListView(generics.GenericAPIView):
@@ -160,7 +163,7 @@ class CurrentUserView(generics.GenericAPIView):
 
         if not user.is_authenticated:
             print("User is not authenticated.")
-            return Response({"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "Yetkisiz"}, status=status.HTTP_401_UNAUTHORIZED)
 
         print(f"Authenticated user: {user.email}")
 
@@ -174,7 +177,7 @@ class PasswordResetRequestView(generics.GenericAPIView):
     def post(self, request):
         email = request.data.get("email")
         if not email:
-            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "E-posta gereklidir."}, status=status.HTTP_400_BAD_REQUEST)
 
         user = get_object_or_404(CustomUser, email=email)
 
@@ -194,12 +197,12 @@ class PasswordResetRequestView(generics.GenericAPIView):
         # Debug: Log the reset URL
         print("Reset URL:", reset_url)
 
-        subject = "Password Reset Request"
-        message = f"Click the link to reset your password: {reset_url}"
+        subject = "Şifre sıfırlama talebi"
+        message = f"Şifreni sıfırlamak için bu bağlantıya tıkla: {reset_url}"
 
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
-        return Response({"message": "Password reset email sent successfully!"}, status=status.HTTP_200_OK)
+        return Response({"message": "Şifre sıfırlama e-postası başarıyla gönderildi!"}, status=status.HTTP_200_OK)
 
 # Password Reset View
 class PasswordResetView(generics.GenericAPIView):
@@ -208,7 +211,7 @@ class PasswordResetView(generics.GenericAPIView):
     def post(self, request, uid, token):
         new_password = request.data.get("new_password")
         if not new_password:
-            return Response({"error": "New password is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Yeni bir şifre gerekli."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user_id = force_str(urlsafe_base64_decode(uid))
@@ -224,12 +227,12 @@ class PasswordResetView(generics.GenericAPIView):
             print("Token check result:", token_is_valid)
 
             if not token_is_valid:
-                return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Geçersiz veya süresi dolmuş bir token."}, status=status.HTTP_400_BAD_REQUEST)
 
             user.set_password(new_password)
             user.save()
 
-            return Response({"message": "Password reset successfully!"}, status=status.HTTP_200_OK)
+            return Response({"message": "Şifre başarıyla sıfırlandı!"}, status=status.HTTP_200_OK)
         except Exception as e:
             # Debug: Log the exception
             print("Error during password reset:", str(e))
@@ -244,13 +247,8 @@ class UpdateUserProfileView(UpdateAPIView):
     def get_object(self):
         # Override to fetch the current logged-in user
         return self.request.user
-    
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-import logging
 
-logger = logging.getLogger(__name__)
+
 
 class UpdatePasswordView(APIView):
     permission_classes = [IsAuthenticated]
@@ -262,7 +260,7 @@ class UpdatePasswordView(APIView):
             logger.debug("Password update serializer validated successfully.")
             serializer.update(request.user, serializer.validated_data)
             logger.info("Password updated successfully for user.")
-            return Response({"message": "Password updated successfully."}, status=status.HTTP_200_OK)
+            return Response({"message": "Şifre başarıyla güncellendi."}, status=status.HTTP_200_OK)
         logger.error(f"Password update serializer validation failed: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -9,6 +9,10 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth.hashers import check_password
+import logging
+
+logger = logging.getLogger(__name__)
+
 '''
  Not well nourished about mail sending mechanisim adjust later if necessary
 
@@ -55,7 +59,7 @@ class LoginSerializer(serializers.Serializer):
         password = data.get('password')
 
         if not email or not password:
-            raise serializers.ValidationError("Both email and password are required.")
+            raise serializers.ValidationError("Email ve şifre gerekli.")
 
         return data
 
@@ -101,11 +105,11 @@ class PasswordResetSerializer(serializers.Serializer):
             user_id = force_str(urlsafe_base64_decode(uid))
             user = get_user_model().objects.get(id=user_id)
         except (TypeError, ValueError, get_user_model().DoesNotExist):
-            raise serializers.ValidationError("Invalid user ID or token.")
+            raise serializers.ValidationError("Geçersiz veya süresi dolmuş bir token.")
 
         token_generator = PasswordResetTokenGenerator()
         if not token_generator.check_token(user, token):
-            raise serializers.ValidationError("Invalid or expired token.")
+            raise serializers.ValidationError("Geçersiz veya süresi dolmuş bir token.")
 
         user.set_password(self.validated_data['new_password'])
         user.save()
@@ -119,7 +123,7 @@ class PasswordResetRequestSerializer(serializers.Serializer):
         try:
             user = get_user_model().objects.get(email=value)
         except get_user_model().DoesNotExist:
-            raise serializers.ValidationError("No user found with this email.")
+            raise serializers.ValidationError("Bu e-posta ile kayıtlı bir kullanıcı bulunamadı.")
         return value
    
 
@@ -133,11 +137,6 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'email', 'phone']  # Include fields you want to allow updates for
         
 
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth.password_validation import validate_password
-import logging
-
-logger = logging.getLogger(__name__)
 
 class PasswordUpdateSerializer(serializers.Serializer):
     currentPassword = serializers.CharField(write_only=True)
