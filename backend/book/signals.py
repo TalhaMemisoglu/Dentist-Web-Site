@@ -9,7 +9,7 @@ from .models import Appointment
 @receiver(post_save, sender=Appointment)
 def appointment_scheduled(sender, instance, created, **kwargs):
     if created:  # Only send notification if a new appointment is created
-        subject = "Randevu Onaylandı"
+        subject = "Randevu Oluşturuldu"
         message = (
         f"Sayın {instance.patient.get_full_name()},\n\n"
         f"Dr. {instance.dentist.get_full_name()} ile randevunuz planlanmıştır.\n"
