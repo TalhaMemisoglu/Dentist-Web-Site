@@ -37,16 +37,16 @@ class Appointment(models.Model):
 
 
         if self.appointment_date < timezone.now().date():
-            raise ValidationError("Cannot book appointments in the past")
+            raise ValidationError("Geçmiş bir tarihe randevu alınamaz")
 
         if self.patient.user_type != 'patient':
-            raise ValidationError("Only patients can book appointments")
+            raise ValidationError("Sadece hastalar randevu alabilir")
 
         if self.dentist.user_type != 'dentist':
-            raise ValidationError("Can only book appointments with dentists")
+            raise ValidationError("Yalnızca diş hekimleri için randevu alınabilir")
 
         if not self.is_time_available():
-            raise ValidationError("This time slot is not available")
+            raise ValidationError("Bu saat aralığı uygun değil")
 
     def is_time_available(self):
         appointment_end = datetime.combine(

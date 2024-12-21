@@ -92,7 +92,7 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
 
         if not date_str:
             return Response(
-                {"error": "Date parameter is required"},
+                {"error": "Tarih parametresi gereklidir."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -100,12 +100,12 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
             date = datetime.strptime(date_str, '%Y-%m-%d').date()
             if date < local_now.date():
                 return Response(
-                    {"error": "Cannot book appointments in the past"},
+                    {"error": "Geçmişteki tarihlere randevu alınamaz."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
         except ValueError:
             return Response(
-                {"error": "Invalid date format. Use YYYY-MM-DD"},
+                {"error": "Geçersiz tarih formatı. YYYY-MM-DD kullanın."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -113,7 +113,7 @@ class DentistViewSet(viewsets.ReadOnlyModelViewSet):
         work_hours = self.get_work_hours(date)
         if not work_hours:
             return Response({
-                "error": "Selected date is not a working day",
+                "error": "Seçilen tarih için çalışma saatleri mevcut değil.",
                 "available_slots": []
             })
 
@@ -204,7 +204,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             appointments_serializer = self.get_serializer(updated_appointments, many=True)
             
             return Response({
-                'message': 'Appointment created successfully',
+                'message': 'Randevu başarıyla oluşturuldu',
                 'user_id': request.user.id,
                 'user_type': request.user.user_type,
                 'appointments': appointments_serializer.data
@@ -246,7 +246,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         past_appointments.update(status='cancelled')
 
         return Response({
-            'message': f'Updated {updated_count} past appointments to cancelled',
+            'message': f'{updated_count} geçmiş randevu iptal edildi',
             'updated_appointments': updated_count
         })
 
@@ -257,7 +257,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         # Check if appointment is in a valid state to be completed
         if appointment.status not in ['scheduled', 'confirmed']:
             return Response(
-                {"error": "Only scheduled or confirmed appointments can be marked as completed"},
+                {"error": "Sadece planlanmış veya onaylanmış randevular tamamlanabilir"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -268,7 +268,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         )
         if appointment_datetime > timezone.now():
             return Response(
-                {"error": "Cannot complete future appointments"},
+                {"error": "Gelecekteki randevular tamamlanamaz"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -284,7 +284,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(appointments, many=True)
         
         return Response({
-            'message': 'Appointment marked as completed',
+            'message': 'Randevu tamamlandı olarak işaretlendi',
             'user_id': request.user.id,
             'user_type': request.user.user_type,
             'appointments': serializer.data,
@@ -310,13 +310,13 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             
             if appointment.status != 'scheduled':
                 return Response(
-                    {"error": "Only scheduled appointments can be cancelled"},
+                    {"error": "Yanlızca planlanmış randevular iptal edilebilir"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
             if appointment.appointment_date < local_now.date():
                 return Response(
-                    {"error": "Cannot cancel past appointments"},
+                    {"error": "Geçmiş randevular iptal edilemez"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -327,7 +327,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(appointments, many=True)
             
             return Response({
-                'message': 'Appointment cancelled successfully',
+                'message': 'Randevu başarıyla iptal edildi',
                 'user_id': request.user.id,
                 'user_type': request.user.user_type,
                 'appointments': serializer.data,
@@ -372,7 +372,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def calendar_appointments(self, request):
         if request.user.user_type != 'assistant':
             return Response(
-                {"error": "Only assistants can access all appointments"},
+                {"error": "Yalnızca asistanlar tüm randevulara erişebilir"},
                 status=status.HTTP_403_FORBIDDEN
             )
 
@@ -408,7 +408,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def appointments_by_date(self, request):
         if request.user.user_type != 'assistant':
             return Response(
-                {"error": "Only assistants can access all appointments"},
+                {"error": "Yalnızca asistanlar tüm randevulara erişebilir"},
                 status=status.HTTP_403_FORBIDDEN
             )
 
@@ -420,7 +420,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
         except (ValueError, TypeError):
             return Response(
-                {"error": "Invalid date format. Use YYYY-MM-DD"},
+                {"error": "Geçersiz tarih formatı. YYYY-MM-DD kullanın."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -435,7 +435,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def appointments_stats(self, request):
         if request.user.user_type != 'assistant':
             return Response(
-                {"error": "Only assistants can access appointment statistics"},
+                {"error": "Yalnızca asistanlar randevu istatistiklerine erişebilir"},
                 status=status.HTTP_403_FORBIDDEN
             )
 
@@ -481,7 +481,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
            
             if request.user.user_type != 'dentist':
                 return Response(
-                    {"error": "Only dentists can access their calendar"},
+                    {"error": "Sadece diş hekimleri randevularına erişebilir"},
                     status=status.HTTP_403_FORBIDDEN
                 )
 
@@ -525,7 +525,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         def dentist_appointments_by_date(self, request):
             if request.user.user_type != 'dentist':
                 return Response(
-                    {"error": "Only dentists can access their appointments"},
+                    {"error": "Sadece diş hekimleri randevularına erişebilir"},
                     status=status.HTTP_403_FORBIDDEN
                 )
 
@@ -537,7 +537,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
             except (ValueError, TypeError):
                 return Response(
-                    {"error": "Invalid date format. Use YYYY-MM-DD"},
+                    {"error": "Geçersiz tarih formatı. YYYY-MM-DD kullanın."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -553,7 +553,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         def dentist_daily_schedule(self, request):
             if request.user.user_type != 'dentist':
                 return Response(
-                    {"error": "Only dentists can access their schedule"},
+                    {"error": "Sadece diş hekimleri takvimlerine erişebilir."},
                     status=status.HTTP_403_FORBIDDEN
                 )
 
@@ -562,7 +562,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
             except (ValueError, TypeError):
                 return Response(
-                    {"error": "Invalid date format. Use YYYY-MM-DD"},
+                    {"error": "Geçersiz tarih formatı. YYYY-MM-DD kullanın."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
@@ -614,7 +614,7 @@ class AdminCalendarViewSet(ViewSet):
         dentist_id = request.query_params.get('dentist_id')
         if not dentist_id:
             return Response(
-                {"error": "dentist_id is required"},
+                {"error": "Diş hekimi ID'si gereklidir"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -635,7 +635,7 @@ class AdminCalendarViewSet(ViewSet):
             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
         except (ValueError, TypeError):
             return Response(
-                {"error": "Invalid date format. Use YYYY-MM-DD"},
+                {"error": "Geçersiz tarih formatı. YYYY-MM-DD kullanın."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
